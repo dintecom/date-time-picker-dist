@@ -16,9 +16,9 @@
     "url": "https://github.com/DanielYKPan/date-time-picker.git"
   },
   "peerDependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0",
-    "@angular/cdk": "^7.0.0"
+    "@angular/common": "^7.0.0 || ^8.0.0",
+    "@angular/core": "^7.0.0 || ^8.0.0",
+    "@angular/cdk": "^7.0.0 || ^8.0.0"
   },
   "main": "bundles/ng-pick-datetime.umd.js",
   "module": "fesm5/ng-pick-datetime.js",
