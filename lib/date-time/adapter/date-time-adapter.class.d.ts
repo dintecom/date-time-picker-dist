@@ -14,10 +14,10 @@ export declare const OWL_DATE_TIME_LOCALE_PROVIDER: {
 };
 export declare abstract class DateTimeAdapter<T> {
     /** The locale to use for all dates. */
-    protected locale: any;
+    private locale;
     /** A stream that emits when the locale changes. */
-    protected _localeChanges: Subject<void>;
-    readonly localeChanges: Observable<void>;
+    protected _localeChanges: Subject<string>;
+    readonly localeChanges: Observable<string>;
     /** total milliseconds in a day. */
     protected readonly millisecondsInDay = 86400000;
     /** total milliseconds in a minute. */
@@ -30,13 +30,13 @@ export declare abstract class DateTimeAdapter<T> {
      * Get the month of the given date
      * 0 -- January
      * 11 -- December
-     * */
+     */
     abstract getMonth(date: T): number;
     /**
      * Get the day of the week of the given date
      * 0 -- Sunday
      * 6 -- Saturday
-     * */
+     */
     abstract getDay(date: T): number;
     /**
      * Get the day num of the given date
@@ -144,7 +144,7 @@ export declare abstract class DateTimeAdapter<T> {
     abstract clone(date: T): T;
     /**
      * Get a new moment
-     * */
+     */
     abstract now(): T;
     /**
      * Formats a date as a string according to the given format.
@@ -159,14 +159,14 @@ export declare abstract class DateTimeAdapter<T> {
      * 1 if the first date is after the second,
      * -1 if the first date is before the second
      * 0 if dates are equal.
-     * */
+     */
     compare(first: T, second: T): number;
     /**
      * Check if two given dates are in the same year
      * 1 if the first date's year is after the second,
      * -1 if the first date's year is before the second
      * 0 if two given dates are in the same year
-     * */
+     */
     compareYear(first: T, second: T): number;
     /**
      * Attempts to deserialize a value to a valid date object. This is different from parsing in that
@@ -179,9 +179,13 @@ export declare abstract class DateTimeAdapter<T> {
      */
     deserialize(value: any): T | null;
     /**
+     * Get the locale used for all dates.
+     */
+    getLocale(): string;
+    /**
      * Sets the locale used for all dates.
      */
-    setLocale(locale: any): void;
+    setLocale(locale: string): void;
     /**
      * Clamp the given date between min and max dates.
      */

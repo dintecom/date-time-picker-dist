@@ -11,7 +11,7 @@ import { ComponentType } from '@angular/cdk/portal';
 export declare const OWL_DIALOG_DATA: InjectionToken<any>;
 /**
  * Injection token that determines the scroll handling while the dialog is open.
- * */
+ */
 export declare const OWL_DIALOG_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 export declare function OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => ScrollStrategy;
 /** @docs-private */
@@ -20,9 +20,9 @@ export declare const OWL_DIALOG_SCROLL_STRATEGY_PROVIDER: {
     deps: (typeof Overlay)[];
     useFactory: typeof OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY;
 };
-/** I
- * njection token that can be used to specify default dialog options.
- * */
+/**
+ * Injection token that can be used to specify default dialog options.
+ */
 export declare const OWL_DIALOG_DEFAULT_OPTIONS: InjectionToken<OwlDialogConfig>;
 export declare class OwlDialogService {
     private overlay;

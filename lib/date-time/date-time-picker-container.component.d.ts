@@ -20,12 +20,12 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
     activeSelectedIndex: number;
     /**
      * Stream emits when try to hide picker
-     * */
+     */
     private hidePicker$;
     readonly hidePickerStream: Observable<any>;
     /**
      * Stream emits when try to confirm the selected value
-     * */
+     */
     private confirmSelected$;
     readonly confirmSelectedStream: Observable<any>;
     private pickerOpened$;
@@ -41,25 +41,25 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
     readonly setLabel: string;
     /**
      * The range 'from' label
-     * */
+     */
     readonly fromLabel: string;
     /**
      * The range 'to' label
-     * */
+     */
     readonly toLabel: string;
     /**
      * The range 'from' formatted value
-     * */
+     */
     readonly fromFormattedValue: string;
     /**
      * The range 'to' formatted value
-     * */
+     */
     readonly toFormattedValue: string;
     /**
      * Cases in which the control buttons show in the picker
      * 1) picker mode is 'dialog'
      * 2) picker type is NOT 'calendar' and the picker mode is NOT 'inline'
-     * */
+     */
     readonly showControlButtons: boolean;
     readonly containerElm: HTMLElement;
     readonly owlDTContainerClass: boolean;
@@ -116,6 +116,6 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
     private updateAndCheckCalendarDate;
     /**
      * Focus to the picker
-     * */
+     */
     private focusPicker;
 }

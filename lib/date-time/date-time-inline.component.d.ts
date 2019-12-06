@@ -43,12 +43,12 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
-     * */
+     */
     yearSelected: EventEmitter<T>;
     /**
      * Emits selected month in year view
      * This doesn't imply a change on the selected date.
-     * */
+     */
     monthSelected: EventEmitter<T>;
     private _selected;
     selected: T | null;
@@ -70,10 +70,10 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
     select(date: T[] | T): void;
     /**
      * Emits the selected year in multi-year view
-     * */
+     */
     selectYear(normalizedYear: T): void;
     /**
      * Emits selected month in year view
-     * */
+     */
     selectMonth(normalizedMonth: T): void;
 }

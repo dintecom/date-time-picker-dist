@@ -2,7 +2,7 @@
  * native-date-time-adapter.class
  */
 import { Platform } from '@angular/cdk/platform';
-import { DateTimeAdapter } from './date-time-adapter.class';
+import { DateTimeAdapter } from '../date-time-adapter.class';
 export declare class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
     private owlDateTimeLocale;
     /** Whether to clamp the date between 1 and 9999 to avoid IE and Edge errors. */

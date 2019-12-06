@@ -12,7 +12,7 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
     private dateTimeFormats;
     /**
      * The select mode of the picker;
-     * */
+     */
     private _selectMode;
     selectMode: SelectMode;
     /** The currently selected date. */
@@ -24,7 +24,7 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
     pickerMoment: T;
     /**
      * A function used to filter which dates are selectable
-     * */
+     */
     private _dateFilter;
     dateFilter: (date: T) => boolean;
     /** The minimum selectable date. */
@@ -45,15 +45,15 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
     /**
      * An array to hold all selectedDates' month value
      * the value is the month number in current year
-     * */
+     */
     selectedMonths: number[];
     /**
      * Callback to invoke when a new month is selected
-     * */
+     */
     readonly change: EventEmitter<T>;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     * */
+     */
     readonly monthSelected: EventEmitter<T>;
     /** Emits when any date is activated. */
     readonly pickerMomentChange: EventEmitter<T>;
@@ -80,7 +80,7 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
     handleCalendarKeydown(event: KeyboardEvent): void;
     /**
      * Generate the calendar month list
-     * */
+     */
     private generateMonthList;
     /**
      * Creates an CalendarCell for the given month.
@@ -99,7 +99,7 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
      * Set the selectedMonths value
      * In single mode, it has only one value which represent the month the selected date in
      * In range mode, it would has two values, one for the month the fromValue in and the other for the month the toValue in
-     * */
+     */
     private setSelectedMonths;
     /**
      * Check the given dates are in the same year

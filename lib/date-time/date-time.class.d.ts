@@ -49,7 +49,7 @@ export declare abstract class OwlDateTime<T> {
      */
     private _hideOtherMonths;
     hideOtherMonths: boolean;
-    private _id;
+    private readonly _id;
     readonly id: string;
     abstract readonly selected: T | null;
     abstract readonly selecteds: T[] | null;

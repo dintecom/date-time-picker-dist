@@ -15,7 +15,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     private dateTimeFormats;
     /**
      * Date filter for the month and year view
-     * */
+     */
     dateFilter: Function;
     /**
      * Set the first day of week
@@ -42,7 +42,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     startView: 'month' | 'year' | 'multi-years';
     /**
      * Whether to hide dates in other months at the start or end of the current month.
-     * */
+     */
     hideOtherMonths: boolean;
     /** Emits when the currently picker moment changes. */
     pickerMomentChange: EventEmitter<T>;
@@ -52,11 +52,11 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     userSelection: EventEmitter<void>;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     * */
+     */
     readonly yearSelected: EventEmitter<T>;
     /**
      * Emits the selected month. This doesn't imply a change on the selected date
-     * */
+     */
     readonly monthSelected: EventEmitter<T>;
     readonly periodButtonText: string;
     readonly periodButtonLabel: string;
@@ -74,7 +74,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     dateFilterForViews: (date: T) => boolean;
     /**
      * Bind class 'owl-dt-calendar' to host
-     * */
+     */
     readonly owlDTCalendarClass: boolean;
     private intlChangesSub;
     /**
@@ -94,11 +94,11 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     toggleViews(): void;
     /**
      * Handles user clicks on the previous button.
-     * */
+     */
     previousClicked(): void;
     /**
      * Handles user clicks on the next button.
-     * */
+     */
     nextClicked(): void;
     dateSelected(date: T): void;
     /**
@@ -120,7 +120,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     nextButtonEnabled(): boolean;
     /**
      * Focus to the host element
-     * */
+     */
     focusActiveCell(): void;
     selectYearInMultiYearView(normalizedYear: T): void;
     selectMonthInYearView(normalizedMonth: T): void;

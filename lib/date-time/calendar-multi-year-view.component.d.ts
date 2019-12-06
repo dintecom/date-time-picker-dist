@@ -14,7 +14,7 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     private dateTimeAdapter;
     /**
      * The select mode of the picker;
-     * */
+     */
     private _selectMode;
     selectMode: SelectMode;
     /** The currently selected date. */
@@ -26,7 +26,7 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     pickerMoment: T;
     /**
      * A function used to filter which dates are selectable
-     * */
+     */
     private _dateFilter;
     dateFilter: (date: T) => boolean;
     /** The minimum selectable date. */
@@ -50,11 +50,11 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     readonly nextButtonLabel: string;
     /**
      * Callback to invoke when a new month is selected
-     * */
+     */
     readonly change: EventEmitter<T>;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     * */
+     */
     readonly yearSelected: EventEmitter<T>;
     /** Emits when any date is activated. */
     readonly pickerMomentChange: EventEmitter<T>;
@@ -74,11 +74,11 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     private selectYear;
     /**
      * Generate the previous year list
-     * */
+     */
     prevYearList(event: any): void;
     /**
      * Generate the next year list
-     * */
+     */
     nextYearList(event: any): void;
     generateYearList(): void;
     /** Whether the previous period button is enabled. */

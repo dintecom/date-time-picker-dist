@@ -27,7 +27,7 @@ export declare class OwlDialogConfig {
     hasBackdrop?: boolean;
     /**
      * Custom style for the backdrop
-     * */
+     */
     backdropStyle?: any;
     /** Data being injected into the child component. */
     data?: any;
@@ -43,19 +43,19 @@ export declare class OwlDialogConfig {
     role?: 'dialog' | 'alertdialog';
     /**
      * Custom class for the pane
-     * */
+     */
     paneClass?: string | string[];
     /**
      * Mouse Event
-     * */
+     */
     event?: MouseEvent;
     /**
      * Custom class for the backdrop
-     * */
+     */
     backdropClass?: string | string[];
     /**
      * Whether the dialog should close when the user goes backwards/forwards in history.
-     * */
+     */
     closeOnNavigation?: boolean;
     /** Width of the dialog. */
     width?: string;
@@ -64,29 +64,29 @@ export declare class OwlDialogConfig {
     /**
      * The min-width of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     * */
+     */
     minWidth?: number | string;
     /**
      * The min-height of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     * */
+     */
     minHeight?: number | string;
     /**
      * The max-width of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     * */
+     */
     maxWidth?: number | string;
     /**
      * The max-height of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     * */
+     */
     maxHeight?: number | string;
     /** Position overrides. */
     position?: DialogPosition;
     /**
      * The scroll strategy when the dialog is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
-     * */
+     */
     scrollStrategy?: ScrollStrategy;
     viewContainerRef?: ViewContainerRef;
     constructor();

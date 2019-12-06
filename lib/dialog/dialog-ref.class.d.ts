@@ -15,7 +15,7 @@ export declare class OwlDialogRef<T> {
     private locationChanged;
     /**
      * The instance of component opened into modal
-     * */
+     */
     componentInstance: T;
     /** Whether the user is allowed to close the dialog. */
     disableClose: boolean;

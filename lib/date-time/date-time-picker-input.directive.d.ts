@@ -3,9 +3,9 @@
  */
 import { AfterContentInit, ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { OwlDateTimeComponent } from './date-time-picker.component';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { OwlDateTimeComponent } from './date-time-picker.component';
 import { SelectMode } from './date-time.class';
 export declare const OWL_DATETIME_VALUE_ACCESSOR: any;
 export declare const OWL_DATETIME_VALIDATORS: any;
@@ -16,7 +16,7 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     private dateTimeFormats;
     /**
      * The date time picker that this input is associated with.
-     * */
+     */
     owlDateTime: OwlDateTimeComponent<T>;
     /**
      * A function to filter date time
@@ -48,11 +48,11 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     values: T[];
     /**
      * Callback to invoke when `change` event is fired on this `<input>`
-     * */
+     */
     dateTimeChange: EventEmitter<any>;
     /**
      * Callback to invoke when an `input` event is fired on this `<input>`.
-     * */
+     */
     dateTimeInput: EventEmitter<any>;
     readonly elementRef: ElementRef;
     readonly isInSingleMode: boolean;
@@ -76,7 +76,7 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     /**
      * The form control validator for the range.
      * Check whether the 'before' value is before the 'to' value
-     * */
+     */
     private rangeValidator;
     /** The combined form control validator for this input. */
     private validator;
@@ -103,7 +103,7 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     registerOnValidatorChange(fn: () => void): void;
     /**
      * Open the picker when user hold alt + DOWN_ARROW
-     * */
+     */
     handleKeydownOnHost(event: KeyboardEvent): void;
     handleBlurOnHost(event: Event): void;
     handleInputOnHost(event: any): void;

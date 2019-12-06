@@ -11,7 +11,7 @@ export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
     /**
      * Value would be displayed in the box
      * If it is null, the box would display [value]
-     * */
+     */
     boxValue: number;
     value: number;
     min: number;
@@ -22,19 +22,15 @@ export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
     inputChange: EventEmitter<number>;
     private inputStream;
     private inputStreamSub;
+    constructor();
     readonly displayValue: number;
     readonly owlDTTimerBoxClass: boolean;
-    private valueInput;
-    constructor();
     ngOnInit(): void;
     ngOnDestroy(): void;
     upBtnClicked(): void;
     downBtnClicked(): void;
-    handleInputChange(val: string): void;
+    handleInputChange(value: string): void;
+    handleWheelChange(event: WheelEvent): void;
     private updateValue;
     private updateValueViaInput;
-    private onValueInputMouseWheelBind;
-    private onValueInputMouseWheel;
-    private bindValueInputMouseWheel;
-    private unbindValueInputMouseWheel;
 }

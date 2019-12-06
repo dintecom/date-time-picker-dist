@@ -45,7 +45,7 @@ export declare class OwlTimerComponent<T> implements OnInit {
      * The value would be displayed in hourBox.
      * We need this because the value displayed in hourBox it not
      * the same as the hourValue when the timer is in hour12Timer mode.
-     * */
+     */
     readonly hourBoxValue: number;
     readonly minuteValue: number;
     readonly secondValue: number;
@@ -63,17 +63,17 @@ export declare class OwlTimerComponent<T> implements OnInit {
     ngOnInit(): void;
     /**
      * Focus to the host element
-     * */
+     */
     focus(): void;
     /**
      * Set the hour value via typing into timer box input
      * We need this to handle the hour value when the timer is in hour12 mode
-     * */
+     */
     setHourValueViaInput(hours: number): void;
     setHourValue(hours: number): void;
     setMinuteValue(minutes: number): void;
     setSecondValue(seconds: number): void;
-    setMeridiem(event: any): void;
+    setMeridian(event: any): void;
     /**
      * Check if the up hour button is enabled
      */
@@ -103,21 +103,21 @@ export declare class OwlTimerComponent<T> implements OnInit {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     private compareHours;
     /**
      * PickerMoment's minute value +/- certain amount and compare it to the give date
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     private compareMinutes;
     /**
      * PickerMoment's second value +/- certain amount and compare it to the give date
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     private compareSeconds;
     /**
      * Get a valid date object

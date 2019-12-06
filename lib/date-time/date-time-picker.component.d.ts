@@ -56,33 +56,33 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     /**
      * The scroll strategy when the picker is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
-     * */
+     */
     scrollStrategy: ScrollStrategy;
     /**
      * Callback when the picker is closed
-     * */
+     */
     afterPickerClosed: EventEmitter<any>;
     /**
      * Callback when the picker is open
-     * */
+     */
     afterPickerOpen: EventEmitter<any>;
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
-     * */
+     */
     yearSelected: EventEmitter<T>;
     /**
      * Emits selected month in year view
      * This doesn't imply a change on the selected date.
-     * */
+     */
     monthSelected: EventEmitter<T>;
     /**
      * Emit when the selected value has been confirmed
-     * */
+     */
     confirmSelectedChange: EventEmitter<T | T[]>;
     /**
      * Emits when the date time picker is disabled.
-     * */
+     */
     disabledChange: EventEmitter<boolean>;
     private pickerContainerPortal;
     private pickerContainer;
@@ -120,11 +120,11 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     select(date: T[] | T): void;
     /**
      * Emits the selected year in multi-year view
-     * */
+     */
     selectYear(normalizedYear: T): void;
     /**
      * Emits selected month in year view
-     * */
+     */
     selectMonth(normalizedMonth: T): void;
     /**
      * Hide the picker
@@ -145,6 +145,6 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     private createPopup;
     /**
      * Create the popup PositionStrategy.
-     * */
+     */
     private createPopupPositionStrategy;
 }

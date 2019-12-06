@@ -7,8 +7,28 @@
  */
 import { InjectionToken } from '@angular/core';
 /**
+ * @record
+ */
+export function OwlDateTimeFormats() { }
+if (false) {
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.parseInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.fullPickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.datePickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.timePickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.monthYearLabel;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.dateA11yLabel;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.monthYearA11yLabel;
+}
+/**
  * InjectionToken for date time picker that can be used to override default format.
  * @type {?}
  */
 export const OWL_DATE_TIME_FORMATS = new InjectionToken('OWL_DATE_TIME_FORMATS');
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGF0ZS10aW1lLWZvcm1hdC5jbGFzcy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL25nLXBpY2stZGF0ZXRpbWUvIiwic291cmNlcyI6WyJsaWIvZGF0ZS10aW1lL2FkYXB0ZXIvZGF0ZS10aW1lLWZvcm1hdC5jbGFzcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7O0FBSUEsT0FBTyxFQUFFLGNBQWMsRUFBRSxNQUFNLGVBQWUsQ0FBQzs7Ozs7QUFhL0MsTUFBTSxPQUFPLHFCQUFxQixHQUFHLElBQUksY0FBYyxDQUFxQix1QkFBdUIsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogZGF0ZS10aW1lLWZvcm1hdC5jbGFzc1xuICovXG5cbmltcG9ydCB7IEluamVjdGlvblRva2VuIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbmV4cG9ydCB0eXBlIE93bERhdGVUaW1lRm9ybWF0cyA9IHtcbiAgICBwYXJzZUlucHV0OiBhbnksXG4gICAgZnVsbFBpY2tlcklucHV0OiBhbnksXG4gICAgZGF0ZVBpY2tlcklucHV0OiBhbnksXG4gICAgdGltZVBpY2tlcklucHV0OiBhbnksXG4gICAgbW9udGhZZWFyTGFiZWw6IGFueSxcbiAgICBkYXRlQTExeUxhYmVsOiBhbnksXG4gICAgbW9udGhZZWFyQTExeUxhYmVsOiBhbnksXG59O1xuXG4vKiogSW5qZWN0aW9uVG9rZW4gZm9yIGRhdGUgdGltZSBwaWNrZXIgdGhhdCBjYW4gYmUgdXNlZCB0byBvdmVycmlkZSBkZWZhdWx0IGZvcm1hdC4gKi9cbmV4cG9ydCBjb25zdCBPV0xfREFURV9USU1FX0ZPUk1BVFMgPSBuZXcgSW5qZWN0aW9uVG9rZW48T3dsRGF0ZVRpbWVGb3JtYXRzPignT1dMX0RBVEVfVElNRV9GT1JNQVRTJyk7XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGF0ZS10aW1lLWZvcm1hdC5jbGFzcy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL25nLWRhdGUtYW5kLXRpbWUtcGlja2VyLyIsInNvdXJjZXMiOlsibGliL2RhdGUtdGltZS9hZGFwdGVyL2RhdGUtdGltZS1mb3JtYXQuY2xhc3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUlBLE9BQU8sRUFBRSxjQUFjLEVBQUUsTUFBTSxlQUFlLENBQUM7Ozs7QUFFL0Msd0NBUUM7OztJQVBHLHdDQUFnQjs7SUFDaEIsNkNBQXFCOztJQUNyQiw2Q0FBcUI7O0lBQ3JCLDZDQUFxQjs7SUFDckIsNENBQW9COztJQUNwQiwyQ0FBbUI7O0lBQ25CLGdEQUF3Qjs7Ozs7O0FBSTVCLE1BQU0sT0FBTyxxQkFBcUIsR0FBRyxJQUFJLGNBQWMsQ0FDbkQsdUJBQXVCLENBQzFCIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBkYXRlLXRpbWUtZm9ybWF0LmNsYXNzXG4gKi9cblxuaW1wb3J0IHsgSW5qZWN0aW9uVG9rZW4gfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuZXhwb3J0IGludGVyZmFjZSBPd2xEYXRlVGltZUZvcm1hdHMge1xuICAgIHBhcnNlSW5wdXQ6IGFueTtcbiAgICBmdWxsUGlja2VySW5wdXQ6IGFueTtcbiAgICBkYXRlUGlja2VySW5wdXQ6IGFueTtcbiAgICB0aW1lUGlja2VySW5wdXQ6IGFueTtcbiAgICBtb250aFllYXJMYWJlbDogYW55O1xuICAgIGRhdGVBMTF5TGFiZWw6IGFueTtcbiAgICBtb250aFllYXJBMTF5TGFiZWw6IGFueTtcbn1cblxuLyoqIEluamVjdGlvblRva2VuIGZvciBkYXRlIHRpbWUgcGlja2VyIHRoYXQgY2FuIGJlIHVzZWQgdG8gb3ZlcnJpZGUgZGVmYXVsdCBmb3JtYXQuICovXG5leHBvcnQgY29uc3QgT1dMX0RBVEVfVElNRV9GT1JNQVRTID0gbmV3IEluamVjdGlvblRva2VuPE93bERhdGVUaW1lRm9ybWF0cz4oXG4gICAgJ09XTF9EQVRFX1RJTUVfRk9STUFUUydcbik7XG4iXX0=

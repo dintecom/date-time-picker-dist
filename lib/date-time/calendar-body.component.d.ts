@@ -21,11 +21,11 @@ export declare class OwlCalendarBodyComponent implements OnInit {
     activeCell: number;
     /**
      * The cells to display in the table.
-     * */
+     */
     rows: CalendarCell[][];
     /**
      * The number of columns in the table.
-     * */
+     */
     numCols: number;
     /**
      * The ratio (width / height) to use for the cells in the table.
@@ -33,11 +33,11 @@ export declare class OwlCalendarBodyComponent implements OnInit {
     cellRatio: number;
     /**
      * The value in the table that corresponds to today.
-     * */
+     */
     todayValue: number;
     /**
      * The value in the table that is currently selected.
-     * */
+     */
     selectedValues: number[];
     /**
      * Current picker select mode
@@ -45,7 +45,7 @@ export declare class OwlCalendarBodyComponent implements OnInit {
     selectMode: SelectMode;
     /**
      * Emit when a calendar cell is selected
-     * */
+     */
     readonly select: EventEmitter<CalendarCell>;
     readonly owlDTCalendarBodyClass: boolean;
     readonly isInSingleMode: boolean;
@@ -60,18 +60,18 @@ export declare class OwlCalendarBodyComponent implements OnInit {
     isSelected(value: number): boolean;
     /**
      * Check if the cell in the range
-     * */
+     */
     isInRange(value: number): boolean;
     /**
      * Check if the cell is the range from
-     * */
+     */
     isRangeFrom(value: number): boolean;
     /**
      * Check if the cell is the range to
-     * */
+     */
     isRangeTo(value: number): boolean;
     /**
      * Focus to a active cell
-     * */
+     */
     focusActiveCell(): void;
 }

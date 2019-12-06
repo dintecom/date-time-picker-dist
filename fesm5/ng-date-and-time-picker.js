@@ -1,16 +1,17 @@
 import { Injectable, ɵɵdefineInjectable, InjectionToken, inject, LOCALE_ID, EventEmitter, Component, ChangeDetectionStrategy, ElementRef, NgZone, ChangeDetectorRef, Optional, Inject, Input, Output, ViewChild, TemplateRef, Injector, SkipSelf, ViewContainerRef, Directive, forwardRef, Renderer2, Pipe, NgModule } from '@angular/core';
-import { DOCUMENT, Location, CommonModule } from '@angular/common';
+import { DOCUMENT, Location, getLocaleFirstDayOfWeek, CommonModule } from '@angular/common';
 import { FocusTrapFactory, A11yModule } from '@angular/cdk/a11y';
 import { NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
+import { Subject, Subscription, defer, merge, of } from 'rxjs';
 import { __spread, __extends, __values, __assign } from 'tslib';
 import { CdkPortalOutlet, BasePortalOutlet, ComponentPortal, PortalInjector, PortalModule } from '@angular/cdk/portal';
-import { DOWN_ARROW, RIGHT_ARROW, UP_ARROW, LEFT_ARROW, SPACE, ESCAPE, HOME, END, PAGE_UP, PAGE_DOWN, ENTER } from '@angular/cdk/keycodes';
+import { SPACE, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, ESCAPE, ENTER, PAGE_DOWN, PAGE_UP, END, HOME } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
-import { Subject, Subscription, defer, merge, of } from 'rxjs';
 import { take, filter, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, group, query, animateChild, animate, keyframes } from '@angular/animations';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, Validators } from '@angular/forms';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
+import * as importMoment from 'moment';
 
 /**
  * @fileoverview added by tsickle
@@ -284,13 +285,12 @@ DateTimeAdapter = /** @class */ (function () {
      * 1 if the first date is after the second,
      * -1 if the first date is before the second
      * 0 if dates are equal.
-     * */
+     */
     /**
      * Compare two given dates
      * 1 if the first date is after the second,
      * -1 if the first date is before the second
      * 0 if dates are equal.
-     *
      * @param {?} first
      * @param {?} second
      * @return {?}
@@ -300,7 +300,6 @@ DateTimeAdapter = /** @class */ (function () {
      * 1 if the first date is after the second,
      * -1 if the first date is before the second
      * 0 if dates are equal.
-     *
      * @param {?} first
      * @param {?} second
      * @return {?}
@@ -331,13 +330,12 @@ DateTimeAdapter = /** @class */ (function () {
      * 1 if the first date's year is after the second,
      * -1 if the first date's year is before the second
      * 0 if two given dates are in the same year
-     * */
+     */
     /**
      * Check if two given dates are in the same year
      * 1 if the first date's year is after the second,
      * -1 if the first date's year is before the second
      * 0 if two given dates are in the same year
-     *
      * @param {?} first
      * @param {?} second
      * @return {?}
@@ -347,7 +345,6 @@ DateTimeAdapter = /** @class */ (function () {
      * 1 if the first date's year is after the second,
      * -1 if the first date's year is before the second
      * 0 if two given dates are in the same year
-     *
      * @param {?} first
      * @param {?} second
      * @return {?}
@@ -411,6 +408,20 @@ DateTimeAdapter = /** @class */ (function () {
         return this.invalid();
     };
     /**
+     * Get the locale used for all dates.
+     */
+    /**
+     * Get the locale used for all dates.
+     * @return {?}
+     */
+    DateTimeAdapter.prototype.getLocale = /**
+     * Get the locale used for all dates.
+     * @return {?}
+     */
+    function () {
+        return this.locale;
+    };
+    /**
      * Sets the locale used for all dates.
      */
     /**
@@ -425,7 +436,7 @@ DateTimeAdapter = /** @class */ (function () {
      */
     function (locale) {
         this.locale = locale;
-        this._localeChanges.next();
+        this._localeChanges.next(locale);
     };
     /**
      * Clamp the given date between min and max dates.
@@ -459,7 +470,7 @@ if (false) {
     /**
      * The locale to use for all dates.
      * @type {?}
-     * @protected
+     * @private
      */
     DateTimeAdapter.prototype.locale;
     /**
@@ -491,7 +502,6 @@ if (false) {
      * Get the month of the given date
      * 0 -- January
      * 11 -- December
-     *
      * @abstract
      * @param {?} date
      * @return {?}
@@ -501,7 +511,6 @@ if (false) {
      * Get the day of the week of the given date
      * 0 -- Sunday
      * 6 -- Saturday
-     *
      * @abstract
      * @param {?} date
      * @return {?}
@@ -707,7 +716,6 @@ if (false) {
     DateTimeAdapter.prototype.clone = function (date) { };
     /**
      * Get a new moment
-     *
      * @abstract
      * @return {?}
      */
@@ -735,6 +743,26 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * @record
+ */
+function OwlDateTimeFormats() { }
+if (false) {
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.parseInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.fullPickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.datePickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.timePickerInput;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.monthYearLabel;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.dateA11yLabel;
+    /** @type {?} */
+    OwlDateTimeFormats.prototype.monthYearA11yLabel;
+}
+/**
  * InjectionToken for date time picker that can be used to override default format.
  * @type {?}
  */
@@ -756,10 +784,6 @@ var OwlCalendarComponent = /** @class */ (function () {
         this.cdRef = cdRef;
         this.dateTimeAdapter = dateTimeAdapter;
         this.dateTimeFormats = dateTimeFormats;
-        /**
-         * Set the first day of week
-         */
-        this.firstDayOfWeek = 0;
         this._selecteds = [];
         /**
          * The view that the calendar should start in.
@@ -779,12 +803,10 @@ var OwlCalendarComponent = /** @class */ (function () {
         this.userSelection = new EventEmitter();
         /**
          * Emits the selected year. This doesn't imply a change on the selected date
-         *
          */
         this.yearSelected = new EventEmitter();
         /**
          * Emits the selected month. This doesn't imply a change on the selected date
-         *
          */
         this.monthSelected = new EventEmitter();
         /**
@@ -1043,10 +1065,9 @@ var OwlCalendarComponent = /** @class */ (function () {
     Object.defineProperty(OwlCalendarComponent.prototype, "owlDTCalendarClass", {
         /**
          * Bind class 'owl-dt-calendar' to host
-         * */
+         */
         get: /**
          * Bind class 'owl-dt-calendar' to host
-         *
          * @return {?}
          */
         function () {
@@ -1105,19 +1126,17 @@ var OwlCalendarComponent = /** @class */ (function () {
      */
     function () {
         this.currentView =
-            this._currentView == 'month' ? 'multi-years' : 'month';
+            this._currentView === 'month' ? 'multi-years' : 'month';
     };
     /**
      * Handles user clicks on the previous button.
-     * */
+     */
     /**
      * Handles user clicks on the previous button.
-     *
      * @return {?}
      */
     OwlCalendarComponent.prototype.previousClicked = /**
      * Handles user clicks on the previous button.
-     *
      * @return {?}
      */
     function () {
@@ -1128,15 +1147,13 @@ var OwlCalendarComponent = /** @class */ (function () {
     };
     /**
      * Handles user clicks on the next button.
-     * */
+     */
     /**
      * Handles user clicks on the next button.
-     *
      * @return {?}
      */
     OwlCalendarComponent.prototype.nextClicked = /**
      * Handles user clicks on the next button.
-     *
      * @return {?}
      */
     function () {
@@ -1240,15 +1257,13 @@ var OwlCalendarComponent = /** @class */ (function () {
     };
     /**
      * Focus to the host element
-     * */
+     */
     /**
      * Focus to the host element
-     *
      * @return {?}
      */
     OwlCalendarComponent.prototype.focusActiveCell = /**
      * Focus to the host element
-     *
      * @return {?}
      */
     function () {
@@ -1353,13 +1368,11 @@ var OwlCalendarComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: 'owl-date-time-calendar',
                     exportAs: 'owlDateTimeCalendar',
-                    template: "<div class=\"owl-dt-calendar-control\">\n    <!-- focus when keyboard tab (http://kizu.ru/en/blog/keyboard-only-focus/#x) -->\n    <button class=\"owl-dt-control owl-dt-control-button owl-dt-control-arrow-button\"\n            type=\"button\" tabindex=\"0\"\n            [style.visibility]=\"showControlArrows? 'visible': 'hidden'\"\n            [disabled]=\"!prevButtonEnabled()\"\n            [attr.aria-label]=\"prevButtonLabel\"\n            (click)=\"previousClicked()\">\n        <span class=\"owl-dt-control-content owl-dt-control-button-content\" tabindex=\"-1\">\n            <!-- <editor-fold desc=\"SVG Arrow Left\"> -->\n        <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                 version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 250.738 250.738\"\n                 style=\"enable-background:new 0 0 250.738 250.738;\" xml:space=\"preserve\"\n                 width=\"100%\" height=\"100%\">\n                <path style=\"fill-rule: evenodd; clip-rule: evenodd;\" d=\"M96.633,125.369l95.053-94.533c7.101-7.055,7.101-18.492,0-25.546   c-7.1-7.054-18.613-7.054-25.714,0L58.989,111.689c-3.784,3.759-5.487,8.759-5.238,13.68c-0.249,4.922,1.454,9.921,5.238,13.681   l106.983,106.398c7.101,7.055,18.613,7.055,25.714,0c7.101-7.054,7.101-18.491,0-25.544L96.633,125.369z\"/>\n            </svg>\n            <!-- </editor-fold> -->\n        </span>\n    </button>\n    <div class=\"owl-dt-calendar-control-content\">\n        <button class=\"owl-dt-control owl-dt-control-button owl-dt-control-period-button\"\n                type=\"button\" tabindex=\"0\"\n                [attr.aria-label]=\"periodButtonLabel\"\n                (click)=\"toggleViews()\">\n            <span class=\"owl-dt-control-content owl-dt-control-button-content\" tabindex=\"-1\">\n                {{periodButtonText}}\n\n                <span class=\"owl-dt-control-button-arrow\"\n                      [style.transform]=\"'rotate(' + (isMonthView? 0 : 180) +'deg)'\">\n                    <!-- <editor-fold desc=\"SVG Arrow\"> -->\n                    <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n                         width=\"50%\" height=\"50%\" viewBox=\"0 0 292.362 292.362\" style=\"enable-background:new 0 0 292.362 292.362;\"\n                         xml:space=\"preserve\">\n                        <g>\n                            <path d=\"M286.935,69.377c-3.614-3.617-7.898-5.424-12.848-5.424H18.274c-4.952,0-9.233,1.807-12.85,5.424\n                                C1.807,72.998,0,77.279,0,82.228c0,4.948,1.807,9.229,5.424,12.847l127.907,127.907c3.621,3.617,7.902,5.428,12.85,5.428\n                                s9.233-1.811,12.847-5.428L286.935,95.074c3.613-3.617,5.427-7.898,5.427-12.847C292.362,77.279,290.548,72.998,286.935,69.377z\"/>\n                        </g>\n                    </svg>\n                    <!-- </editor-fold> -->\n                </span>\n            </span>\n        </button>\n    </div>\n    <button class=\"owl-dt-control owl-dt-control-button owl-dt-control-arrow-button\"\n            type=\"button\" tabindex=\"0\"\n            [style.visibility]=\"showControlArrows? 'visible': 'hidden'\"\n            [disabled]=\"!nextButtonEnabled()\"\n            [attr.aria-label]=\"nextButtonLabel\"\n            (click)=\"nextClicked()\">\n        <span class=\"owl-dt-control-content owl-dt-control-button-content\" tabindex=\"-1\">\n            <!-- <editor-fold desc=\"SVG Arrow Right\"> -->\n        <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n                 viewBox=\"0 0 250.738 250.738\" style=\"enable-background:new 0 0 250.738 250.738;\" xml:space=\"preserve\">\n                <path style=\"fill-rule:evenodd;clip-rule:evenodd;\" d=\"M191.75,111.689L84.766,5.291c-7.1-7.055-18.613-7.055-25.713,0\n                    c-7.101,7.054-7.101,18.49,0,25.544l95.053,94.534l-95.053,94.533c-7.101,7.054-7.101,18.491,0,25.545\n                    c7.1,7.054,18.613,7.054,25.713,0L191.75,139.05c3.784-3.759,5.487-8.759,5.238-13.681\n                    C197.237,120.447,195.534,115.448,191.75,111.689z\"/>\n            </svg>\n            <!-- </editor-fold> -->\n        </span>\n    </button>\n</div>\n<div class=\"owl-dt-calendar-main\" cdkMonitorSubtreeFocus [ngSwitch]=\"currentView\" tabindex=\"-1\">\n    <owl-date-time-month-view\n            *ngSwitchCase=\"'month'\"\n            [pickerMoment]=\"pickerMoment\"\n            [firstDayOfWeek]=\"firstDayOfWeek\"\n            [selected]=\"selected\"\n            [selecteds]=\"selecteds\"\n            [selectMode]=\"selectMode\"\n            [minDate]=\"minDate\"\n            [maxDate]=\"maxDate\"\n            [dateFilter]=\"dateFilter\"\n            [hideOtherMonths]=\"hideOtherMonths\"\n            (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n            (selectedChange)=\"dateSelected($event)\"\n            (userSelection)=\"userSelected()\"></owl-date-time-month-view>\n\n    <owl-date-time-year-view\n            *ngSwitchCase=\"'year'\"\n            [pickerMoment]=\"pickerMoment\"\n            [selected]=\"selected\"\n            [selecteds]=\"selecteds\"\n            [selectMode]=\"selectMode\"\n            [minDate]=\"minDate\"\n            [maxDate]=\"maxDate\"\n            [dateFilter]=\"dateFilter\"\n            (keyboardEnter)=\"focusActiveCell()\"\n            (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n            (monthSelected)=\"selectMonthInYearView($event)\"\n            (change)=\"goToDateInView($event, 'month')\"></owl-date-time-year-view>\n\n    <owl-date-time-multi-year-view\n            *ngSwitchCase=\"'multi-years'\"\n            [pickerMoment]=\"pickerMoment\"\n            [selected]=\"selected\"\n            [selecteds]=\"selecteds\"\n            [selectMode]=\"selectMode\"\n            [minDate]=\"minDate\"\n            [maxDate]=\"maxDate\"\n            [dateFilter]=\"dateFilter\"\n            (keyboardEnter)=\"focusActiveCell()\"\n            (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n            (yearSelected)=\"selectYearInMultiYearView($event)\"\n            (change)=\"goToDateInView($event, 'year')\"></owl-date-time-multi-year-view>\n</div>\n",
+                    template: "<div class=\"owl-dt-calendar-control\">\n    <!-- focus when keyboard tab (http://kizu.ru/en/blog/keyboard-only-focus/#x) -->\n    <button\n        class=\"owl-dt-control owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\"\n        tabindex=\"0\"\n        [style.visibility]=\"showControlArrows ? 'visible' : 'hidden'\"\n        [disabled]=\"!prevButtonEnabled()\"\n        [attr.aria-label]=\"prevButtonLabel\"\n        (click)=\"previousClicked()\"\n    >\n        <span\n            class=\"owl-dt-control-content owl-dt-control-button-content\"\n            tabindex=\"-1\"\n        >\n            <!-- <editor-fold desc=\"SVG Arrow Left\"> -->\n            <svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                version=\"1.1\"\n                x=\"0px\"\n                y=\"0px\"\n                viewBox=\"0 0 250.738 250.738\"\n                style=\"enable-background:new 0 0 250.738 250.738;\"\n                xml:space=\"preserve\"\n                width=\"100%\"\n                height=\"100%\"\n            >\n                <path\n                    style=\"fill-rule: evenodd; clip-rule: evenodd;\"\n                    d=\"M96.633,125.369l95.053-94.533c7.101-7.055,7.101-18.492,0-25.546   c-7.1-7.054-18.613-7.054-25.714,0L58.989,111.689c-3.784,3.759-5.487,8.759-5.238,13.68c-0.249,4.922,1.454,9.921,5.238,13.681   l106.983,106.398c7.101,7.055,18.613,7.055,25.714,0c7.101-7.054,7.101-18.491,0-25.544L96.633,125.369z\"\n                />\n            </svg>\n            <!-- </editor-fold> -->\n        </span>\n    </button>\n    <div class=\"owl-dt-calendar-control-content\">\n        <button\n            class=\"owl-dt-control owl-dt-control-button owl-dt-control-period-button\"\n            type=\"button\"\n            tabindex=\"0\"\n            [attr.aria-label]=\"periodButtonLabel\"\n            (click)=\"toggleViews()\"\n        >\n            <span\n                class=\"owl-dt-control-content owl-dt-control-button-content\"\n                tabindex=\"-1\"\n            >\n                {{ periodButtonText }}\n\n                <span\n                    class=\"owl-dt-control-button-arrow\"\n                    [style.transform]=\"\n                        'rotate(' + (isMonthView ? 0 : 180) + 'deg)'\n                    \"\n                >\n                    <!-- <editor-fold desc=\"SVG Arrow\"> -->\n                    <svg\n                        version=\"1.1\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                        xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                        x=\"0px\"\n                        y=\"0px\"\n                        width=\"50%\"\n                        height=\"50%\"\n                        viewBox=\"0 0 292.362 292.362\"\n                        style=\"enable-background:new 0 0 292.362 292.362;\"\n                        xml:space=\"preserve\"\n                    >\n                        <g>\n                            <path\n                                d=\"M286.935,69.377c-3.614-3.617-7.898-5.424-12.848-5.424H18.274c-4.952,0-9.233,1.807-12.85,5.424\n                                C1.807,72.998,0,77.279,0,82.228c0,4.948,1.807,9.229,5.424,12.847l127.907,127.907c3.621,3.617,7.902,5.428,12.85,5.428\n                                s9.233-1.811,12.847-5.428L286.935,95.074c3.613-3.617,5.427-7.898,5.427-12.847C292.362,77.279,290.548,72.998,286.935,69.377z\"\n                            />\n                        </g>\n                    </svg>\n                    <!-- </editor-fold> -->\n                </span>\n            </span>\n        </button>\n    </div>\n    <button\n        class=\"owl-dt-control owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\"\n        tabindex=\"0\"\n        [style.visibility]=\"showControlArrows ? 'visible' : 'hidden'\"\n        [disabled]=\"!nextButtonEnabled()\"\n        [attr.aria-label]=\"nextButtonLabel\"\n        (click)=\"nextClicked()\"\n    >\n        <span\n            class=\"owl-dt-control-content owl-dt-control-button-content\"\n            tabindex=\"-1\"\n        >\n            <!-- <editor-fold desc=\"SVG Arrow Right\"> -->\n            <svg\n                version=\"1.1\"\n                xmlns=\"http://www.w3.org/2000/svg\"\n                xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                x=\"0px\"\n                y=\"0px\"\n                viewBox=\"0 0 250.738 250.738\"\n                style=\"enable-background:new 0 0 250.738 250.738;\"\n                xml:space=\"preserve\"\n            >\n                <path\n                    style=\"fill-rule:evenodd;clip-rule:evenodd;\"\n                    d=\"M191.75,111.689L84.766,5.291c-7.1-7.055-18.613-7.055-25.713,0\n                    c-7.101,7.054-7.101,18.49,0,25.544l95.053,94.534l-95.053,94.533c-7.101,7.054-7.101,18.491,0,25.545\n                    c7.1,7.054,18.613,7.054,25.713,0L191.75,139.05c3.784-3.759,5.487-8.759,5.238-13.681\n                    C197.237,120.447,195.534,115.448,191.75,111.689z\"\n                />\n            </svg>\n            <!-- </editor-fold> -->\n        </span>\n    </button>\n</div>\n<div\n    class=\"owl-dt-calendar-main\"\n    cdkMonitorSubtreeFocus\n    [ngSwitch]=\"currentView\"\n    tabindex=\"-1\"\n>\n    <owl-date-time-month-view\n        *ngSwitchCase=\"'month'\"\n        [pickerMoment]=\"pickerMoment\"\n        [firstDayOfWeek]=\"firstDayOfWeek\"\n        [selected]=\"selected\"\n        [selecteds]=\"selecteds\"\n        [selectMode]=\"selectMode\"\n        [minDate]=\"minDate\"\n        [maxDate]=\"maxDate\"\n        [dateFilter]=\"dateFilter\"\n        [hideOtherMonths]=\"hideOtherMonths\"\n        (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n        (selectedChange)=\"dateSelected($event)\"\n        (userSelection)=\"userSelected()\"\n    ></owl-date-time-month-view>\n\n    <owl-date-time-year-view\n        *ngSwitchCase=\"'year'\"\n        [pickerMoment]=\"pickerMoment\"\n        [selected]=\"selected\"\n        [selecteds]=\"selecteds\"\n        [selectMode]=\"selectMode\"\n        [minDate]=\"minDate\"\n        [maxDate]=\"maxDate\"\n        [dateFilter]=\"dateFilter\"\n        (keyboardEnter)=\"focusActiveCell()\"\n        (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n        (monthSelected)=\"selectMonthInYearView($event)\"\n        (change)=\"goToDateInView($event, 'month')\"\n    ></owl-date-time-year-view>\n\n    <owl-date-time-multi-year-view\n        *ngSwitchCase=\"'multi-years'\"\n        [pickerMoment]=\"pickerMoment\"\n        [selected]=\"selected\"\n        [selecteds]=\"selecteds\"\n        [selectMode]=\"selectMode\"\n        [minDate]=\"minDate\"\n        [maxDate]=\"maxDate\"\n        [dateFilter]=\"dateFilter\"\n        (keyboardEnter)=\"focusActiveCell()\"\n        (pickerMomentChange)=\"handlePickerMomentChange($event)\"\n        (yearSelected)=\"selectYearInMultiYearView($event)\"\n        (change)=\"goToDateInView($event, 'year')\"\n    ></owl-date-time-multi-year-view>\n</div>\n",
                     host: {
                         '[class.owl-dt-calendar]': 'owlDTCalendarClass'
                     },
-                    preserveWhitespaces: false,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -1393,7 +1406,6 @@ var OwlCalendarComponent = /** @class */ (function () {
 if (false) {
     /**
      * Date filter for the month and year view
-     *
      * @type {?}
      */
     OwlCalendarComponent.prototype.dateFilter;
@@ -1440,7 +1452,6 @@ if (false) {
     OwlCalendarComponent.prototype.startView;
     /**
      * Whether to hide dates in other months at the start or end of the current month.
-     *
      * @type {?}
      */
     OwlCalendarComponent.prototype.hideOtherMonths;
@@ -1461,13 +1472,11 @@ if (false) {
     OwlCalendarComponent.prototype.userSelection;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     *
      * @type {?}
      */
     OwlCalendarComponent.prototype.yearSelected;
     /**
      * Emits the selected month. This doesn't imply a change on the selected date
-     *
      * @type {?}
      */
     OwlCalendarComponent.prototype.monthSelected;
@@ -1625,12 +1634,11 @@ var OwlTimerComponent = /** @class */ (function () {
          * The value would be displayed in hourBox.
          * We need this because the value displayed in hourBox it not
          * the same as the hourValue when the timer is in hour12Timer mode.
-         * */
+         */
         get: /**
          * The value would be displayed in hourBox.
          * We need this because the value displayed in hourBox it not
          * the same as the hourValue when the timer is in hour12Timer mode.
-         *
          * @return {?}
          */
         function () {
@@ -1781,15 +1789,13 @@ var OwlTimerComponent = /** @class */ (function () {
     function () { };
     /**
      * Focus to the host element
-     * */
+     */
     /**
      * Focus to the host element
-     *
      * @return {?}
      */
     OwlTimerComponent.prototype.focus = /**
      * Focus to the host element
-     *
      * @return {?}
      */
     function () {
@@ -1812,18 +1818,16 @@ var OwlTimerComponent = /** @class */ (function () {
     /**
      * Set the hour value via typing into timer box input
      * We need this to handle the hour value when the timer is in hour12 mode
-     * */
+     */
     /**
      * Set the hour value via typing into timer box input
      * We need this to handle the hour value when the timer is in hour12 mode
-     *
      * @param {?} hours
      * @return {?}
      */
     OwlTimerComponent.prototype.setHourValueViaInput = /**
      * Set the hour value via typing into timer box input
      * We need this to handle the hour value when the timer is in hour12 mode
-     *
      * @param {?} hours
      * @return {?}
      */
@@ -1882,7 +1886,7 @@ var OwlTimerComponent = /** @class */ (function () {
      * @param {?} event
      * @return {?}
      */
-    OwlTimerComponent.prototype.setMeridiem = /**
+    OwlTimerComponent.prototype.setMeridian = /**
      * @param {?} event
      * @return {?}
      */
@@ -1997,13 +2001,12 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     /**
      * PickerMoment's hour value +/- certain amount and compare it to the give date
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2014,7 +2017,6 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2032,13 +2034,12 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     /**
      * PickerMoment's minute value +/- certain amount and compare it to the give date
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2049,7 +2050,6 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2067,13 +2067,12 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     * */
+     */
     /**
      * PickerMoment's second value +/- certain amount and compare it to the give date
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2084,7 +2083,6 @@ var OwlTimerComponent = /** @class */ (function () {
      * 1 is after the comparedDate
      * -1 is before the comparedDate
      * 0 is equal the comparedDate
-     *
      * @private
      * @param {?} amount
      * @param {?} comparedDate
@@ -2122,14 +2120,12 @@ var OwlTimerComponent = /** @class */ (function () {
         { type: Component, args: [{
                     exportAs: 'owlDateTimeTimer',
                     selector: 'owl-date-time-timer',
-                    template: "<owl-date-time-timer-box\n        [upBtnAriaLabel]=\"upHourButtonLabel\"\n        [downBtnAriaLabel]=\"downHourButtonLabel\"\n        [upBtnDisabled]=\"!upHourEnabled()\"\n        [downBtnDisabled]=\"!downHourEnabled()\"\n        [boxValue]=\"hourBoxValue\"\n        [value]=\"hourValue\" [min]=\"0\" [max]=\"23\"\n        [step]=\"stepHour\" [inputLabel]=\"'Hour'\"\n        (inputChange)=\"setHourValueViaInput($event)\"\n        (valueChange)=\"setHourValue($event)\"></owl-date-time-timer-box>\n<owl-date-time-timer-box\n        [showDivider]=\"true\"\n        [upBtnAriaLabel]=\"upMinuteButtonLabel\"\n        [downBtnAriaLabel]=\"downMinuteButtonLabel\"\n        [upBtnDisabled]=\"!upMinuteEnabled()\"\n        [downBtnDisabled]=\"!downMinuteEnabled()\"\n        [value]=\"minuteValue\" [min]=\"0\" [max]=\"59\"\n        [step]=\"stepMinute\" [inputLabel]=\"'Minute'\"\n        (inputChange)=\"setMinuteValue($event)\"\n        (valueChange)=\"setMinuteValue($event)\"></owl-date-time-timer-box>\n<owl-date-time-timer-box\n        *ngIf=\"showSecondsTimer\"\n        [showDivider]=\"true\"\n        [upBtnAriaLabel]=\"upSecondButtonLabel\"\n        [downBtnAriaLabel]=\"downSecondButtonLabel\"\n        [upBtnDisabled]=\"!upSecondEnabled()\"\n        [downBtnDisabled]=\"!downSecondEnabled()\"\n        [value]=\"secondValue\" [min]=\"0\" [max]=\"59\"\n        [step]=\"stepSecond\" [inputLabel]=\"'Second'\"\n        (inputChange)=\"setSecondValue($event)\"\n        (valueChange)=\"setSecondValue($event)\"></owl-date-time-timer-box>\n\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\n    <button class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\n            type=\"button\" tabindex=\"0\"\n            (click)=\"setMeridiem($event)\">\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n            {{hour12ButtonLabel}}\n        </span>\n    </button>\n</div>\n",
-                    preserveWhitespaces: false,
+                    template: "<owl-date-time-timer-box\n    [upBtnAriaLabel]=\"upHourButtonLabel\"\n    [downBtnAriaLabel]=\"downHourButtonLabel\"\n    [upBtnDisabled]=\"!upHourEnabled()\"\n    [downBtnDisabled]=\"!downHourEnabled()\"\n    [boxValue]=\"hourBoxValue\"\n    [value]=\"hourValue\"\n    [min]=\"0\"\n    [max]=\"23\"\n    [step]=\"stepHour\"\n    [inputLabel]=\"'Hour'\"\n    (inputChange)=\"setHourValueViaInput($event)\"\n    (valueChange)=\"setHourValue($event)\"\n></owl-date-time-timer-box>\n<owl-date-time-timer-box\n    [showDivider]=\"true\"\n    [upBtnAriaLabel]=\"upMinuteButtonLabel\"\n    [downBtnAriaLabel]=\"downMinuteButtonLabel\"\n    [upBtnDisabled]=\"!upMinuteEnabled()\"\n    [downBtnDisabled]=\"!downMinuteEnabled()\"\n    [value]=\"minuteValue\"\n    [min]=\"0\"\n    [max]=\"59\"\n    [step]=\"stepMinute\"\n    [inputLabel]=\"'Minute'\"\n    (inputChange)=\"setMinuteValue($event)\"\n    (valueChange)=\"setMinuteValue($event)\"\n></owl-date-time-timer-box>\n<owl-date-time-timer-box\n    *ngIf=\"showSecondsTimer\"\n    [showDivider]=\"true\"\n    [upBtnAriaLabel]=\"upSecondButtonLabel\"\n    [downBtnAriaLabel]=\"downSecondButtonLabel\"\n    [upBtnDisabled]=\"!upSecondEnabled()\"\n    [downBtnDisabled]=\"!downSecondEnabled()\"\n    [value]=\"secondValue\"\n    [min]=\"0\"\n    [max]=\"59\"\n    [step]=\"stepSecond\"\n    [inputLabel]=\"'Second'\"\n    (inputChange)=\"setSecondValue($event)\"\n    (valueChange)=\"setSecondValue($event)\"\n></owl-date-time-timer-box>\n\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\n    <button\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\n        type=\"button\"\n        tabindex=\"0\"\n        (click)=\"setMeridian($event)\"\n    >\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n            {{ hour12ButtonLabel }}\n        </span>\n    </button>\n</div>\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     host: {
                         '[class.owl-dt-timer]': 'owlDTTimerClass',
                         '[attr.tabindex]': 'owlDTTimeTabIndex'
-                    },
-                    styles: [""]
+                    }
                 }] }
     ];
     /** @nocollapse */
@@ -2249,7 +2245,7 @@ var owlDateTimePickerAnimations = {
     fadeInPicker: trigger('fadeInPicker', [
         state('enter', style({ opacity: 1 })),
         state('void', style({ opacity: 0 })),
-        transition('void => enter', animate('400ms 100ms cubic-bezier(0.55, 0, 0.55, 0.2)')),
+        transition('void => enter', animate('400ms 100ms cubic-bezier(0.55, 0, 0.55, 0.2)'))
     ])
 };
 
@@ -2270,12 +2266,10 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
         // The current active SelectedIndex in range select mode (0: 'from', 1: 'to')
         /**
          * Stream emits when try to hide picker
-         *
          */
         this.hidePicker$ = new Subject();
         /**
          * Stream emits when try to confirm the selected value
-         *
          */
         this.confirmSelected$ = new Subject();
         this.pickerOpened$ = new Subject();
@@ -2363,10 +2357,9 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
     Object.defineProperty(OwlDateTimeContainerComponent.prototype, "fromLabel", {
         /**
          * The range 'from' label
-         * */
+         */
         get: /**
          * The range 'from' label
-         *
          * @return {?}
          */
         function () {
@@ -2378,10 +2371,9 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
     Object.defineProperty(OwlDateTimeContainerComponent.prototype, "toLabel", {
         /**
          * The range 'to' label
-         * */
+         */
         get: /**
          * The range 'to' label
-         *
          * @return {?}
          */
         function () {
@@ -2393,10 +2385,9 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
     Object.defineProperty(OwlDateTimeContainerComponent.prototype, "fromFormattedValue", {
         /**
          * The range 'from' formatted value
-         * */
+         */
         get: /**
          * The range 'from' formatted value
-         *
          * @return {?}
          */
         function () {
@@ -2412,10 +2403,9 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
     Object.defineProperty(OwlDateTimeContainerComponent.prototype, "toFormattedValue", {
         /**
          * The range 'to' formatted value
-         * */
+         */
         get: /**
          * The range 'to' formatted value
-         *
          * @return {?}
          */
         function () {
@@ -2433,12 +2423,11 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
          * Cases in which the control buttons show in the picker
          * 1) picker mode is 'dialog'
          * 2) picker type is NOT 'calendar' and the picker mode is NOT 'inline'
-         * */
+         */
         get: /**
          * Cases in which the control buttons show in the picker
          * 1) picker mode is 'dialog'
          * 2) picker type is NOT 'calendar' and the picker mode is NOT 'inline'
-         *
          * @return {?}
          */
         function () {
@@ -2902,16 +2891,14 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
     };
     /**
      * Focus to the picker
-     * */
+     */
     /**
      * Focus to the picker
-     *
      * @private
      * @return {?}
      */
     OwlDateTimeContainerComponent.prototype.focusPicker = /**
      * Focus to the picker
-     *
      * @private
      * @return {?}
      */
@@ -2932,7 +2919,6 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
                     selector: 'owl-date-time-container',
                     template: "<div [cdkTrapFocus]=\"picker.pickerMode !== 'inline'\"\n     [@fadeInPicker]=\"picker.pickerMode === 'inline'? '' : 'enter'\"\n     class=\"owl-dt-container-inner\">\n\n    <owl-date-time-calendar\n            *ngIf=\"pickerType === 'both' || pickerType === 'calendar'\"\n            class=\"owl-dt-container-row\"\n            [firstDayOfWeek]=\"picker.firstDayOfWeek\"\n            [(pickerMoment)]=\"pickerMoment\"\n            [selected]=\"picker.selected\"\n            [selecteds]=\"picker.selecteds\"\n            [selectMode]=\"picker.selectMode\"\n            [minDate]=\"picker.minDateTime\"\n            [maxDate]=\"picker.maxDateTime\"\n            [dateFilter]=\"picker.dateTimeFilter\"\n            [startView]=\"picker.startView\"\n            [hideOtherMonths]=\"picker.hideOtherMonths\"\n            (yearSelected)=\"picker.selectYear($event)\"\n            (monthSelected)=\"picker.selectMonth($event)\"\n            (selectedChange)=\"dateSelected($event)\"></owl-date-time-calendar>\n\n    <owl-date-time-timer\n            *ngIf=\"pickerType === 'both' || pickerType === 'timer'\"\n            class=\"owl-dt-container-row\"\n            [pickerMoment]=\"pickerMoment\"\n            [minDateTime]=\"picker.minDateTime\"\n            [maxDateTime]=\"picker.maxDateTime\"\n            [showSecondsTimer]=\"picker.showSecondsTimer\"\n            [hour12Timer]=\"picker.hour12Timer\"\n            [stepHour]=\"picker.stepHour\"\n            [stepMinute]=\"picker.stepMinute\"\n            [stepSecond]=\"picker.stepSecond\"\n            (selectedChange)=\"timeSelected($event)\"></owl-date-time-timer>\n\n    <div *ngIf=\"picker.isInRangeMode\"\n         role=\"radiogroup\"\n         class=\"owl-dt-container-info owl-dt-container-row\">\n        <div role=\"radio\" [tabindex]=\"activeSelectedIndex === 0 ? 0 : -1\"\n             [attr.aria-checked]=\"activeSelectedIndex === 0\"\n             class=\"owl-dt-control owl-dt-container-range owl-dt-container-from\"\n             [ngClass]=\"{'owl-dt-container-info-active': activeSelectedIndex === 0}\"\n             (click)=\"handleClickOnInfoGroup($event, 0)\"\n             (keydown)=\"handleKeydownOnInfoGroup($event, to, 0)\" #from>\n            <span class=\"owl-dt-control-content owl-dt-container-range-content\" tabindex=\"-1\">\n                <span class=\"owl-dt-container-info-label\">{{fromLabel}}:</span>\n                <span class=\"owl-dt-container-info-value\">{{fromFormattedValue}}</span>\n            </span>\n        </div>\n        <div role=\"radio\" [tabindex]=\"activeSelectedIndex === 1 ? 0 : -1\"\n             [attr.aria-checked]=\"activeSelectedIndex === 1\"\n             class=\"owl-dt-control owl-dt-container-range owl-dt-container-to\"\n             [ngClass]=\"{'owl-dt-container-info-active': activeSelectedIndex === 1}\"\n             (click)=\"handleClickOnInfoGroup($event, 1)\"\n             (keydown)=\"handleKeydownOnInfoGroup($event, from, 1)\" #to>\n            <span class=\"owl-dt-control-content owl-dt-container-range-content\" tabindex=\"-1\">\n                <span class=\"owl-dt-container-info-label\">{{toLabel}}:</span>\n                <span class=\"owl-dt-container-info-value\">{{toFormattedValue}}</span>\n            </span>\n        </div>\n    </div>\n\n    <div *ngIf=\"showControlButtons\" class=\"owl-dt-container-buttons owl-dt-container-row\">\n        <button class=\"owl-dt-control owl-dt-control-button owl-dt-container-control-button\"\n                type=\"button\" tabindex=\"0\"\n                (click)=\"onCancelClicked($event)\">\n            <span class=\"owl-dt-control-content owl-dt-control-button-content\" tabindex=\"-1\">\n                {{cancelLabel}}\n            </span>\n        </button>\n        <button class=\"owl-dt-control owl-dt-control-button owl-dt-container-control-button\"\n                type=\"button\" tabindex=\"0\"\n                (click)=\"onSetClicked($event)\">\n            <span class=\"owl-dt-control-content owl-dt-control-button-content\" tabindex=\"-1\">\n                {{setLabel}}\n            </span>\n        </button>\n    </div>\n</div>\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
-                    preserveWhitespaces: false,
                     animations: [
                         owlDateTimePickerAnimations.transformPicker,
                         owlDateTimePickerAnimations.fadeInPicker
@@ -2945,9 +2931,8 @@ var OwlDateTimeContainerComponent = /** @class */ (function () {
                         '[class.owl-dt-inline-container]': 'owlDTInlineContainerClass',
                         '[class.owl-dt-container-disabled]': 'owlDTContainerDisabledClass',
                         '[attr.id]': 'owlDTContainerId',
-                        '[@transformPicker]': 'owlDTContainerAnimation',
-                    },
-                    styles: [""]
+                        '[@transformPicker]': 'owlDTContainerAnimation'
+                    }
                 }] }
     ];
     /** @nocollapse */
@@ -2974,14 +2959,12 @@ if (false) {
     OwlDateTimeContainerComponent.prototype.activeSelectedIndex;
     /**
      * Stream emits when try to hide picker
-     *
      * @type {?}
      * @private
      */
     OwlDateTimeContainerComponent.prototype.hidePicker$;
     /**
      * Stream emits when try to confirm the selected value
-     *
      * @type {?}
      * @private
      */
@@ -3059,10 +3042,6 @@ var OwlDateTime = /** @class */ (function () {
          * Seconds to change per step
          */
         this._stepSecond = 1;
-        /**
-         * Set the first day of week
-         */
-        this._firstDayOfWeek = 0;
         /**
          * Whether to hide dates in other months at the start or end of the current month.
          */
@@ -3192,9 +3171,9 @@ var OwlDateTime = /** @class */ (function () {
          * @return {?}
          */
         function (value) {
-            value = coerceNumberProperty(value, 0);
+            value = coerceNumberProperty(value);
             if (value > 6 || value < 0) {
-                this._firstDayOfWeek = 0;
+                this._firstDayOfWeek = undefined;
             }
             else {
                 this._firstDayOfWeek = value;
@@ -3500,22 +3479,18 @@ var OwlDialogConfig = /** @class */ (function () {
         this.role = 'dialog';
         /**
          * Custom class for the pane
-         *
          */
         this.paneClass = '';
         /**
          * Mouse Event
-         *
          */
         this.event = null;
         /**
          * Custom class for the backdrop
-         *
          */
         this.backdropClass = '';
         /**
          * Whether the dialog should close when the user goes backwards/forwards in history.
-         *
          */
         this.closeOnNavigation = true;
         /**
@@ -3529,13 +3504,11 @@ var OwlDialogConfig = /** @class */ (function () {
         /**
          * The max-width of the overlay panel.
          * If a number is provided, pixel units are assumed.
-         *
          */
         this.maxWidth = '85vw';
         /**
          * The scroll strategy when the dialog is open
          * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
-         *
          */
         this.scrollStrategy = new NoopScrollStrategy();
         this.id = "owl-dialog-" + uniqueId++;
@@ -3560,7 +3533,6 @@ if (false) {
     OwlDialogConfig.prototype.hasBackdrop;
     /**
      * Custom style for the backdrop
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.backdropStyle;
@@ -3586,25 +3558,21 @@ if (false) {
     OwlDialogConfig.prototype.role;
     /**
      * Custom class for the pane
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.paneClass;
     /**
      * Mouse Event
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.event;
     /**
      * Custom class for the backdrop
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.backdropClass;
     /**
      * Whether the dialog should close when the user goes backwards/forwards in history.
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.closeOnNavigation;
@@ -3621,28 +3589,24 @@ if (false) {
     /**
      * The min-width of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.minWidth;
     /**
      * The min-height of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.minHeight;
     /**
      * The max-width of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.maxWidth;
     /**
      * The max-height of the overlay panel.
      * If a number is provided, pixel units are assumed.
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.maxHeight;
@@ -3654,7 +3618,6 @@ if (false) {
     /**
      * The scroll strategy when the dialog is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
-     *
      * @type {?}
      */
     OwlDialogConfig.prototype.scrollStrategy;
@@ -3694,7 +3657,9 @@ OwlDialogRef = /** @class */ (function () {
          * @param {?} event
          * @return {?}
          */
-        function (event) { return event.phaseName === 'done' && event.toState === 'enter'; })), take(1))
+        function (event) {
+            return event.phaseName === 'done' && event.toState === 'enter';
+        })), take(1))
             .subscribe((/**
          * @return {?}
          */
@@ -3707,7 +3672,9 @@ OwlDialogRef = /** @class */ (function () {
          * @param {?} event
          * @return {?}
          */
-        function (event) { return event.phaseName === 'done' && event.toState === 'exit'; })), take(1))
+        function (event) {
+            return event.phaseName === 'done' && event.toState === 'exit';
+        })), take(1))
             .subscribe((/**
          * @return {?}
          */
@@ -3716,9 +3683,10 @@ OwlDialogRef = /** @class */ (function () {
             _this.locationChanged.unsubscribe();
             _this._afterClosed$.next(_this.result);
             _this._afterClosed$.complete();
-            _this.componentInstance = (/** @type {?} */ (null));
+            _this.componentInstance = undefined;
         }));
-        this.overlayRef.keydownEvents()
+        this.overlayRef
+            .keydownEvents()
             .pipe(filter((/**
          * @param {?} event
          * @return {?}
@@ -3816,13 +3784,17 @@ OwlDialogRef = /** @class */ (function () {
         /** @type {?} */
         var strategy = (/** @type {?} */ (this)).getPositionStrategy();
         if (position && (position.left || position.right)) {
-            position.left ? strategy.left(position.left) : strategy.right(position.right);
+            position.left
+                ? strategy.left(position.left)
+                : strategy.right(position.right);
         }
         else {
             strategy.centerHorizontally();
         }
         if (position && (position.top || position.bottom)) {
-            position.top ? strategy.top(position.top) : strategy.bottom(position.bottom);
+            position.top
+                ? strategy.top(position.top)
+                : strategy.bottom(position.bottom);
         }
         else {
             strategy.centerVertically();
@@ -3854,7 +3826,9 @@ OwlDialogRef = /** @class */ (function () {
     function (width, height) {
         if (width === void 0) { width = 'auto'; }
         if (height === void 0) { height = 'auto'; }
-        (/** @type {?} */ (this)).getPositionStrategy().width(width).height(height);
+        (/** @type {?} */ (this)).getPositionStrategy()
+            .width(width)
+            .height(height);
         (/** @type {?} */ (this)).overlayRef.updatePosition();
         return (/** @type {?} */ (this));
     };
@@ -3906,7 +3880,8 @@ OwlDialogRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return (/** @type {?} */ (this.overlayRef.getConfig().positionStrategy));
+        return (/** @type {?} */ (this.overlayRef.getConfig()
+            .positionStrategy));
     };
     return OwlDialogRef;
 }());
@@ -3939,7 +3914,6 @@ if (false) {
     OwlDialogRef.prototype.locationChanged;
     /**
      * The instance of component opened into modal
-     *
      * @type {?}
      */
     OwlDialogRef.prototype.componentInstance;
@@ -4463,7 +4437,6 @@ function extendObject(dest) {
 var OWL_DIALOG_DATA = new InjectionToken('OwlDialogData');
 /**
  * Injection token that determines the scroll handling while the dialog is open.
- *
  * @type {?}
  */
 var OWL_DIALOG_SCROLL_STRATEGY = new InjectionToken('owl-dialog-scroll-strategy');
@@ -4472,12 +4445,10 @@ var OWL_DIALOG_SCROLL_STRATEGY = new InjectionToken('owl-dialog-scroll-strategy'
  * @return {?}
  */
 function OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    /** @type {?} */
-    var fn = (/**
+    return (/**
      * @return {?}
      */
     function () { return overlay.scrollStrategies.block(); });
-    return fn;
 }
 /**
  * \@docs-private
@@ -4489,9 +4460,7 @@ var OWL_DIALOG_SCROLL_STRATEGY_PROVIDER = {
     useFactory: OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY
 };
 /**
- * I
- * njection token that can be used to specify default dialog options.
- *
+ * Injection token that can be used to specify default dialog options.
  * @type {?}
  */
 var OWL_DIALOG_DEFAULT_OPTIONS = new InjectionToken('owl-dialog-default-options');
@@ -4953,12 +4922,10 @@ var OWL_DTPICKER_SCROLL_STRATEGY = new InjectionToken('owl-dtpicker-scroll-strat
  * @return {?}
  */
 function OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    /** @type {?} */
-    var fn = (/**
+    return (/**
      * @return {?}
      */
     function () { return overlay.scrollStrategies.block(); });
-    return fn;
 }
 /**
  * \@docs-private
@@ -5009,34 +4976,28 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
         _this._opened = false;
         /**
          * Callback when the picker is closed
-         *
          */
         _this.afterPickerClosed = new EventEmitter();
         /**
          * Callback when the picker is open
-         *
          */
         _this.afterPickerOpen = new EventEmitter();
         /**
          * Emits selected year in multi-year view
          * This doesn't imply a change on the selected date.
-         *
          */
         _this.yearSelected = new EventEmitter();
         /**
          * Emits selected month in year view
          * This doesn't imply a change on the selected date.
-         *
          */
         _this.monthSelected = new EventEmitter();
         /**
          * Emit when the selected value has been confirmed
-         *
          */
         _this.confirmSelectedChange = new EventEmitter();
         /**
          * Emits when the date time picker is disabled.
-         *
          */
         _this.disabledChange = new EventEmitter();
         _this.dtInputSub = Subscription.EMPTY;
@@ -5404,7 +5365,7 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
          *    the 'selecteds' has 'from'(selecteds[0]) and 'to'(selecteds[1]) values.
          * 4) selectMode is 'rangeFrom' and selecteds[0] has value.
          * 5) selectMode is 'rangeTo' and selecteds[1] has value.
-         * */
+         */
         if (this.pickerMode !== 'dialog' &&
             this.pickerType === 'calendar' &&
             ((this.selectMode === 'single' && this.selected) ||
@@ -5418,16 +5379,14 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
     };
     /**
      * Emits the selected year in multi-year view
-     * */
+     */
     /**
      * Emits the selected year in multi-year view
-     *
      * @param {?} normalizedYear
      * @return {?}
      */
     OwlDateTimeComponent.prototype.selectYear = /**
      * Emits the selected year in multi-year view
-     *
      * @param {?} normalizedYear
      * @return {?}
      */
@@ -5436,16 +5395,14 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
     };
     /**
      * Emits selected month in year view
-     * */
+     */
     /**
      * Emits selected month in year view
-     *
      * @param {?} normalizedMonth
      * @return {?}
      */
     OwlDateTimeComponent.prototype.selectMonth = /**
      * Emits selected month in year view
-     *
      * @param {?} normalizedMonth
      * @return {?}
      */
@@ -5664,16 +5621,14 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
     };
     /**
      * Create the popup PositionStrategy.
-     * */
+     */
     /**
      * Create the popup PositionStrategy.
-     *
      * @private
      * @return {?}
      */
     OwlDateTimeComponent.prototype.createPopupPositionStrategy = /**
      * Create the popup PositionStrategy.
-     *
      * @private
      * @return {?}
      */
@@ -5730,9 +5685,7 @@ var OwlDateTimeComponent = /** @class */ (function (_super) {
                     selector: 'owl-date-time',
                     exportAs: 'owlDateTime',
                     template: "",
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    preserveWhitespaces: false,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -5809,45 +5762,38 @@ if (false) {
     /**
      * The scroll strategy when the picker is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.scrollStrategy;
     /**
      * Callback when the picker is closed
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.afterPickerClosed;
     /**
      * Callback when the picker is open
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.afterPickerOpen;
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.yearSelected;
     /**
      * Emits selected month in year view
      * This doesn't imply a change on the selected date.
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.monthSelected;
     /**
      * Emit when the selected value has been confirmed
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.confirmSelectedChange;
     /**
      * Emits when the date time picker is disabled.
-     *
      * @type {?}
      */
     OwlDateTimeComponent.prototype.disabledChange;
@@ -5976,7 +5922,9 @@ var OwlDateTimeTriggerDirective = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._disabled === undefined ? this.dtPicker.disabled : !!this._disabled;
+            return this._disabled === undefined
+                ? this.dtPicker.disabled
+                : !!this._disabled;
         },
         set: /**
          * @param {?} value
@@ -6004,8 +5952,7 @@ var OwlDateTimeTriggerDirective = /** @class */ (function () {
     OwlDateTimeTriggerDirective.prototype.ngOnInit = /**
      * @return {?}
      */
-    function () {
-    };
+    function () { };
     /**
      * @param {?} changes
      * @return {?}
@@ -6063,13 +6010,14 @@ var OwlDateTimeTriggerDirective = /** @class */ (function () {
         var _this = this;
         this.stateChanges.unsubscribe();
         /** @type {?} */
-        var inputDisabled = this.dtPicker && this.dtPicker.dtInput ?
-            this.dtPicker.dtInput.disabledChange : of();
+        var inputDisabled = this.dtPicker && this.dtPicker.dtInput
+            ? this.dtPicker.dtInput.disabledChange
+            : of();
         /** @type {?} */
-        var pickerDisabled = this.dtPicker ?
-            this.dtPicker.disabledChange : of();
-        this.stateChanges = merge(pickerDisabled, inputDisabled)
-            .subscribe((/**
+        var pickerDisabled = this.dtPicker
+            ? this.dtPicker.disabledChange
+            : of();
+        this.stateChanges = merge(pickerDisabled, inputDisabled).subscribe((/**
          * @return {?}
          */
         function () {
@@ -6154,25 +6102,24 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
         /**
          * The character to separate the 'from' and 'to' in input value
          */
-        this.rangeSeparator = '~';
+        this.rangeSeparator = '-';
         this._values = [];
         /**
          * Callback to invoke when `change` event is fired on this `<input>`
-         *
          */
         this.dateTimeChange = new EventEmitter();
         /**
          * Callback to invoke when an `input` event is fired on this `<input>`.
-         *
          */
         this.dateTimeInput = new EventEmitter();
         this.dtPickerSub = Subscription.EMPTY;
         this.localeSub = Subscription.EMPTY;
         this.lastValueValid = true;
         this.onModelChange = (/**
+         * @param {?} date
          * @return {?}
          */
-        function () { });
+        function (date) { });
         this.onModelTouched = (/**
          * @return {?}
          */
@@ -6281,7 +6228,6 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
         /**
          * The form control validator for the range.
          * Check whether the 'before' value is before the 'to' value
-         *
          */
         this.rangeValidator = (/**
          * @param {?} control
@@ -6339,10 +6285,9 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
     Object.defineProperty(OwlDateTimeInputDirective.prototype, "owlDateTime", {
         /**
          * The date time picker that this input is associated with.
-         * */
+         */
         set: /**
          * The date time picker that this input is associated with.
-         *
          * @param {?} value
          * @return {?}
          */
@@ -6746,16 +6691,14 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
     };
     /**
      * Open the picker when user hold alt + DOWN_ARROW
-     * */
+     */
     /**
      * Open the picker when user hold alt + DOWN_ARROW
-     *
      * @param {?} event
      * @return {?}
      */
     OwlDateTimeInputDirective.prototype.handleKeydownOnHost = /**
      * Open the picker when user hold alt + DOWN_ARROW
-     *
      * @param {?} event
      * @return {?}
      */
@@ -6856,11 +6799,7 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
                 }
                 else {
                     if (this._selectMode === 'range') {
-                        this.renderer.setProperty(this.elmRef.nativeElement, 'value', fromFormatted +
-                            ' ' +
-                            this.rangeSeparator +
-                            ' ' +
-                            toFormatted);
+                        this.renderer.setProperty(this.elmRef.nativeElement, 'value', fromFormatted + " " + this.rangeSeparator + " " + toFormatted);
                     }
                     else if (this._selectMode === 'rangeFrom') {
                         this.renderer.setProperty(this.elmRef.nativeElement, 'value', fromFormatted);
@@ -7112,7 +7051,7 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
         if (first && second) {
             return this.dateTimeAdapter.compare(first, second) === 0;
         }
-        return first == second;
+        return first === second;
     };
     OwlDateTimeInputDirective.decorators = [
         { type: Directive, args: [{
@@ -7129,10 +7068,7 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
                         '[attr.max]': 'maxIso8601',
                         '[disabled]': 'owlDateTimeInputDisabled'
                     },
-                    providers: [
-                        OWL_DATETIME_VALUE_ACCESSOR,
-                        OWL_DATETIME_VALIDATORS,
-                    ],
+                    providers: [OWL_DATETIME_VALUE_ACCESSOR, OWL_DATETIME_VALIDATORS]
                 },] }
     ];
     /** @nocollapse */
@@ -7204,13 +7140,11 @@ if (false) {
     OwlDateTimeInputDirective.prototype._values;
     /**
      * Callback to invoke when `change` event is fired on this `<input>`
-     *
      * @type {?}
      */
     OwlDateTimeInputDirective.prototype.dateTimeChange;
     /**
      * Callback to invoke when an `input` event is fired on this `<input>`.
-     *
      * @type {?}
      */
     OwlDateTimeInputDirective.prototype.dateTimeInput;
@@ -7276,7 +7210,6 @@ if (false) {
     /**
      * The form control validator for the range.
      * Check whether the 'before' value is before the 'to' value
-     *
      * @type {?}
      * @private
      */
@@ -7360,7 +7293,6 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
         this.activeCell = 0;
         /**
          * The number of columns in the table.
-         *
          */
         this.numCols = 7;
         /**
@@ -7369,7 +7301,6 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
         this.cellRatio = 1;
         /**
          * Emit when a calendar cell is selected
-         *
          */
         this.select = new EventEmitter();
     }
@@ -7468,16 +7399,14 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
     };
     /**
      * Check if the cell in the range
-     * */
+     */
     /**
      * Check if the cell in the range
-     *
      * @param {?} value
      * @return {?}
      */
     OwlCalendarBodyComponent.prototype.isInRange = /**
      * Check if the cell in the range
-     *
      * @param {?} value
      * @return {?}
      */
@@ -7497,16 +7426,14 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
     };
     /**
      * Check if the cell is the range from
-     * */
+     */
     /**
      * Check if the cell is the range from
-     *
      * @param {?} value
      * @return {?}
      */
     OwlCalendarBodyComponent.prototype.isRangeFrom = /**
      * Check if the cell is the range from
-     *
      * @param {?} value
      * @return {?}
      */
@@ -7519,16 +7446,14 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
     };
     /**
      * Check if the cell is the range to
-     * */
+     */
     /**
      * Check if the cell is the range to
-     *
      * @param {?} value
      * @return {?}
      */
     OwlCalendarBodyComponent.prototype.isRangeTo = /**
      * Check if the cell is the range to
-     *
      * @param {?} value
      * @return {?}
      */
@@ -7541,15 +7466,13 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
     };
     /**
      * Focus to a active cell
-     * */
+     */
     /**
      * Focus to a active cell
-     *
      * @return {?}
      */
     OwlCalendarBodyComponent.prototype.focusActiveCell = /**
      * Focus to a active cell
-     *
      * @return {?}
      */
     function () {
@@ -7575,13 +7498,11 @@ var OwlCalendarBodyComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: '[owl-date-time-calendar-body]',
                     exportAs: 'owlDateTimeCalendarBody',
-                    template: "<tr *ngFor=\"let row of rows; let rowIndex = index\" role=\"row\">\n    <td *ngFor=\"let item of row; let colIndex = index\"\n        class=\"owl-dt-calendar-cell {{item.cellClass}}\"\n        [tabindex]=\"isActiveCell(rowIndex, colIndex) ? 0 : -1\"\n        [class.owl-dt-calendar-cell-active]=\"isActiveCell(rowIndex, colIndex)\"\n        [class.owl-dt-calendar-cell-disabled]=\"!item.enabled\"\n        [class.owl-dt-calendar-cell-in-range]=\"isInRange(item.value)\"\n        [class.owl-dt-calendar-cell-range-from]=\"isRangeFrom(item.value)\"\n        [class.owl-dt-calendar-cell-range-to]=\"isRangeTo(item.value)\"\n        [attr.aria-label]=\"item.ariaLabel\"\n        [attr.aria-disabled]=\"!item.enabled || null\"\n        [style.width.%]=\"100 / numCols\"\n        [style.paddingTop.%]=\"50 * cellRatio / numCols\"\n        [style.paddingBottom.%]=\"50 * cellRatio / numCols\"\n        (click)=\"selectCell(item)\">\n        <span class=\"owl-dt-calendar-cell-content\"\n              [ngClass]=\"{\n                'owl-dt-calendar-cell-out': item.out,\n                'owl-dt-calendar-cell-today': item.value === todayValue,\n                'owl-dt-calendar-cell-selected': isSelected(item.value)\n              }\">\n            {{item.displayValue}}\n        </span>\n    </td>\n</tr>\n",
+                    template: "<tr *ngFor=\"let row of rows; let rowIndex = index\" role=\"row\">\n    <td\n        *ngFor=\"let item of row; let colIndex = index\"\n        class=\"owl-dt-calendar-cell {{ item.cellClass }}\"\n        [tabindex]=\"isActiveCell(rowIndex, colIndex) ? 0 : -1\"\n        [class.owl-dt-calendar-cell-active]=\"isActiveCell(rowIndex, colIndex)\"\n        [class.owl-dt-calendar-cell-disabled]=\"!item.enabled\"\n        [class.owl-dt-calendar-cell-in-range]=\"isInRange(item.value)\"\n        [class.owl-dt-calendar-cell-range-from]=\"isRangeFrom(item.value)\"\n        [class.owl-dt-calendar-cell-range-to]=\"isRangeTo(item.value)\"\n        [attr.aria-label]=\"item.ariaLabel\"\n        [attr.aria-disabled]=\"!item.enabled || null\"\n        [style.width.%]=\"100 / numCols\"\n        [style.paddingTop.%]=\"(50 * cellRatio) / numCols\"\n        [style.paddingBottom.%]=\"(50 * cellRatio) / numCols\"\n        (click)=\"selectCell(item)\"\n    >\n        <span\n            class=\"owl-dt-calendar-cell-content\"\n            [ngClass]=\"{\n                'owl-dt-calendar-cell-out': item.out,\n                'owl-dt-calendar-cell-today': item.value === todayValue,\n                'owl-dt-calendar-cell-selected': isSelected(item.value)\n            }\"\n        >\n            {{ item.displayValue }}\n        </span>\n    </td>\n</tr>\n",
                     host: {
                         '[class.owl-dt-calendar-body]': 'owlDTCalendarBodyClass'
                     },
-                    preserveWhitespaces: false,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -7609,13 +7530,11 @@ if (false) {
     OwlCalendarBodyComponent.prototype.activeCell;
     /**
      * The cells to display in the table.
-     *
      * @type {?}
      */
     OwlCalendarBodyComponent.prototype.rows;
     /**
      * The number of columns in the table.
-     *
      * @type {?}
      */
     OwlCalendarBodyComponent.prototype.numCols;
@@ -7626,13 +7545,11 @@ if (false) {
     OwlCalendarBodyComponent.prototype.cellRatio;
     /**
      * The value in the table that corresponds to today.
-     *
      * @type {?}
      */
     OwlCalendarBodyComponent.prototype.todayValue;
     /**
      * The value in the table that is currently selected.
-     *
      * @type {?}
      */
     OwlCalendarBodyComponent.prototype.selectedValues;
@@ -7643,7 +7560,6 @@ if (false) {
     OwlCalendarBodyComponent.prototype.selectMode;
     /**
      * Emit when a calendar cell is selected
-     *
      * @type {?}
      */
     OwlCalendarBodyComponent.prototype.select;
@@ -7677,37 +7593,32 @@ var OwlMonthViewComponent = /** @class */ (function () {
         this.dateTimeFormats = dateTimeFormats;
         /**
          * Whether to hide dates in other months at the start or end of the current month.
-         *
          */
         this.hideOtherMonths = false;
         /**
          * Define the first day of a week
-         * Sunday: 0 ~ Saturday: 6
-         *
+         * Sunday: 0 - Saturday: 6
          */
-        this._firstDayOfWeek = 0;
+        this._firstDayOfWeek = getLocaleFirstDayOfWeek(this.dateTimeAdapter.getLocale());
         /**
          * The select mode of the picker;
-         *
          */
         this._selectMode = 'single';
         this._selecteds = [];
+        this.isDefaultFirstDayOfWeek = true;
         this.localeSub = Subscription.EMPTY;
         this.initiated = false;
         /**
          * An array to hold all selectedDates' value
          * the value is the day number in current month
-         *
          */
         this.selectedDates = [];
         /**
          * Callback to invoke when a new date is selected
-         *
          */
         this.selectedChange = new EventEmitter();
         /**
          * Callback to invoke when any date is selected.
-         *
          */
         this.userSelection = new EventEmitter();
         /**
@@ -7723,13 +7634,13 @@ var OwlMonthViewComponent = /** @class */ (function () {
             return this._firstDayOfWeek;
         },
         set: /**
-         * @param {?} val
+         * @param {?} value
          * @return {?}
          */
-        function (val) {
-            val = coerceNumberProperty(val);
-            if (val >= 0 && val <= 6 && val !== this._firstDayOfWeek) {
-                this._firstDayOfWeek = val;
+        function (value) {
+            if (value >= 0 && value <= 6 && value !== this._firstDayOfWeek) {
+                this._firstDayOfWeek = value;
+                this.isDefaultFirstDayOfWeek = false;
                 if (this.initiated) {
                     this.generateWeekDays();
                     this.generateCalendar();
@@ -7977,11 +7888,15 @@ var OwlMonthViewComponent = /** @class */ (function () {
         var _this = this;
         this.generateWeekDays();
         this.localeSub = this.dateTimeAdapter.localeChanges.subscribe((/**
+         * @param {?} locale
          * @return {?}
          */
-        function () {
+        function (locale) {
             _this.generateWeekDays();
             _this.generateCalendar();
+            _this.firstDayOfWeek = _this.isDefaultFirstDayOfWeek
+                ? getLocaleFirstDayOfWeek(locale)
+                : _this.firstDayOfWeek;
             _this.cdRef.markForCheck();
         }));
     };
@@ -8125,16 +8040,14 @@ var OwlMonthViewComponent = /** @class */ (function () {
     };
     /**
      * Generate the calendar weekdays array
-     * */
+     */
     /**
      * Generate the calendar weekdays array
-     *
      * @private
      * @return {?}
      */
     OwlMonthViewComponent.prototype.generateWeekDays = /**
      * Generate the calendar weekdays array
-     *
      * @private
      * @return {?}
      */
@@ -8164,16 +8077,14 @@ var OwlMonthViewComponent = /** @class */ (function () {
     };
     /**
      * Generate the calendar days array
-     * */
+     */
     /**
      * Generate the calendar days array
-     *
      * @private
      * @return {?}
      */
     OwlMonthViewComponent.prototype.generateCalendar = /**
      * Generate the calendar days array
-     *
      * @private
      * @return {?}
      */
@@ -8328,12 +8239,11 @@ var OwlMonthViewComponent = /** @class */ (function () {
      * Set the selectedDates value.
      * In single mode, it has only one value which represent the selected date
      * In range mode, it would has two values, one for the fromValue and the other for the toValue
-     * */
+     */
     /**
      * Set the selectedDates value.
      * In single mode, it has only one value which represent the selected date
      * In range mode, it would has two values, one for the fromValue and the other for the toValue
-     *
      * @private
      * @return {?}
      */
@@ -8341,7 +8251,6 @@ var OwlMonthViewComponent = /** @class */ (function () {
      * Set the selectedDates value.
      * In single mode, it has only one value which represent the selected date
      * In range mode, it would has two values, one for the fromValue and the other for the toValue
-     *
      * @private
      * @return {?}
      */
@@ -8389,13 +8298,11 @@ var OwlMonthViewComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: 'owl-date-time-month-view',
                     exportAs: 'owlYearView',
-                    template: "<table class=\"owl-dt-calendar-table owl-dt-calendar-month-table\"\n       [class.owl-dt-calendar-only-current-month]=\"hideOtherMonths\">\n    <thead class=\"owl-dt-calendar-header\">\n    <tr class=\"owl-dt-weekdays\">\n        <th *ngFor=\"let weekday of weekdays\"\n            [attr.aria-label]=\"weekday.long\"\n            class=\"owl-dt-weekday\" scope=\"col\">\n            <span>{{weekday.short}}</span>\n        </th>\n    </tr>\n    <tr>\n        <th class=\"owl-dt-calendar-table-divider\" aria-hidden=\"true\" colspan=\"7\"></th>\n    </tr>\n    </thead>\n    <tbody owl-date-time-calendar-body role=\"grid\"\n           [rows]=\"days\" [todayValue]=\"todayDate\"\n           [selectedValues]=\"selectedDates\"\n           [selectMode]=\"selectMode\"\n           [activeCell]=\"activeCell\"\n           (keydown)=\"handleCalendarKeydown($event)\"\n           (select)=\"selectCalendarCell($event)\">\n    </tbody>\n</table>\n",
+                    template: "<table\n    class=\"owl-dt-calendar-table owl-dt-calendar-month-table\"\n    [class.owl-dt-calendar-only-current-month]=\"hideOtherMonths\"\n>\n    <thead class=\"owl-dt-calendar-header\">\n        <tr class=\"owl-dt-weekdays\">\n            <th\n                *ngFor=\"let weekday of weekdays\"\n                [attr.aria-label]=\"weekday.long\"\n                class=\"owl-dt-weekday\"\n                scope=\"col\"\n            >\n                <span>{{ weekday.short }}</span>\n            </th>\n        </tr>\n        <tr>\n            <th\n                class=\"owl-dt-calendar-table-divider\"\n                aria-hidden=\"true\"\n                colspan=\"7\"\n            ></th>\n        </tr>\n    </thead>\n    <tbody\n        owl-date-time-calendar-body\n        role=\"grid\"\n        [rows]=\"days\"\n        [todayValue]=\"todayDate\"\n        [selectedValues]=\"selectedDates\"\n        [selectMode]=\"selectMode\"\n        [activeCell]=\"activeCell\"\n        (keydown)=\"handleCalendarKeydown($event)\"\n        (select)=\"selectCalendarCell($event)\"\n    ></tbody>\n</table>\n",
                     host: {
                         '[class.owl-dt-calendar-view]': 'owlDTCalendarView'
                     },
-                    preserveWhitespaces: false,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -8424,21 +8331,18 @@ var OwlMonthViewComponent = /** @class */ (function () {
 if (false) {
     /**
      * Whether to hide dates in other months at the start or end of the current month.
-     *
      * @type {?}
      */
     OwlMonthViewComponent.prototype.hideOtherMonths;
     /**
      * Define the first day of a week
-     * Sunday: 0 ~ Saturday: 6
-     *
+     * Sunday: 0 - Saturday: 6
      * @type {?}
      * @private
      */
     OwlMonthViewComponent.prototype._firstDayOfWeek;
     /**
      * The select mode of the picker;
-     *
      * @type {?}
      * @private
      */
@@ -8461,7 +8365,6 @@ if (false) {
     OwlMonthViewComponent.prototype._pickerMoment;
     /**
      * A function used to filter which dates are selectable
-     *
      * @type {?}
      * @private
      */
@@ -8497,6 +8400,11 @@ if (false) {
      * @type {?}
      * @private
      */
+    OwlMonthViewComponent.prototype.isDefaultFirstDayOfWeek;
+    /**
+     * @type {?}
+     * @private
+     */
     OwlMonthViewComponent.prototype.localeSub;
     /**
      * @type {?}
@@ -8510,14 +8418,12 @@ if (false) {
     OwlMonthViewComponent.prototype.dateNames;
     /**
      * The date of the month that today falls on.
-     *
      * @type {?}
      */
     OwlMonthViewComponent.prototype.todayDate;
     /**
      * An array to hold all selectedDates' value
      * the value is the day number in current month
-     *
      * @type {?}
      */
     OwlMonthViewComponent.prototype.selectedDates;
@@ -8525,13 +8431,11 @@ if (false) {
     OwlMonthViewComponent.prototype.firstRowOffset;
     /**
      * Callback to invoke when a new date is selected
-     *
      * @type {?}
      */
     OwlMonthViewComponent.prototype.selectedChange;
     /**
      * Callback to invoke when any date is selected.
-     *
      * @type {?}
      */
     OwlMonthViewComponent.prototype.userSelection;
@@ -8580,7 +8484,6 @@ var OwlYearViewComponent = /** @class */ (function () {
         this.dateTimeFormats = dateTimeFormats;
         /**
          * The select mode of the picker;
-         *
          */
         this._selectMode = 'single';
         this._selecteds = [];
@@ -8589,17 +8492,14 @@ var OwlYearViewComponent = /** @class */ (function () {
         /**
          * An array to hold all selectedDates' month value
          * the value is the month number in current year
-         *
          */
         this.selectedMonths = [];
         /**
          * Callback to invoke when a new month is selected
-         *
          */
         this.change = new EventEmitter();
         /**
          * Emits the selected year. This doesn't imply a change on the selected date
-         *
          */
         this.monthSelected = new EventEmitter();
         /**
@@ -8962,16 +8862,14 @@ var OwlYearViewComponent = /** @class */ (function () {
     };
     /**
      * Generate the calendar month list
-     * */
+     */
     /**
      * Generate the calendar month list
-     *
      * @private
      * @return {?}
      */
     OwlYearViewComponent.prototype.generateMonthList = /**
      * Generate the calendar month list
-     *
      * @private
      * @return {?}
      */
@@ -9095,12 +8993,11 @@ var OwlYearViewComponent = /** @class */ (function () {
      * Set the selectedMonths value
      * In single mode, it has only one value which represent the month the selected date in
      * In range mode, it would has two values, one for the month the fromValue in and the other for the month the toValue in
-     * */
+     */
     /**
      * Set the selectedMonths value
      * In single mode, it has only one value which represent the month the selected date in
      * In range mode, it would has two values, one for the month the fromValue in and the other for the month the toValue in
-     *
      * @private
      * @return {?}
      */
@@ -9108,7 +9005,6 @@ var OwlYearViewComponent = /** @class */ (function () {
      * Set the selectedMonths value
      * In single mode, it has only one value which represent the month the selected date in
      * In range mode, it would has two values, one for the month the fromValue in and the other for the month the toValue in
-     *
      * @private
      * @return {?}
      */
@@ -9181,13 +9077,11 @@ var OwlYearViewComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: 'owl-date-time-year-view',
                     exportAs: 'owlMonthView',
-                    template: "<table class=\"owl-dt-calendar-table owl-dt-calendar-year-table\">\n    <thead class=\"owl-dt-calendar-header\">\n    <tr>\n        <th class=\"owl-dt-calendar-table-divider\" aria-hidden=\"true\" colspan=\"3\"></th>\n    </tr>\n    </thead>\n    <tbody owl-date-time-calendar-body role=\"grid\"\n           [rows]=\"months\" [numCols]=\"3\" [cellRatio]=\"3 / 7\"\n           [activeCell]=\"activeCell\"\n           [todayValue]=\"todayMonth\"\n           [selectedValues]=\"selectedMonths\"\n           [selectMode]=\"selectMode\"\n           (keydown)=\"handleCalendarKeydown($event)\"\n           (select)=\"selectCalendarCell($event)\">\n    </tbody>\n</table>\n",
+                    template: "<table class=\"owl-dt-calendar-table owl-dt-calendar-year-table\">\n    <thead class=\"owl-dt-calendar-header\">\n        <tr>\n            <th\n                class=\"owl-dt-calendar-table-divider\"\n                aria-hidden=\"true\"\n                colspan=\"3\"\n            ></th>\n        </tr>\n    </thead>\n    <tbody\n        owl-date-time-calendar-body\n        role=\"grid\"\n        [rows]=\"months\"\n        [numCols]=\"3\"\n        [cellRatio]=\"3 / 7\"\n        [activeCell]=\"activeCell\"\n        [todayValue]=\"todayMonth\"\n        [selectedValues]=\"selectedMonths\"\n        [selectMode]=\"selectMode\"\n        (keydown)=\"handleCalendarKeydown($event)\"\n        (select)=\"selectCalendarCell($event)\"\n    ></tbody>\n</table>\n",
                     host: {
                         '[class.owl-dt-calendar-view]': 'owlDTCalendarView'
                     },
-                    preserveWhitespaces: false,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -9215,7 +9109,6 @@ var OwlYearViewComponent = /** @class */ (function () {
 if (false) {
     /**
      * The select mode of the picker;
-     *
      * @type {?}
      * @private
      */
@@ -9238,7 +9131,6 @@ if (false) {
     OwlYearViewComponent.prototype._pickerMoment;
     /**
      * A function used to filter which dates are selectable
-     *
      * @type {?}
      * @private
      */
@@ -9280,19 +9172,16 @@ if (false) {
     /**
      * An array to hold all selectedDates' month value
      * the value is the month number in current year
-     *
      * @type {?}
      */
     OwlYearViewComponent.prototype.selectedMonths;
     /**
      * Callback to invoke when a new month is selected
-     *
      * @type {?}
      */
     OwlYearViewComponent.prototype.change;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     *
      * @type {?}
      */
     OwlYearViewComponent.prototype.monthSelected;
@@ -9346,19 +9235,16 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
         this.dateTimeAdapter = dateTimeAdapter;
         /**
          * The select mode of the picker;
-         *
          */
         this._selectMode = 'single';
         this._selecteds = [];
         this.initiated = false;
         /**
          * Callback to invoke when a new month is selected
-         *
          */
         this.change = new EventEmitter();
         /**
          * Emits the selected year. This doesn't imply a change on the selected date
-         *
          */
         this.yearSelected = new EventEmitter();
         /**
@@ -9455,8 +9341,10 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
             /** @type {?} */
             var oldMoment = this._pickerMoment;
             value = this.dateTimeAdapter.deserialize(value);
-            this._pickerMoment = this.getValidDate(value) || this.dateTimeAdapter.now();
-            if (oldMoment && this._pickerMoment &&
+            this._pickerMoment =
+                this.getValidDate(value) || this.dateTimeAdapter.now();
+            if (oldMoment &&
+                this._pickerMoment &&
                 !this.isSameYearList(oldMoment, this._pickerMoment)) {
                 this.generateYearList();
             }
@@ -9571,8 +9459,9 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this.selectMode === 'range' || this.selectMode === 'rangeFrom'
-                || this.selectMode === 'rangeTo';
+            return (this.selectMode === 'range' ||
+                this.selectMode === 'rangeFrom' ||
+                this.selectMode === 'rangeTo');
         },
         enumerable: true,
         configurable: true
@@ -9583,7 +9472,8 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
          */
         function () {
             if (this._pickerMoment) {
-                return this.dateTimeAdapter.getYear(this._pickerMoment) % (YEARS_PER_ROW * YEAR_ROWS);
+                return (this.dateTimeAdapter.getYear(this._pickerMoment) %
+                    (YEARS_PER_ROW * YEAR_ROWS));
             }
         },
         enumerable: true,
@@ -9595,7 +9485,7 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
          */
         function () {
             if (this._years && this._years.length > 0) {
-                return this._years[0][0].displayValue + " ~ " + this._years[YEAR_ROWS - 1][YEARS_PER_ROW - 1].displayValue;
+                return this._years[0][0].displayValue + " - " + this._years[YEAR_ROWS - 1][YEARS_PER_ROW - 1].displayValue;
             }
         },
         enumerable: true,
@@ -9647,8 +9537,7 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
     OwlMultiYearViewComponent.prototype.ngOnInit = /**
      * @return {?}
      */
-    function () {
-    };
+    function () { };
     /**
      * @return {?}
      */
@@ -9698,16 +9587,14 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
     };
     /**
      * Generate the previous year list
-     * */
+     */
     /**
      * Generate the previous year list
-     *
      * @param {?} event
      * @return {?}
      */
     OwlMultiYearViewComponent.prototype.prevYearList = /**
      * Generate the previous year list
-     *
      * @param {?} event
      * @return {?}
      */
@@ -9718,16 +9605,14 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
     };
     /**
      * Generate the next year list
-     * */
+     */
     /**
      * Generate the next year list
-     *
      * @param {?} event
      * @return {?}
      */
     OwlMultiYearViewComponent.prototype.nextYearList = /**
      * Generate the next year list
-     *
      * @param {?} event
      * @return {?}
      */
@@ -9775,7 +9660,8 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
         if (!this.minDate) {
             return true;
         }
-        return !this.minDate || !this.isSameYearList(this._pickerMoment, this.minDate);
+        return (!this.minDate ||
+            !this.isSameYearList(this._pickerMoment, this.minDate));
     };
     /** Whether the next period button is enabled. */
     /**
@@ -9787,7 +9673,8 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return !this.maxDate || !this.isSameYearList(this._pickerMoment, this.maxDate);
+        return (!this.maxDate ||
+            !this.isSameYearList(this._pickerMoment, this.maxDate));
     };
     /**
      * @param {?} event
@@ -9823,22 +9710,30 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
                 break;
             // go to the first year of the year page
             case HOME:
-                moment = this.dateTimeAdapter.addCalendarYears(this._pickerMoment, -this.dateTimeAdapter.getYear(this._pickerMoment) % (YEARS_PER_ROW * YEAR_ROWS));
+                moment = this.dateTimeAdapter.addCalendarYears(this._pickerMoment, -this.dateTimeAdapter.getYear(this._pickerMoment) %
+                    (YEARS_PER_ROW * YEAR_ROWS));
                 this.pickerMomentChange.emit(moment);
                 break;
             // go to the last year of the year page
             case END:
-                moment = this.dateTimeAdapter.addCalendarYears(this._pickerMoment, (YEARS_PER_ROW * YEAR_ROWS) - this.dateTimeAdapter.getYear(this._pickerMoment) % (YEARS_PER_ROW * YEAR_ROWS) - 1);
+                moment = this.dateTimeAdapter.addCalendarYears(this._pickerMoment, YEARS_PER_ROW * YEAR_ROWS -
+                    (this.dateTimeAdapter.getYear(this._pickerMoment) %
+                        (YEARS_PER_ROW * YEAR_ROWS)) -
+                    1);
                 this.pickerMomentChange.emit(moment);
                 break;
             // minus 1 year page (or 10 year pages)
             case PAGE_UP:
-                moment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, event.altKey ? -10 * (YEARS_PER_ROW * YEAR_ROWS) : -1 * (YEARS_PER_ROW * YEAR_ROWS));
+                moment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, event.altKey
+                    ? -10 * (YEARS_PER_ROW * YEAR_ROWS)
+                    : -1 * (YEARS_PER_ROW * YEAR_ROWS));
                 this.pickerMomentChange.emit(moment);
                 break;
             // add 1 year page (or 10 year pages)
             case PAGE_DOWN:
-                moment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, event.altKey ? 10 * (YEARS_PER_ROW * YEAR_ROWS) : (YEARS_PER_ROW * YEAR_ROWS));
+                moment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, event.altKey
+                    ? 10 * (YEARS_PER_ROW * YEAR_ROWS)
+                    : YEARS_PER_ROW * YEAR_ROWS);
                 this.pickerMomentChange.emit(moment);
                 break;
             case ENTER:
@@ -9919,8 +9814,10 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
      */
     function (year) {
         // disable if the year is greater than maxDate lower than minDate
-        if (year === undefined || year === null ||
-            (this.maxDate && year > this.dateTimeAdapter.getYear(this.maxDate)) ||
+        if (year === undefined ||
+            year === null ||
+            (this.maxDate &&
+                year > this.dateTimeAdapter.getYear(this.maxDate)) ||
             (this.minDate && year < this.dateTimeAdapter.getYear(this.minDate))) {
             return false;
         }
@@ -9931,7 +9828,7 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
         /** @type {?} */
         var firstOfYear = this.dateTimeAdapter.createDate(year, 0, 1);
         // If any date in the year is enabled count the year as enabled.
-        for (var date = firstOfYear; this.dateTimeAdapter.getYear(date) == year; date = this.dateTimeAdapter.addCalendarDays(date, 1)) {
+        for (var date = firstOfYear; this.dateTimeAdapter.getYear(date) === year; date = this.dateTimeAdapter.addCalendarDays(date, 1)) {
             if (this.dateFilter(date)) {
                 return true;
             }
@@ -9951,8 +9848,10 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
      * @return {?}
      */
     function (date1, date2) {
-        return Math.floor(this.dateTimeAdapter.getYear(date1) / (YEARS_PER_ROW * YEAR_ROWS)) ===
-            Math.floor(this.dateTimeAdapter.getYear(date2) / (YEARS_PER_ROW * YEAR_ROWS));
+        return (Math.floor(this.dateTimeAdapter.getYear(date1) /
+            (YEARS_PER_ROW * YEAR_ROWS)) ===
+            Math.floor(this.dateTimeAdapter.getYear(date2) /
+                (YEARS_PER_ROW * YEAR_ROWS)));
     };
     /**
      * Get a valid date object
@@ -9970,7 +9869,10 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
      * @return {?}
      */
     function (obj) {
-        return (this.dateTimeAdapter.isDateInstance(obj) && this.dateTimeAdapter.isValid(obj)) ? obj : null;
+        return this.dateTimeAdapter.isDateInstance(obj) &&
+            this.dateTimeAdapter.isValid(obj)
+            ? obj
+            : null;
     };
     /**
      * @private
@@ -9986,14 +9888,12 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
     OwlMultiYearViewComponent.decorators = [
         { type: Component, args: [{
                     selector: 'owl-date-time-multi-year-view',
-                    template: "<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        [disabled]=\"!previousEnabled()\" [attr.aria-label]=\"prevButtonLabel\"\n        type=\"button\" tabindex=\"0\" (click)=\"prevYearList($event)\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Left\"> -->\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n             version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 250.738 250.738\"\n             style=\"enable-background:new 0 0 250.738 250.738;\" xml:space=\"preserve\"\n             width=\"100%\" height=\"100%\">\n            <path style=\"fill-rule: evenodd; clip-rule: evenodd;\" d=\"M96.633,125.369l95.053-94.533c7.101-7.055,7.101-18.492,0-25.546   c-7.1-7.054-18.613-7.054-25.714,0L58.989,111.689c-3.784,3.759-5.487,8.759-5.238,13.68c-0.249,4.922,1.454,9.921,5.238,13.681   l106.983,106.398c7.101,7.055,18.613,7.055,25.714,0c7.101-7.054,7.101-18.491,0-25.544L96.633,125.369z\"/>\n        </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n<table class=\"owl-dt-calendar-table owl-dt-calendar-multi-year-table\">\n    <thead class=\"owl-dt-calendar-header\">\n    <tr>\n        <th colspan=\"3\">{{tableHeader}}</th>\n    </tr>\n    </thead>\n    <tbody owl-date-time-calendar-body role=\"grid\"\n           [rows]=\"years\" [numCols]=\"3\" [cellRatio]=\"3 / 7\"\n           [activeCell]=\"activeCell\"\n           [todayValue]=\"todayYear\"\n           [selectedValues]=\"selectedYears\"\n           [selectMode]=\"selectMode\"\n           (keydown)=\"handleCalendarKeydown($event)\"\n           (select)=\"selectCalendarCell($event)\"></tbody>\n</table>\n<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        [disabled]=\"!nextEnabled()\" [attr.aria-label]=\"nextButtonLabel\"\n        type=\"button\" tabindex=\"0\" (click)=\"nextYearList($event)\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Right\"> -->\n    <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n             viewBox=\"0 0 250.738 250.738\" style=\"enable-background:new 0 0 250.738 250.738;\" xml:space=\"preserve\">\n            <path style=\"fill-rule:evenodd;clip-rule:evenodd;\" d=\"M191.75,111.689L84.766,5.291c-7.1-7.055-18.613-7.055-25.713,0\n                c-7.101,7.054-7.101,18.49,0,25.544l95.053,94.534l-95.053,94.533c-7.101,7.054-7.101,18.491,0,25.545\n                c7.1,7.054,18.613,7.054,25.713,0L191.75,139.05c3.784-3.759,5.487-8.759,5.238-13.681\n                C197.237,120.447,195.534,115.448,191.75,111.689z\"/>\n        </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n",
+                    template: "<button\n    class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n    [disabled]=\"!previousEnabled()\"\n    [attr.aria-label]=\"prevButtonLabel\"\n    type=\"button\"\n    tabindex=\"0\"\n    (click)=\"prevYearList($event)\"\n>\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Left\"> -->\n        <svg\n            xmlns=\"http://www.w3.org/2000/svg\"\n            xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n            version=\"1.1\"\n            x=\"0px\"\n            y=\"0px\"\n            viewBox=\"0 0 250.738 250.738\"\n            style=\"enable-background:new 0 0 250.738 250.738;\"\n            xml:space=\"preserve\"\n            width=\"100%\"\n            height=\"100%\"\n        >\n            <path\n                style=\"fill-rule: evenodd; clip-rule: evenodd;\"\n                d=\"M96.633,125.369l95.053-94.533c7.101-7.055,7.101-18.492,0-25.546   c-7.1-7.054-18.613-7.054-25.714,0L58.989,111.689c-3.784,3.759-5.487,8.759-5.238,13.68c-0.249,4.922,1.454,9.921,5.238,13.681   l106.983,106.398c7.101,7.055,18.613,7.055,25.714,0c7.101-7.054,7.101-18.491,0-25.544L96.633,125.369z\"\n            />\n        </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n<table class=\"owl-dt-calendar-table owl-dt-calendar-multi-year-table\">\n    <thead class=\"owl-dt-calendar-header\">\n        <tr>\n            <th colspan=\"3\">{{ tableHeader }}</th>\n        </tr>\n    </thead>\n    <tbody\n        owl-date-time-calendar-body\n        role=\"grid\"\n        [rows]=\"years\"\n        [numCols]=\"3\"\n        [cellRatio]=\"3 / 7\"\n        [activeCell]=\"activeCell\"\n        [todayValue]=\"todayYear\"\n        [selectedValues]=\"selectedYears\"\n        [selectMode]=\"selectMode\"\n        (keydown)=\"handleCalendarKeydown($event)\"\n        (select)=\"selectCalendarCell($event)\"\n    ></tbody>\n</table>\n<button\n    class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n    [disabled]=\"!nextEnabled()\"\n    [attr.aria-label]=\"nextButtonLabel\"\n    type=\"button\"\n    tabindex=\"0\"\n    (click)=\"nextYearList($event)\"\n>\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Right\"> -->\n        <svg\n            version=\"1.1\"\n            xmlns=\"http://www.w3.org/2000/svg\"\n            xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n            x=\"0px\"\n            y=\"0px\"\n            viewBox=\"0 0 250.738 250.738\"\n            style=\"enable-background:new 0 0 250.738 250.738;\"\n            xml:space=\"preserve\"\n        >\n            <path\n                style=\"fill-rule:evenodd;clip-rule:evenodd;\"\n                d=\"M191.75,111.689L84.766,5.291c-7.1-7.055-18.613-7.055-25.713,0\n                c-7.101,7.054-7.101,18.49,0,25.544l95.053,94.534l-95.053,94.533c-7.101,7.054-7.101,18.491,0,25.545\n                c7.1,7.054,18.613,7.054,25.713,0L191.75,139.05c3.784-3.759,5.487-8.759,5.238-13.681\n                C197.237,120.447,195.534,115.448,191.75,111.689z\"\n            />\n        </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n",
                     host: {
                         '[class.owl-dt-calendar-view]': 'owlDTCalendarView',
                         '[class.owl-dt-calendar-multi-year-view]': 'owlDTCalendarMultiYearView'
                     },
-                    preserveWhitespaces: false,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [""]
+                    changeDetection: ChangeDetectionStrategy.OnPush
                 }] }
     ];
     /** @nocollapse */
@@ -10021,7 +9921,6 @@ var OwlMultiYearViewComponent = /** @class */ (function () {
 if (false) {
     /**
      * The select mode of the picker;
-     *
      * @type {?}
      * @private
      */
@@ -10044,7 +9943,6 @@ if (false) {
     OwlMultiYearViewComponent.prototype._pickerMoment;
     /**
      * A function used to filter which dates are selectable
-     *
      * @type {?}
      * @private
      */
@@ -10083,13 +9981,11 @@ if (false) {
     OwlMultiYearViewComponent.prototype.initiated;
     /**
      * Callback to invoke when a new month is selected
-     *
      * @type {?}
      */
     OwlMultiYearViewComponent.prototype.change;
     /**
      * Emits the selected year. This doesn't imply a change on the selected date
-     *
      * @type {?}
      */
     OwlMultiYearViewComponent.prototype.yearSelected;
@@ -10137,7 +10033,6 @@ var OwlTimerBoxComponent = /** @class */ (function () {
         this.inputChange = new EventEmitter();
         this.inputStream = new Subject();
         this.inputStreamSub = Subscription.EMPTY;
-        this.onValueInputMouseWheelBind = this.onValueInputMouseWheel.bind(this);
     }
     Object.defineProperty(OwlTimerBoxComponent.prototype, "displayValue", {
         get: /**
@@ -10167,7 +10062,9 @@ var OwlTimerBoxComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this.inputStreamSub = this.inputStream.pipe(debounceTime(500), distinctUntilChanged()).subscribe((/**
+        this.inputStreamSub = this.inputStream
+            .pipe(debounceTime(500), distinctUntilChanged())
+            .subscribe((/**
          * @param {?} val
          * @return {?}
          */
@@ -10178,7 +10075,6 @@ var OwlTimerBoxComponent = /** @class */ (function () {
                 _this.updateValueViaInput(inputValue);
             }
         }));
-        this.bindValueInputMouseWheel();
     };
     /**
      * @return {?}
@@ -10187,7 +10083,6 @@ var OwlTimerBoxComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.unbindValueInputMouseWheel();
         this.inputStreamSub.unsubscribe();
     };
     /**
@@ -10209,15 +10104,33 @@ var OwlTimerBoxComponent = /** @class */ (function () {
         this.updateValue(this.value - this.step);
     };
     /**
-     * @param {?} val
+     * @param {?} value
      * @return {?}
      */
     OwlTimerBoxComponent.prototype.handleInputChange = /**
-     * @param {?} val
+     * @param {?} value
      * @return {?}
      */
-    function (val) {
-        this.inputStream.next(val);
+    function (value) {
+        this.inputStream.next(value);
+    };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    OwlTimerBoxComponent.prototype.handleWheelChange = /**
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        /** @type {?} */
+        var deltaY = event.deltaY;
+        if (deltaY > 0 && !this.upBtnDisabled) {
+            this.upBtnClicked();
+        }
+        else if (deltaY < 0 && !this.downBtnDisabled) {
+            this.downBtnClicked();
+        }
     };
     /**
      * @private
@@ -10248,61 +10161,15 @@ var OwlTimerBoxComponent = /** @class */ (function () {
         }
         this.inputChange.emit(value);
     };
-    /**
-     * @private
-     * @param {?} event
-     * @return {?}
-     */
-    OwlTimerBoxComponent.prototype.onValueInputMouseWheel = /**
-     * @private
-     * @param {?} event
-     * @return {?}
-     */
-    function (event) {
-        event = event || window.event;
-        /** @type {?} */
-        var delta = event.wheelDelta || -event.deltaY || -event.detail;
-        if (delta > 0) {
-            !this.upBtnDisabled && this.upBtnClicked();
-        }
-        else if (delta < 0) {
-            !this.downBtnDisabled && this.downBtnClicked();
-        }
-        event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-    };
-    /**
-     * @private
-     * @return {?}
-     */
-    OwlTimerBoxComponent.prototype.bindValueInputMouseWheel = /**
-     * @private
-     * @return {?}
-     */
-    function () {
-        this.valueInput.nativeElement.addEventListener('onwheel' in document ? "wheel" : "mousewheel", this.onValueInputMouseWheelBind);
-    };
-    /**
-     * @private
-     * @return {?}
-     */
-    OwlTimerBoxComponent.prototype.unbindValueInputMouseWheel = /**
-     * @private
-     * @return {?}
-     */
-    function () {
-        this.valueInput.nativeElement.removeEventListener('onwheel' in document ? "wheel" : "mousewheel", this.onValueInputMouseWheelBind);
-    };
     OwlTimerBoxComponent.decorators = [
         { type: Component, args: [{
                     exportAs: 'owlDateTimeTimerBox',
                     selector: 'owl-date-time-timer-box',
-                    template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\" tabindex=\"-1\"\n        [disabled]=\"upBtnDisabled\"\n        [attr.aria-label]=\"upBtnAriaLabel\"\n        (click)=\"upBtnClicked()\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                 version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 451.847 451.846\"\n                 style=\"enable-background:new 0 0 451.847 451.846;\" xml:space=\"preserve\"\n                 width=\"100%\" height=\"100%\">\n                    <path d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"/>\n                </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n    <input class=\"owl-dt-timer-input\" maxlength=\"2\"\n           [value]=\"displayValue | numberFixedLen : 2\"\n           (keydown.arrowup)=\"!upBtnDisabled && upBtnClicked()\"\n           (keydown.arrowdown)=\"!downBtnDisabled && downBtnClicked()\"\n           (input)=\"handleInputChange(valueInput.value)\" #valueInput>\n    <span class=\"owl-hidden-accessible\">{{inputLabel}}</span>\n</label>\n<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\" tabindex=\"-1\"\n        [disabled]=\"downBtnDisabled\"\n        [attr.aria-label]=\"downBtnAriaLabel\"\n        (click)=\"downBtnClicked()\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                 version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 451.847 451.846\"\n                 style=\"enable-background:new 0 0 451.847 451.846;\" xml:space=\"preserve\"\n                 width=\"100%\" height=\"100%\">\n                    <path d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"/>\n                </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n",
-                    preserveWhitespaces: false,
+                    template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\" tabindex=\"-1\"\n        [disabled]=\"upBtnDisabled\"\n        [attr.aria-label]=\"upBtnAriaLabel\"\n        (click)=\"upBtnClicked()\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                 version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 451.847 451.846\"\n                 style=\"enable-background:new 0 0 451.847 451.846;\" xml:space=\"preserve\"\n                 width=\"100%\" height=\"100%\">\n                    <path d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"/>\n                </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n    <input class=\"owl-dt-timer-input\" maxlength=\"2\"\n           [value]=\"displayValue | numberFixedLen : 2\"\n           (wheel)=\"handleWheelChange($event)\"\n           (keydown.arrowUp)=\"!upBtnDisabled  && upBtnClicked()\"\n           (keydown.arrowDown)=\"!downBtnAriaLabel && downBtnClicked()\"\n           (input)=\"handleInputChange(valueInput.value)\" #valueInput>\n    <span class=\"owl-hidden-accessible\">{{inputLabel}}</span>\n</label>\n<button class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n        type=\"button\" tabindex=\"-1\"\n        [disabled]=\"downBtnDisabled\"\n        [attr.aria-label]=\"downBtnAriaLabel\"\n        (click)=\"downBtnClicked()\">\n    <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n        <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n                 version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 451.847 451.846\"\n                 style=\"enable-background:new 0 0 451.847 451.846;\" xml:space=\"preserve\"\n                 width=\"100%\" height=\"100%\">\n                    <path d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"/>\n                </svg>\n        <!-- </editor-fold> -->\n    </span>\n</button>\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     host: {
                         '[class.owl-dt-timer-box]': 'owlDTTimerBoxClass'
-                    },
-                    styles: [""]
+                    }
                 }] }
     ];
     /** @nocollapse */
@@ -10320,8 +10187,7 @@ var OwlTimerBoxComponent = /** @class */ (function () {
         step: [{ type: Input }],
         inputLabel: [{ type: Input }],
         valueChange: [{ type: Output }],
-        inputChange: [{ type: Output }],
-        valueInput: [{ type: ViewChild, args: ['valueInput', { static: true },] }]
+        inputChange: [{ type: Output }]
     };
     return OwlTimerBoxComponent;
 }());
@@ -10339,7 +10205,6 @@ if (false) {
     /**
      * Value would be displayed in the box
      * If it is null, the box would display [value]
-     *
      * @type {?}
      */
     OwlTimerBoxComponent.prototype.boxValue;
@@ -10367,16 +10232,6 @@ if (false) {
      * @private
      */
     OwlTimerBoxComponent.prototype.inputStreamSub;
-    /**
-     * @type {?}
-     * @private
-     */
-    OwlTimerBoxComponent.prototype.valueInput;
-    /**
-     * @type {?}
-     * @private
-     */
-    OwlTimerBoxComponent.prototype.onValueInputMouseWheelBind;
 }
 
 /**
@@ -10455,20 +10310,19 @@ var OwlDateTimeInlineComponent = /** @class */ (function (_super) {
         /**
          * Emits selected year in multi-year view
          * This doesn't imply a change on the selected date.
-         *
          */
         _this.yearSelected = new EventEmitter();
         /**
          * Emits selected month in year view
          * This doesn't imply a change on the selected date.
-         *
          */
         _this.monthSelected = new EventEmitter();
         _this._selecteds = [];
         _this.onModelChange = (/**
+         * @param {?} date
          * @return {?}
          */
-        function () { });
+        function (date) { });
         _this.onModelTouched = (/**
          * @return {?}
          */
@@ -10844,16 +10698,14 @@ var OwlDateTimeInlineComponent = /** @class */ (function (_super) {
     };
     /**
      * Emits the selected year in multi-year view
-     * */
+     */
     /**
      * Emits the selected year in multi-year view
-     *
      * @param {?} normalizedYear
      * @return {?}
      */
     OwlDateTimeInlineComponent.prototype.selectYear = /**
      * Emits the selected year in multi-year view
-     *
      * @param {?} normalizedYear
      * @return {?}
      */
@@ -10862,16 +10714,14 @@ var OwlDateTimeInlineComponent = /** @class */ (function (_super) {
     };
     /**
      * Emits selected month in year view
-     * */
+     */
     /**
      * Emits selected month in year view
-     *
      * @param {?} normalizedMonth
      * @return {?}
      */
     OwlDateTimeInlineComponent.prototype.selectMonth = /**
      * Emits selected month in year view
-     *
      * @param {?} normalizedMonth
      * @return {?}
      */
@@ -10881,14 +10731,12 @@ var OwlDateTimeInlineComponent = /** @class */ (function (_super) {
     OwlDateTimeInlineComponent.decorators = [
         { type: Component, args: [{
                     selector: 'owl-date-time-inline',
-                    template: "<owl-date-time-container></owl-date-time-container>",
+                    template: "<owl-date-time-container></owl-date-time-container>\n",
                     host: {
                         '[class.owl-dt-inline]': 'owlDTInlineClass'
                     },
                     changeDetection: ChangeDetectionStrategy.OnPush,
-                    preserveWhitespaces: false,
-                    providers: [OWL_DATETIME_VALUE_ACCESSOR$1],
-                    styles: [""]
+                    providers: [OWL_DATETIME_VALUE_ACCESSOR$1]
                 }] }
     ];
     /** @nocollapse */
@@ -10971,14 +10819,12 @@ if (false) {
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
-     *
      * @type {?}
      */
     OwlDateTimeInlineComponent.prototype.yearSelected;
     /**
      * Emits selected month in year view
      * This doesn't imply a change on the selected date.
-     *
      * @type {?}
      */
     OwlDateTimeInlineComponent.prototype.monthSelected;
@@ -11030,16 +10876,9 @@ var OwlDialogModule = /** @class */ (function () {
         { type: NgModule, args: [{
                     imports: [CommonModule, A11yModule, OverlayModule, PortalModule],
                     exports: [],
-                    declarations: [
-                        OwlDialogContainerComponent,
-                    ],
-                    providers: [
-                        OWL_DIALOG_SCROLL_STRATEGY_PROVIDER,
-                        OwlDialogService,
-                    ],
-                    entryComponents: [
-                        OwlDialogContainerComponent,
-                    ]
+                    declarations: [OwlDialogContainerComponent],
+                    providers: [OWL_DIALOG_SCROLL_STRATEGY_PROVIDER, OwlDialogService],
+                    entryComponents: [OwlDialogContainerComponent]
                 },] }
     ];
     return OwlDialogModule;
@@ -11064,7 +10903,7 @@ var OwlDateTimeModule = /** @class */ (function () {
                         OwlDateTimeInlineComponent,
                         OwlMultiYearViewComponent,
                         OwlYearViewComponent,
-                        OwlMonthViewComponent,
+                        OwlMonthViewComponent
                     ],
                     declarations: [
                         OwlDateTimeTriggerDirective,
@@ -11079,15 +10918,10 @@ var OwlDateTimeModule = /** @class */ (function () {
                         OwlCalendarComponent,
                         OwlCalendarBodyComponent,
                         NumberFixedLenPipe,
-                        OwlDateTimeInlineComponent,
+                        OwlDateTimeInlineComponent
                     ],
-                    providers: [
-                        OwlDateTimeIntl,
-                        OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER,
-                    ],
-                    entryComponents: [
-                        OwlDateTimeContainerComponent,
-                    ]
+                    providers: [OwlDateTimeIntl, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER],
+                    entryComponents: [OwlDateTimeContainerComponent]
                 },] }
     ];
     return OwlDateTimeModule;
@@ -11170,7 +11004,7 @@ var SUPPORTS_INTL_API = typeof Intl !== 'undefined';
  * because the regex will match strings an with out of bounds month, date, etc.
  * @type {?}
  */
-var ISO_8601_REGEX = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|(?:(?:\+|-)\d{2}:\d{2}))?)?$/;
+var ISO_8601_REGEX = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|(?:[+\-]\d{2}:\d{2}))?)?$/;
 /**
  * Creates an array and fills it with values.
  * @template T
@@ -11339,7 +11173,7 @@ var NativeDateTimeAdapter = /** @class */ (function (_super) {
     function (date) {
         if (SUPPORTS_INTL_API) {
             /** @type {?} */
-            var dtf = new Intl.DateTimeFormat(this.locale, {
+            var dtf = new Intl.DateTimeFormat(this.getLocale(), {
                 year: 'numeric',
                 timeZone: 'utc'
             });
@@ -11359,7 +11193,7 @@ var NativeDateTimeAdapter = /** @class */ (function (_super) {
         var _this = this;
         if (SUPPORTS_INTL_API) {
             /** @type {?} */
-            var dtf_1 = new Intl.DateTimeFormat(this.locale, {
+            var dtf_1 = new Intl.DateTimeFormat(this.getLocale(), {
                 month: style,
                 timeZone: 'utc'
             });
@@ -11385,7 +11219,7 @@ var NativeDateTimeAdapter = /** @class */ (function (_super) {
         var _this = this;
         if (SUPPORTS_INTL_API) {
             /** @type {?} */
-            var dtf_2 = new Intl.DateTimeFormat(this.locale, {
+            var dtf_2 = new Intl.DateTimeFormat(this.getLocale(), {
                 weekday: style,
                 timeZone: 'utc'
             });
@@ -11409,7 +11243,7 @@ var NativeDateTimeAdapter = /** @class */ (function (_super) {
         var _this = this;
         if (SUPPORTS_INTL_API) {
             /** @type {?} */
-            var dtf_3 = new Intl.DateTimeFormat(this.locale, {
+            var dtf_3 = new Intl.DateTimeFormat(this.getLocale(), {
                 day: 'numeric',
                 timeZone: 'utc'
             });
@@ -11700,7 +11534,7 @@ var NativeDateTimeAdapter = /** @class */ (function (_super) {
             }
             displayFormat = __assign({}, displayFormat, { timeZone: 'utc' });
             /** @type {?} */
-            var dtf = new Intl.DateTimeFormat(this.locale, displayFormat);
+            var dtf = new Intl.DateTimeFormat(this.getLocale(), displayFormat);
             return this.stripDirectionalityCharacters(this._format(dtf, date));
         }
         return this.stripDirectionalityCharacters(date.toDateString());
@@ -11891,12 +11725,18 @@ if (false) {
 /** @type {?} */
 var OWL_NATIVE_DATE_TIME_FORMATS = {
     parseInput: null,
-    fullPickerInput: { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' },
+    fullPickerInput: {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    },
     datePickerInput: { year: 'numeric', month: 'numeric', day: 'numeric' },
     timePickerInput: { hour: 'numeric', minute: 'numeric' },
     monthYearLabel: { year: 'numeric', month: 'short' },
     dateA11yLabel: { year: 'numeric', month: 'long', day: 'numeric' },
-    monthYearA11yLabel: { year: 'numeric', month: 'long' },
+    monthYearA11yLabel: { year: 'numeric', month: 'long' }
 };
 
 /**
@@ -11909,9 +11749,7 @@ var NativeDateTimeModule = /** @class */ (function () {
     NativeDateTimeModule.decorators = [
         { type: NgModule, args: [{
                     imports: [PlatformModule],
-                    providers: [
-                        { provide: DateTimeAdapter, useClass: NativeDateTimeAdapter },
-                    ],
+                    providers: [{ provide: DateTimeAdapter, useClass: NativeDateTimeAdapter }]
                 },] }
     ];
     return NativeDateTimeModule;
@@ -11923,10 +11761,679 @@ var OwlNativeDateTimeModule = /** @class */ (function () {
     OwlNativeDateTimeModule.decorators = [
         { type: NgModule, args: [{
                     imports: [NativeDateTimeModule],
-                    providers: [{ provide: OWL_DATE_TIME_FORMATS, useValue: ɵ0$1 }],
+                    providers: [
+                        {
+                            provide: OWL_DATE_TIME_FORMATS,
+                            useValue: ɵ0$1
+                        }
+                    ]
                 },] }
     ];
     return OwlNativeDateTimeModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var moment = importMoment;
+/**
+ * Configurable options for {\@see MomentDateAdapter}.
+ * @record
+ */
+function OwlMomentDateTimeAdapterOptions() { }
+if (false) {
+    /**
+     * Turns the use of utc dates on or off.
+     * Changing this will change how the DateTimePicker output value.
+     * {\@default false}
+     * @type {?}
+     */
+    OwlMomentDateTimeAdapterOptions.prototype.useUtc;
+    /**
+     * Turns the use of strict string parsing in moment.
+     * Changing this will change how the DateTimePicker interprets input.
+     * {\@default false}
+     * @type {?}
+     */
+    OwlMomentDateTimeAdapterOptions.prototype.parseStrict;
+}
+/**
+ * InjectionToken for moment date adapter to configure options.
+ * @type {?}
+ */
+var OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS = new InjectionToken('OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS', {
+    providedIn: 'root',
+    factory: OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY
+});
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY() {
+    return {
+        useUtc: false,
+        parseStrict: false
+    };
+}
+/**
+ * Creates an array and fills it with values.
+ * @template T
+ * @param {?} length
+ * @param {?} valueFunction
+ * @return {?}
+ */
+function range$1(length, valueFunction) {
+    /** @type {?} */
+    var valuesArray = Array(length);
+    for (var i = 0; i < length; i++) {
+        valuesArray[i] = valueFunction(i);
+    }
+    return valuesArray;
+}
+var MomentDateTimeAdapter = /** @class */ (function (_super) {
+    __extends(MomentDateTimeAdapter, _super);
+    function MomentDateTimeAdapter(owlDateTimeLocale, options) {
+        var _this = _super.call(this) || this;
+        _this.owlDateTimeLocale = owlDateTimeLocale;
+        _this.options = options;
+        _this.setLocale(owlDateTimeLocale || moment.locale());
+        return _this;
+    }
+    /**
+     * @param {?} locale
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.setLocale = /**
+     * @param {?} locale
+     * @return {?}
+     */
+    function (locale) {
+        var _this = this;
+        _super.prototype.setLocale.call(this, locale);
+        /** @type {?} */
+        var momentLocaleData = moment.localeData(locale);
+        this._localeData = {
+            longMonths: momentLocaleData.months(),
+            shortMonths: momentLocaleData.monthsShort(),
+            longDaysOfWeek: momentLocaleData.weekdays(),
+            shortDaysOfWeek: momentLocaleData.weekdaysShort(),
+            narrowDaysOfWeek: momentLocaleData.weekdaysMin(),
+            dates: range$1(31, (/**
+             * @param {?} i
+             * @return {?}
+             */
+            function (i) { return _this.createDate(2017, 0, i + 1).format('D'); }))
+        };
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getYear = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).year();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getMonth = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).month();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getDay = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).day();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getDate = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).date();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getHours = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).hours();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getMinutes = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).minutes();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getSeconds = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).seconds();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getTime = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).valueOf();
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getNumDaysInMonth = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).daysInMonth();
+    };
+    /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.differenceInCalendarDays = /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    function (dateLeft, dateRight) {
+        return this.clone(dateLeft).diff(dateRight, 'days');
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getYearName = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).format('YYYY');
+    };
+    /**
+     * @param {?} style
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getMonthNames = /**
+     * @param {?} style
+     * @return {?}
+     */
+    function (style) {
+        return style === 'long'
+            ? this._localeData.longMonths
+            : this._localeData.shortMonths;
+    };
+    /**
+     * @param {?} style
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getDayOfWeekNames = /**
+     * @param {?} style
+     * @return {?}
+     */
+    function (style) {
+        if (style === 'long') {
+            return this._localeData.longDaysOfWeek;
+        }
+        if (style === 'short') {
+            return this._localeData.shortDaysOfWeek;
+        }
+        return this._localeData.narrowDaysOfWeek;
+    };
+    /**
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.getDateNames = /**
+     * @return {?}
+     */
+    function () {
+        return this._localeData.dates;
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.toIso8601 = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).format();
+    };
+    /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.isEqual = /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    function (dateLeft, dateRight) {
+        if (dateLeft && dateRight) {
+            return this.clone(dateLeft).isSame(this.clone(dateRight));
+        }
+        return dateLeft === dateRight;
+    };
+    /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.isSameDay = /**
+     * @param {?} dateLeft
+     * @param {?} dateRight
+     * @return {?}
+     */
+    function (dateLeft, dateRight) {
+        if (dateLeft && dateRight) {
+            return this.clone(dateLeft).isSame(this.clone(dateRight), 'day');
+        }
+        return dateLeft === dateRight;
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.isValid = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.clone(date).isValid();
+    };
+    /**
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.invalid = /**
+     * @return {?}
+     */
+    function () {
+        return moment.invalid();
+    };
+    /**
+     * @param {?} obj
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.isDateInstance = /**
+     * @param {?} obj
+     * @return {?}
+     */
+    function (obj) {
+        return moment.isMoment(obj);
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.addCalendarYears = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).add({ years: amount });
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.addCalendarMonths = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).add({ months: amount });
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.addCalendarDays = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).add({ days: amount });
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.setHours = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).hours(amount);
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.setMinutes = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).minutes(amount);
+    };
+    /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.setSeconds = /**
+     * @param {?} date
+     * @param {?} amount
+     * @return {?}
+     */
+    function (date, amount) {
+        return this.clone(date).seconds(amount);
+    };
+    /**
+     * @param {?} year
+     * @param {?} month
+     * @param {?} date
+     * @param {?=} hours
+     * @param {?=} minutes
+     * @param {?=} seconds
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.createDate = /**
+     * @param {?} year
+     * @param {?} month
+     * @param {?} date
+     * @param {?=} hours
+     * @param {?=} minutes
+     * @param {?=} seconds
+     * @return {?}
+     */
+    function (year, month, date, hours, minutes, seconds) {
+        if (hours === void 0) { hours = 0; }
+        if (minutes === void 0) { minutes = 0; }
+        if (seconds === void 0) { seconds = 0; }
+        if (month < 0 || month > 11) {
+            throw Error("Invalid month index \"" + month + "\". Month index has to be between 0 and 11.");
+        }
+        if (date < 1) {
+            throw Error("Invalid date \"" + date + "\". Date has to be greater than 0.");
+        }
+        if (hours < 0 || hours > 23) {
+            throw Error("Invalid hours \"" + hours + "\". Hours has to be between 0 and 23.");
+        }
+        if (minutes < 0 || minutes > 59) {
+            throw Error("Invalid minutes \"" + minutes + "\". Minutes has to between 0 and 59.");
+        }
+        if (seconds < 0 || seconds > 59) {
+            throw Error("Invalid seconds \"" + seconds + "\". Seconds has to be between 0 and 59.");
+        }
+        /** @type {?} */
+        var result = this.createMoment({
+            year: year,
+            month: month,
+            date: date,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        }).locale(this.getLocale());
+        // If the result isn't valid, the date must have been out of bounds for this month.
+        if (!result.isValid()) {
+            throw Error("Invalid date \"" + date + "\" for month with index \"" + month + "\".");
+        }
+        return result;
+    };
+    /**
+     * @param {?} date
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.clone = /**
+     * @param {?} date
+     * @return {?}
+     */
+    function (date) {
+        return this.createMoment(date)
+            .clone()
+            .locale(this.getLocale());
+    };
+    /**
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.now = /**
+     * @return {?}
+     */
+    function () {
+        return this.createMoment().locale(this.getLocale());
+    };
+    /**
+     * @param {?} date
+     * @param {?} displayFormat
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.format = /**
+     * @param {?} date
+     * @param {?} displayFormat
+     * @return {?}
+     */
+    function (date, displayFormat) {
+        date = this.clone(date);
+        if (!this.isValid(date)) {
+            throw Error('MomentDateTimeAdapter: Cannot format invalid date.');
+        }
+        return date.format(displayFormat);
+    };
+    /**
+     * @param {?} value
+     * @param {?} parseFormat
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.parse = /**
+     * @param {?} value
+     * @param {?} parseFormat
+     * @return {?}
+     */
+    function (value, parseFormat) {
+        if (value && typeof value === 'string') {
+            return this.createMoment(value, parseFormat, this.getLocale(), this.parseStrict);
+        }
+        return value ? this.createMoment(value).locale(this.getLocale()) : null;
+    };
+    Object.defineProperty(MomentDateTimeAdapter.prototype, "parseStrict", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.options && this.options.parseStrict;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
+     * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
+     * string into null. Returns an invalid date for all other values.
+     */
+    /**
+     * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
+     * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
+     * string into null. Returns an invalid date for all other values.
+     * @param {?} value
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.deserialize = /**
+     * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
+     * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
+     * string into null. Returns an invalid date for all other values.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
+        /** @type {?} */
+        var date;
+        if (value instanceof Date) {
+            date = this.createMoment(value);
+        }
+        if (typeof value === 'string') {
+            if (!value) {
+                return null;
+            }
+            date = this.createMoment(value, moment.ISO_8601, this.parseStrict).locale(this.getLocale());
+        }
+        if (date && this.isValid(date)) {
+            return date;
+        }
+        return _super.prototype.deserialize.call(this, value);
+    };
+    /** Creates a Moment instance while respecting the current UTC settings. */
+    /**
+     * Creates a Moment instance while respecting the current UTC settings.
+     * @private
+     * @param {...?} args
+     * @return {?}
+     */
+    MomentDateTimeAdapter.prototype.createMoment = /**
+     * Creates a Moment instance while respecting the current UTC settings.
+     * @private
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.options && this.options.useUtc
+            ? moment.utc.apply(moment, __spread(args)) : moment.apply(void 0, __spread(args));
+    };
+    MomentDateTimeAdapter.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    MomentDateTimeAdapter.ctorParameters = function () { return [
+        { type: String, decorators: [{ type: Optional }, { type: Inject, args: [OWL_DATE_TIME_LOCALE,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS,] }] }
+    ]; };
+    return MomentDateTimeAdapter;
+}(DateTimeAdapter));
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    MomentDateTimeAdapter.prototype._localeData;
+    /**
+     * @type {?}
+     * @private
+     */
+    MomentDateTimeAdapter.prototype.owlDateTimeLocale;
+    /**
+     * @type {?}
+     * @private
+     */
+    MomentDateTimeAdapter.prototype.options;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var OWL_MOMENT_DATE_TIME_FORMATS = {
+    parseInput: 'l LT',
+    fullPickerInput: 'l LT',
+    datePickerInput: 'l',
+    timePickerInput: 'LT',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var MomentDateTimeModule = /** @class */ (function () {
+    function MomentDateTimeModule() {
+    }
+    MomentDateTimeModule.decorators = [
+        { type: NgModule, args: [{
+                    providers: [
+                        {
+                            provide: DateTimeAdapter,
+                            useClass: MomentDateTimeAdapter,
+                            deps: [OWL_DATE_TIME_LOCALE, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS]
+                        }
+                    ]
+                },] }
+    ];
+    return MomentDateTimeModule;
+}());
+var ɵ0$2 = OWL_MOMENT_DATE_TIME_FORMATS;
+var OwlMomentDateTimeModule = /** @class */ (function () {
+    function OwlMomentDateTimeModule() {
+    }
+    OwlMomentDateTimeModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [MomentDateTimeModule],
+                    providers: [
+                        {
+                            provide: OWL_DATE_TIME_FORMATS,
+                            useValue: ɵ0$2
+                        }
+                    ]
+                },] }
+    ];
+    return OwlMomentDateTimeModule;
 }());
 
 /**
@@ -11939,5 +12446,5 @@ var OwlNativeDateTimeModule = /** @class */ (function () {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, NativeDateTimeModule as ɵa, OWL_DATE_TIME_LOCALE_FACTORY as ɵb, OwlMonthViewComponent as ɵba, OwlTimerBoxComponent as ɵbb, NumberFixedLenPipe as ɵbc, NativeDateTimeAdapter as ɵbd, OWL_NATIVE_DATE_TIME_FORMATS as ɵbe, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵc, OWL_DTPICKER_SCROLL_STRATEGY as ɵd, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵf, OwlDialogModule as ɵg, OwlDialogContainerComponent as ɵh, OWL_DIALOG_SCROLL_STRATEGY as ɵi, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵk, OWL_DIALOG_DEFAULT_OPTIONS as ɵl, OwlDialogService as ɵm, OwlDialogConfig as ɵn, OwlCalendarComponent as ɵo, OwlTimerComponent as ɵp, OwlDateTimeTriggerDirective as ɵq, OWL_DATETIME_VALUE_ACCESSOR as ɵr, OWL_DATETIME_VALIDATORS as ɵs, OwlDateTimeInputDirective as ɵt, OwlDateTime as ɵu, OwlDateTimeContainerComponent as ɵv, owlDateTimePickerAnimations as ɵw, OwlMultiYearViewComponent as ɵx, OwlCalendarBodyComponent as ɵy, OwlYearViewComponent as ɵz };
-//# sourceMappingURL=ng-pick-datetime.js.map
+export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlMomentDateTimeModule, OwlNativeDateTimeModule, NativeDateTimeModule as ɵa, MomentDateTimeModule as ɵb, OwlYearViewComponent as ɵba, OwlMonthViewComponent as ɵbb, OwlTimerBoxComponent as ɵbc, NumberFixedLenPipe as ɵbd, NativeDateTimeAdapter as ɵbe, OWL_NATIVE_DATE_TIME_FORMATS as ɵbf, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS as ɵbg, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY as ɵbh, MomentDateTimeAdapter as ɵbi, OWL_MOMENT_DATE_TIME_FORMATS as ɵbj, OWL_DATE_TIME_LOCALE_FACTORY as ɵc, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵd, OWL_DTPICKER_SCROLL_STRATEGY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵf, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵg, OwlDialogModule as ɵh, OwlDialogContainerComponent as ɵi, OWL_DIALOG_SCROLL_STRATEGY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵk, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵl, OWL_DIALOG_DEFAULT_OPTIONS as ɵm, OwlDialogService as ɵn, OwlDialogConfig as ɵo, OwlCalendarComponent as ɵp, OwlTimerComponent as ɵq, OwlDateTimeTriggerDirective as ɵr, OWL_DATETIME_VALUE_ACCESSOR as ɵs, OWL_DATETIME_VALIDATORS as ɵt, OwlDateTimeInputDirective as ɵu, OwlDateTime as ɵv, OwlDateTimeContainerComponent as ɵw, owlDateTimePickerAnimations as ɵx, OwlMultiYearViewComponent as ɵy, OwlCalendarBodyComponent as ɵz };
+//# sourceMappingURL=ng-date-and-time-picker.js.map

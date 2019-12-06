@@ -12,17 +12,17 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     private dateTimeFormats;
     /**
      * Whether to hide dates in other months at the start or end of the current month.
-     * */
+     */
     hideOtherMonths: boolean;
     /**
      * Define the first day of a week
-     * Sunday: 0 ~ Saturday: 6
-     * */
+     * Sunday: 0 - Saturday: 6
+     */
     private _firstDayOfWeek;
     firstDayOfWeek: number;
     /**
      * The select mode of the picker;
-     * */
+     */
     private _selectMode;
     selectMode: SelectMode;
     /** The currently selected date. */
@@ -34,7 +34,7 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     pickerMoment: T;
     /**
      * A function used to filter which dates are selectable
-     * */
+     */
     private _dateFilter;
     dateFilter: (date: T) => boolean;
     /** The minimum selectable date. */
@@ -55,26 +55,27 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     readonly isInSingleMode: boolean;
     readonly isInRangeMode: boolean;
     private firstDateOfMonth;
+    private isDefaultFirstDayOfWeek;
     private localeSub;
     private initiated;
     private dateNames;
     /**
      * The date of the month that today falls on.
-     * */
+     */
     todayDate: number | null;
     /**
      * An array to hold all selectedDates' value
      * the value is the day number in current month
-     * */
+     */
     selectedDates: number[];
     firstRowOffset: number;
     /**
      * Callback to invoke when a new date is selected
-     * */
+     */
     readonly selectedChange: EventEmitter<T>;
     /**
      * Callback to invoke when any date is selected.
-     * */
+     */
     readonly userSelection: EventEmitter<void>;
     /** Emits when any date is activated. */
     readonly pickerMomentChange: EventEmitter<T>;
@@ -99,11 +100,11 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     handleCalendarKeydown(event: KeyboardEvent): void;
     /**
      * Generate the calendar weekdays array
-     * */
+     */
     private generateWeekDays;
     /**
      * Generate the calendar days array
-     * */
+     */
     private generateCalendar;
     /**
      * Creates CalendarCell for days.
@@ -125,7 +126,7 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
      * Set the selectedDates value.
      * In single mode, it has only one value which represent the selected date
      * In range mode, it would has two values, one for the fromValue and the other for the toValue
-     * */
+     */
     private setSelectedDates;
     private focusActiveCell;
 }
