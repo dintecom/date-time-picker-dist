@@ -9794,7 +9794,7 @@ class MomentDateTimeAdapter extends DateTimeAdapter {
      * @return {?}
      */
     isValid(date) {
-        return this.clone(date).isValid();
+        return this.createMoment(date, date.format(), this.getLocale(), this.parseStrict).isValid();
     }
     /**
      * @return {?}
