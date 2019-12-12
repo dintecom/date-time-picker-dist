@@ -6438,7 +6438,7 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
          */
         function (value) {
             value = this.dateTimeAdapter.deserialize(value);
-            this.lastValueValid = !value || this.dateTimeAdapter.isValidFormat(value, this.dtPicker.formatString);
+            this.lastValueValid = !value || this.dateTimeAdapter.isValid(value);
             value = this.getValidDate(value);
             /** @type {?} */
             var oldDate = this._value;
@@ -6477,9 +6477,9 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
                 }));
                 this.lastValueValid =
                     (!this._values[0] ||
-                        this.dateTimeAdapter.isValidFormat(this._values[0], this.dtPicker.formatString)) &&
+                        this.dateTimeAdapter.isValid(this._values[0])) &&
                         (!this._values[1] ||
-                            this.dateTimeAdapter.isValidFormat(this._values[1], this.dtPicker.formatString));
+                            this.dateTimeAdapter.isValid(this._values[1]));
             }
             else {
                 this._values = [];
@@ -6866,7 +6866,7 @@ var OwlDateTimeInputDirective = /** @class */ (function () {
      */
     function (obj) {
         return this.dateTimeAdapter.isDateInstance(obj) &&
-            this.dateTimeAdapter.isValidFormat(obj, this.dtPicker.formatString)
+            this.dateTimeAdapter.isValid(obj)
             ? obj
             : null;
     };
