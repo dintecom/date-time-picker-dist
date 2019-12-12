@@ -814,6 +814,14 @@
          */
         DateTimeAdapter.prototype.isValid = function (date) { };
         /**
+         * Checks whether the given date is valid.
+         * @abstract
+         * @param {?} value
+         * @param {?} parseFormat
+         * @return {?}
+         */
+        DateTimeAdapter.prototype.isValidFormat = function (value, parseFormat) { };
+        /**
          * Gets date instance that is not valid.
          * @abstract
          * @return {?}
@@ -6323,9 +6331,13 @@
              * @return {?}
              */
             function () {
+                /** @type {?} */
+                var value = _this.elmRef.nativeElement.value;
+                if (!value)
+                    return null;
                 return _this.lastValueValid
                     ? null
-                    : { owlDateTimeParse: { text: _this.elmRef.nativeElement.value } };
+                    : { owlDateTimeParse: { text: value } };
             });
             /**
              * The form control validator for the min date.
@@ -6614,7 +6626,7 @@
              */
             function (value) {
                 value = this.dateTimeAdapter.deserialize(value);
-                this.lastValueValid = !value || this.dateTimeAdapter.isValid(value);
+                this.lastValueValid = !value || this.dateTimeAdapter.isValidFormat(value, this.dtPicker.formatString);
                 value = this.getValidDate(value);
                 /** @type {?} */
                 var oldDate = this._value;
@@ -6653,9 +6665,9 @@
                     }));
                     this.lastValueValid =
                         (!this._values[0] ||
-                            this.dateTimeAdapter.isValid(this._values[0])) &&
+                            this.dateTimeAdapter.isValidFormat(this._values[0], this.dtPicker.formatString)) &&
                             (!this._values[1] ||
-                                this.dateTimeAdapter.isValid(this._values[1]));
+                                this.dateTimeAdapter.isValidFormat(this._values[1], this.dtPicker.formatString));
                 }
                 else {
                     this._values = [];
@@ -6927,6 +6939,7 @@
             else {
                 this.changeInputInRangeFromToMode(value);
             }
+            this.validatorOnChange();
         };
         /**
          * @param {?} event
@@ -7041,7 +7054,7 @@
          */
         function (obj) {
             return this.dateTimeAdapter.isDateInstance(obj) &&
-                this.dateTimeAdapter.isValid(obj)
+                this.dateTimeAdapter.isValidFormat(obj, this.dtPicker.formatString)
                 ? obj
                 : null;
         };
@@ -7099,6 +7112,7 @@
          * @return {?}
          */
         function (inputValue) {
+            this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
             /** @type {?} */
             var value = inputValue;
             if (this.dtPicker.pickerType === 'timer') {
@@ -7106,7 +7120,6 @@
             }
             /** @type {?} */
             var result = this.dateTimeAdapter.parse(value, this.dateTimeFormats.parseInput);
-            this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
             result = this.getValidDate(result);
             // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
             // result equals to null means there is input event, but the input value is invalid
@@ -7137,6 +7150,7 @@
          * @return {?}
          */
         function (inputValue) {
+            this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
             /** @type {?} */
             var originalValue = this._selectMode === 'rangeFrom'
                 ? this._values[0]
@@ -7146,7 +7160,6 @@
             }
             /** @type {?} */
             var result = this.dateTimeAdapter.parse(inputValue, this.dateTimeFormats.parseInput);
-            this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
             result = this.getValidDate(result);
             // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
             if ((this._selectMode === 'rangeFrom' &&
@@ -7188,9 +7201,12 @@
             /** @type {?} */
             var selecteds = inputValue.split(this.rangeSeparator);
             /** @type {?} */
-            var fromString = selecteds[0];
+            var fromString = (selecteds[0] || '').trim();
             /** @type {?} */
-            var toString = selecteds[1];
+            var toString = (selecteds[1] || '').trim();
+            this.lastValueValid =
+                this.dateTimeAdapter.isValidFormat(fromString, this.dtPicker.formatString) &&
+                    this.dateTimeAdapter.isValidFormat(toString, this.dtPicker.formatString);
             if (this.dtPicker.pickerType === 'timer') {
                 fromString = this.convertTimeStringToDateTimeString(fromString, this.values[0]);
                 toString = this.convertTimeStringToDateTimeString(toString, this.values[1]);
@@ -7199,9 +7215,6 @@
             var from = this.dateTimeAdapter.parse(fromString, this.dateTimeFormats.parseInput);
             /** @type {?} */
             var to = this.dateTimeAdapter.parse(toString, this.dateTimeFormats.parseInput);
-            this.lastValueValid =
-                (!from || this.dateTimeAdapter.isValid(from)) &&
-                    (!to || this.dateTimeAdapter.isValid(to));
             from = this.getValidDate(from);
             to = this.getValidDate(to);
             // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
@@ -11510,6 +11523,19 @@
             return date && !isNaN(date.getTime());
         };
         /**
+         * @param {?} value
+         * @param {?} parseFormat
+         * @return {?}
+         */
+        NativeDateTimeAdapter.prototype.isValidFormat = /**
+         * @param {?} value
+         * @param {?} parseFormat
+         * @return {?}
+         */
+        function (value, parseFormat) {
+            return !!Date.parse(value);
+        };
+        /**
          * @return {?}
          */
         NativeDateTimeAdapter.prototype.invalid = /**
@@ -11979,13 +12005,6 @@
          * @type {?}
          */
         OwlMomentDateTimeAdapterOptions.prototype.useUtc;
-        /**
-         * Turns the use of strict string parsing in moment.
-         * Changing this will change how the DateTimePicker interprets input.
-         * {\@default false}
-         * @type {?}
-         */
-        OwlMomentDateTimeAdapterOptions.prototype.parseStrict;
     }
     /**
      * InjectionToken for moment date adapter to configure options.
@@ -12001,8 +12020,7 @@
      */
     function OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY() {
         return {
-            useUtc: false,
-            parseStrict: false
+            useUtc: false
         };
     }
     /**
@@ -12269,7 +12287,20 @@
          * @return {?}
          */
         function (date) {
-            return this.createMoment(date, date.format(), this.getLocale(), this.parseStrict).isValid();
+            return this.clone(date).isValid();
+        };
+        /**
+         * @param {?} value
+         * @param {?} parseFormat
+         * @return {?}
+         */
+        MomentDateTimeAdapter.prototype.isValidFormat = /**
+         * @param {?} value
+         * @param {?} parseFormat
+         * @return {?}
+         */
+        function (value, parseFormat) {
+            return moment(value, parseFormat, true).isValid();
         };
         /**
          * @return {?}
@@ -12472,20 +12503,10 @@
          */
         function (value, parseFormat) {
             if (value && typeof value === 'string') {
-                return this.createMoment(value, parseFormat, this.getLocale(), this.parseStrict);
+                return this.createMoment(value, parseFormat, this.getLocale());
             }
             return value ? this.createMoment(value).locale(this.getLocale()) : null;
         };
-        Object.defineProperty(MomentDateTimeAdapter.prototype, "parseStrict", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this.options && this.options.parseStrict;
-            },
-            enumerable: true,
-            configurable: true
-        });
         /**
          * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
          * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
@@ -12515,7 +12536,7 @@
                 if (!value) {
                     return null;
                 }
-                date = this.createMoment(value, moment.ISO_8601, this.parseStrict).locale(this.getLocale());
+                date = this.createMoment(value, moment.ISO_8601).locale(this.getLocale());
             }
             if (date && this.isValid(date)) {
                 return date;
