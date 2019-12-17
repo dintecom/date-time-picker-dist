@@ -41,7 +41,7 @@ export declare class MomentDateTimeAdapter extends DateTimeAdapter<Moment> {
     isEqual(dateLeft: Moment, dateRight: Moment): boolean;
     isSameDay(dateLeft: Moment, dateRight: Moment): boolean;
     isValid(date: Moment): boolean;
-    isValidFormat(value: any, parseFormat: string): boolean;
+    isValidFormat(value: any, parseFormat: any): boolean;
     invalid(): Moment;
     isDateInstance(obj: any): boolean;
     addCalendarYears(date: Moment, amount: number): Moment;

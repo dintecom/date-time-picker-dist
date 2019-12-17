@@ -5639,6 +5639,7 @@ class OwlDateTimeInputDirective {
      * @return {?}
      */
     changeInputInSingleMode(inputValue) {
+        inputValue = (inputValue || '').trim();
         this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         /** @type {?} */
         let value = inputValue;
@@ -5668,6 +5669,7 @@ class OwlDateTimeInputDirective {
      * @return {?}
      */
     changeInputInRangeFromToMode(inputValue) {
+        inputValue = (inputValue || '').trim();
         this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         /** @type {?} */
         const originalValue = this._selectMode === 'rangeFrom'
@@ -5707,6 +5709,7 @@ class OwlDateTimeInputDirective {
      * @return {?}
      */
     changeInputInRangeMode(inputValue) {
+        inputValue = (inputValue || '').trim();
         /** @type {?} */
         const selecteds = inputValue.split(this.rangeSeparator);
         /** @type {?} */
@@ -9263,7 +9266,53 @@ class NativeDateTimeAdapter extends DateTimeAdapter {
      * @return {?}
      */
     isValidFormat(value, parseFormat) {
-        return !!Date.parse(value);
+        if (SUPPORTS_INTL_API) {
+            parseFormat = Object.assign({}, parseFormat, { timeZone: 'utc' });
+            /** @type {?} */
+            const dtf = new Intl.DateTimeFormat(this.getLocale(), parseFormat);
+            /** @type {?} */
+            const parts = dtf.formatToParts();
+            /** @type {?} */
+            let regex = '^';
+            for (const part of parts) {
+                switch (part.type) {
+                    case 'day':
+                        regex += '([1-9]{1}|[0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})';
+                        break;
+                    case 'month':
+                        regex += '([1-9]|0[1-9]|1[0-2])';
+                        break;
+                    case 'year':
+                        regex += '([0-9]{4})';
+                        break;
+                    case 'hour':
+                        if (dtf.resolvedOptions().hour12) {
+                            regex += '(0?[1-9]|1[012])';
+                        }
+                        else {
+                            regex += '([01]?[0-9]|2[0-3])';
+                        }
+                        break;
+                    case 'second':
+                    case 'minute':
+                        regex += '([0-9]{1}|[0-5][0-9])';
+                        break;
+                    case 'dayPeriod':
+                        regex += '((a|A)(m|M)?|(p|P)(m|M)?)';
+                        break;
+                    case 'literal':
+                        regex += part.value.replace('/', '\\/').replace('.', '\\.');
+                        break;
+                }
+            }
+            regex += '$';
+            return (new RegExp(regex)).test(value);
+        }
+        else {
+            /** @type {?} */
+            const date = new Date(value);
+            return date.getTime() === date.getTime();
+        }
     }
     /**
      * @return {?}

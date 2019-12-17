@@ -33,7 +33,7 @@ export declare class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
     isEqual(dateLeft: Date, dateRight: Date): boolean;
     isSameDay(dateLeft: Date, dateRight: Date): boolean;
     isValid(date: Date): boolean;
-    isValidFormat(value: any, parseFormat: string): boolean;
+    isValidFormat(value: any, parseFormat: any): boolean;
     invalid(): Date;
     isDateInstance(obj: any): boolean;
     addCalendarYears(date: Date, amount: number): Date;

@@ -103,7 +103,7 @@ export declare abstract class DateTimeAdapter<T> {
     /**
      * Checks whether the given date is valid.
      */
-    abstract isValidFormat(value: any, parseFormat: string): boolean;
+    abstract isValidFormat(value: any, parseFormat: any): boolean;
     /**
      * Gets date instance that is not valid.
      */
