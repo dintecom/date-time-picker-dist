@@ -11556,7 +11556,7 @@
                                 regex += '([1-9]|0[1-9]|1[0-2])';
                                 break;
                             case 'year':
-                                regex += '([0-9]{4})';
+                                regex += '([0-9]{1,4})';
                                 break;
                             case 'hour':
                                 if (dtf.resolvedOptions().hour12) {
