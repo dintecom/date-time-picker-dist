@@ -4998,6 +4998,14 @@ class OwlDateTimeInputDirective {
         this.dateTimeAdapter = dateTimeAdapter;
         this.dateTimeFormats = dateTimeFormats;
         /**
+         * The minimum valid date.
+         */
+        this._min = this.dateTimeAdapter.createDate(1, 0, 1, 0, 0, 0);
+        /**
+         * The maximum valid date.
+         */
+        this._max = this.dateTimeAdapter.createDate(3000, 11, 31, 23, 59, 59);
+        /**
          * The picker's select mode
          */
         this._selectMode = 'single';
