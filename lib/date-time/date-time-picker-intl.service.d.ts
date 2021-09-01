@@ -1,7 +1,5 @@
-/**
- * date-time-picker-intl.service
- */
 import { Subject } from 'rxjs';
+import * as i0 from "@angular/core";
 export declare class OwlDateTimeIntl {
     /**
      * Stream that emits whenever the labels here are changed. Use this to notify
@@ -48,4 +46,6 @@ export declare class OwlDateTimeIntl {
     hour12AMLabel: string;
     /** A label for the hour12 button (PM) */
     hour12PMLabel: string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeIntl, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OwlDateTimeIntl>;
 }

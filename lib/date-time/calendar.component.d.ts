@@ -6,6 +6,7 @@ import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
 import { SelectMode } from './date-time.class';
+import * as i0 from "@angular/core";
 export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit, AfterViewChecked, OnDestroy {
     private elmRef;
     private pickerIntl;
@@ -16,26 +17,31 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     /**
      * Date filter for the month and year view
      */
-    dateFilter: Function;
+    dateFilter: (date: T) => boolean;
     /**
      * Set the first day of week
      */
     firstDayOfWeek: number;
     /** The minimum selectable date. */
     private _minDate;
-    minDate: T | null;
+    get minDate(): T | null;
+    set minDate(value: T | null);
     /** The maximum selectable date. */
     private _maxDate;
-    maxDate: T | null;
+    get maxDate(): T | null;
+    set maxDate(value: T | null);
     /** The current picker moment */
     private _pickerMoment;
-    pickerMoment: T;
+    get pickerMoment(): T;
+    set pickerMoment(value: T);
     selectMode: SelectMode;
     /** The currently selected moment. */
     private _selected;
-    selected: T | null;
+    get selected(): T | null;
+    set selected(value: T | null);
     private _selecteds;
-    selecteds: T[];
+    get selecteds(): T[];
+    set selecteds(values: T[]);
     /**
      * The view that the calendar should start in.
      */
@@ -58,16 +64,17 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
      * Emits the selected month. This doesn't imply a change on the selected date
      */
     readonly monthSelected: EventEmitter<T>;
-    readonly periodButtonText: string;
-    readonly periodButtonLabel: string;
-    readonly prevButtonLabel: string;
-    readonly nextButtonLabel: string;
+    get periodButtonText(): string;
+    get periodButtonLabel(): string;
+    get prevButtonLabel(): string;
+    get nextButtonLabel(): string;
     private _currentView;
-    currentView: 'month' | 'year' | 'multi-years';
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
-    readonly showControlArrows: boolean;
-    readonly isMonthView: boolean;
+    get currentView(): 'month' | 'year' | 'multi-years';
+    set currentView(view: 'month' | 'year' | 'multi-years');
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
+    get showControlArrows(): boolean;
+    get isMonthView(): boolean;
     /**
      * Date filter for the month and year view
      */
@@ -75,7 +82,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     /**
      * Bind class 'owl-dt-calendar' to host
      */
-    readonly owlDTCalendarClass: boolean;
+    get owlDTCalendarClass(): boolean;
     private intlChangesSub;
     /**
      * Used for scheduling that focus should be moved to the active cell on the next tick.
@@ -132,4 +139,6 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
      * Get a valid date object
      */
     private getValidDate;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlCalendarComponent<any>, [null, null, null, null, { optional: true; }, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlCalendarComponent<any>, "owl-date-time-calendar", ["owlDateTimeCalendar"], { "dateFilter": "dateFilter"; "firstDayOfWeek": "firstDayOfWeek"; "minDate": "minDate"; "maxDate": "maxDate"; "pickerMoment": "pickerMoment"; "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "startView": "startView"; "hideOtherMonths": "hideOtherMonths"; }, { "pickerMomentChange": "pickerMomentChange"; "selectedChange": "selectedChange"; "userSelection": "userSelection"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never>;
 }

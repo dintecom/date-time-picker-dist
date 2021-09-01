@@ -1,12 +1,10 @@
-/**
- * date-time-picker-input.directive
- */
 import { AfterContentInit, ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
 import { OwlDateTimeComponent } from './date-time-picker.component';
 import { SelectMode } from './date-time.class';
+import * as i0 from "@angular/core";
 export declare const OWL_DATETIME_VALUE_ACCESSOR: any;
 export declare const OWL_DATETIME_VALIDATORS: any;
 export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterContentInit, OnDestroy, ControlValueAccessor, Validator {
@@ -17,35 +15,41 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     /**
      * The date time picker that this input is associated with.
      */
-    owlDateTime: OwlDateTimeComponent<T>;
+    set owlDateTime(value: OwlDateTimeComponent<T>);
     /**
      * A function to filter date time
      */
-    owlDateTimeFilter: (date: T | null) => boolean;
+    set owlDateTimeFilter(filter: (date: T | null) => boolean);
     private _dateTimeFilter;
-    readonly dateTimeFilter: (date: T) => boolean;
+    get dateTimeFilter(): (date: T) => boolean;
     /** Whether the date time picker's input is disabled. */
     private _disabled;
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     /** The minimum valid date. */
     private _min;
-    min: T | null;
+    get min(): T | null;
+    set min(value: T | null);
     /** The maximum valid date. */
     private _max;
-    max: T | null;
+    get max(): T | null;
+    set max(value: T | null);
     /**
      * The picker's select mode
      */
     private _selectMode;
-    selectMode: SelectMode;
+    get selectMode(): SelectMode;
+    set selectMode(mode: SelectMode);
     /**
      * The character to separate the 'from' and 'to' in input value
      */
     rangeSeparator: string;
     private _value;
-    value: T | null;
+    get value(): T | null;
+    set value(value: T | null);
     private _values;
-    values: T[];
+    get values(): T[];
+    set values(values: T[]);
     /**
      * Callback to invoke when `change` event is fired on this `<input>`
      */
@@ -54,9 +58,9 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
      * Callback to invoke when an `input` event is fired on this `<input>`.
      */
     dateTimeInput: EventEmitter<any>;
-    readonly elementRef: ElementRef;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
+    get elementRef(): ElementRef;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
     /** The date-time-picker that this input is associated with. */
     dtPicker: OwlDateTimeComponent<T>;
     private dtPickerSub;
@@ -84,11 +88,11 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
     valueChange: EventEmitter<T | T[]>;
     /** Emits when the disabled state has changed */
     disabledChange: EventEmitter<boolean>;
-    readonly owlDateTimeInputAriaHaspopup: boolean;
-    readonly owlDateTimeInputAriaOwns: string;
-    readonly minIso8601: string;
-    readonly maxIso8601: string;
-    readonly owlDateTimeInputDisabled: boolean;
+    get owlDateTimeInputAriaHaspopup(): boolean;
+    get owlDateTimeInputAriaOwns(): string;
+    get minIso8601(): string;
+    get maxIso8601(): string;
+    get owlDateTimeInputDisabled(): boolean;
     constructor(elmRef: ElementRef, renderer: Renderer2, dateTimeAdapter: DateTimeAdapter<T>, dateTimeFormats: OwlDateTimeFormats);
     ngOnInit(): void;
     ngAfterContentInit(): void;
@@ -143,4 +147,6 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
      * Check if the two value is the same
      */
     private isSameValue;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeInputDirective<any>, [null, null, { optional: true; }, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeInputDirective<any>, "input[owlDateTime]", ["owlDateTimeInput"], { "owlDateTime": "owlDateTime"; "owlDateTimeFilter": "owlDateTimeFilter"; "_disabled": "_disabled"; "min": "min"; "max": "max"; "selectMode": "selectMode"; "rangeSeparator": "rangeSeparator"; "value": "value"; "values": "values"; }, { "dateTimeChange": "dateTimeChange"; "dateTimeInput": "dateTimeInput"; }, never>;
 }

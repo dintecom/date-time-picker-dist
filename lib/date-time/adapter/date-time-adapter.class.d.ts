@@ -17,7 +17,7 @@ export declare abstract class DateTimeAdapter<T> {
     private locale;
     /** A stream that emits when the locale changes. */
     protected _localeChanges: Subject<string>;
-    readonly localeChanges: Observable<string>;
+    get localeChanges(): Observable<string>;
     /** total milliseconds in a day. */
     protected readonly millisecondsInDay = 86400000;
     /** total milliseconds in a minute. */

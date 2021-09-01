@@ -8,6 +8,7 @@ import { OwlDialogRef } from './dialog-ref.class';
 import { Observable, Subject } from 'rxjs';
 import { Overlay, OverlayContainer, ScrollStrategy } from '@angular/cdk/overlay';
 import { ComponentType } from '@angular/cdk/portal';
+import * as i0 from "@angular/core";
 export declare const OWL_DIALOG_DATA: InjectionToken<any>;
 /**
  * Injection token that determines the scroll handling while the dialog is open.
@@ -36,10 +37,10 @@ export declare class OwlDialogService {
     private _afterOpenAtThisLevel;
     private _afterAllClosedAtThisLevel;
     /** Keeps track of the currently-open dialogs. */
-    readonly openDialogs: OwlDialogRef<any>[];
+    get openDialogs(): OwlDialogRef<any>[];
     /** Stream that emits when a dialog has been opened. */
-    readonly afterOpen: Subject<OwlDialogRef<any>>;
-    readonly _afterAllClosed: any;
+    get afterOpen(): Subject<OwlDialogRef<any>>;
+    get _afterAllClosed(): any;
     /**
      * Stream that emits when all open dialog have finished closing.
      * Will emit on subscribe if there are no open dialogs to begin with.
@@ -67,4 +68,6 @@ export declare class OwlDialogService {
      * Hides all of the content that isn't an overlay from assistive technology.
      */
     private hideNonDialogContentFromAssistiveTechnology;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDialogService, [null, null, { optional: true; }, null, { optional: true; }, { optional: true; skipSelf: true; }, null]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OwlDialogService>;
 }

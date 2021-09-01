@@ -3,6 +3,7 @@
  */
 import { ElementRef, EventEmitter, NgZone, OnInit } from '@angular/core';
 import { SelectMode } from './date-time.class';
+import * as i0 from "@angular/core";
 export declare class CalendarCell {
     value: number;
     displayValue: string;
@@ -47,9 +48,9 @@ export declare class OwlCalendarBodyComponent implements OnInit {
      * Emit when a calendar cell is selected
      */
     readonly select: EventEmitter<CalendarCell>;
-    readonly owlDTCalendarBodyClass: boolean;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
+    get owlDTCalendarBodyClass(): boolean;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
     constructor(elmRef: ElementRef, ngZone: NgZone);
     ngOnInit(): void;
     selectCell(cell: CalendarCell): void;
@@ -74,4 +75,6 @@ export declare class OwlCalendarBodyComponent implements OnInit {
      * Focus to a active cell
      */
     focusActiveCell(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlCalendarBodyComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlCalendarBodyComponent, "[owl-date-time-calendar-body]", ["owlDateTimeCalendarBody"], { "activeCell": "activeCell"; "rows": "rows"; "numCols": "numCols"; "cellRatio": "cellRatio"; "todayValue": "todayValue"; "selectedValues": "selectedValues"; "selectMode": "selectMode"; }, { "select": "select"; }, never, never>;
 }

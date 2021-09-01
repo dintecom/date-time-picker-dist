@@ -6,6 +6,7 @@ import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.component';
 import { SelectMode } from './date-time.class';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
+import * as i0 from "@angular/core";
 export declare const YEARS_PER_ROW = 3;
 export declare const YEAR_ROWS = 7;
 export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
@@ -16,38 +17,45 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
      * The select mode of the picker;
      */
     private _selectMode;
-    selectMode: SelectMode;
+    get selectMode(): SelectMode;
+    set selectMode(val: SelectMode);
     /** The currently selected date. */
     private _selected;
-    selected: T | null;
+    get selected(): T | null;
+    set selected(value: T | null);
     private _selecteds;
-    selecteds: T[];
+    get selecteds(): T[];
+    set selecteds(values: T[]);
     private _pickerMoment;
-    pickerMoment: T;
+    get pickerMoment(): T;
+    set pickerMoment(value: T);
     /**
      * A function used to filter which dates are selectable
      */
     private _dateFilter;
-    dateFilter: (date: T) => boolean;
+    get dateFilter(): (date: T) => boolean;
+    set dateFilter(filter: (date: T) => boolean);
     /** The minimum selectable date. */
     private _minDate;
-    minDate: T | null;
+    get minDate(): T | null;
+    set minDate(value: T | null);
     /** The maximum selectable date. */
     private _maxDate;
-    maxDate: T | null;
+    get maxDate(): T | null;
+    set maxDate(value: T | null);
     private _todayYear;
-    readonly todayYear: number;
+    get todayYear(): number;
     private _years;
-    readonly years: CalendarCell[][];
+    get years(): CalendarCell[][];
     private _selectedYears;
-    readonly selectedYears: number[];
+    get selectedYears(): number[];
     private initiated;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
-    readonly activeCell: number;
-    readonly tableHeader: string;
-    readonly prevButtonLabel: string;
-    readonly nextButtonLabel: string;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
+    get activeCell(): number;
+    get tableHeader(): string;
+    get prevButtonLabel(): string;
+    get nextButtonLabel(): string;
     /**
      * Callback to invoke when a new month is selected
      */
@@ -62,8 +70,8 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     readonly keyboardEnter: EventEmitter<any>;
     /** The body of calendar table */
     calendarBodyElm: OwlCalendarBodyComponent;
-    readonly owlDTCalendarView: boolean;
-    readonly owlDTCalendarMultiYearView: boolean;
+    get owlDTCalendarView(): boolean;
+    get owlDTCalendarMultiYearView(): boolean;
     constructor(cdRef: ChangeDetectorRef, pickerIntl: OwlDateTimeIntl, dateTimeAdapter: DateTimeAdapter<T>);
     ngOnInit(): void;
     ngAfterContentInit(): void;
@@ -99,4 +107,6 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
      */
     private getValidDate;
     private focusActiveCell;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlMultiYearViewComponent<any>, [null, null, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMultiYearViewComponent<any>, "owl-date-time-multi-year-view", never, { "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "change": "change"; "yearSelected": "yearSelected"; "pickerMomentChange": "pickerMomentChange"; "keyboardEnter": "keyboardEnter"; }, never, never>;
 }

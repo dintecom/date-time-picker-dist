@@ -6,6 +6,7 @@ import { AnimationEvent } from '@angular/animations';
 import { FocusTrapFactory } from '@angular/cdk/a11y';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { OwlDialogConfig } from './dialog-config.class';
+import * as i0 from "@angular/core";
 export declare class OwlDialogContainerComponent extends BasePortalOutlet implements OnInit {
     private changeDetector;
     private elementRef;
@@ -20,17 +21,17 @@ export declare class OwlDialogContainerComponent extends BasePortalOutlet implem
     animationStateChanged: EventEmitter<AnimationEvent>;
     isAnimating: boolean;
     private _config;
-    readonly config: OwlDialogConfig;
+    get config(): OwlDialogConfig;
     private state;
     private params;
     private elementFocusedBeforeDialogWasOpened;
-    readonly owlDialogContainerClass: boolean;
-    readonly owlDialogContainerTabIndex: number;
-    readonly owlDialogContainerId: string;
-    readonly owlDialogContainerRole: string;
-    readonly owlDialogContainerAriaLabelledby: string;
-    readonly owlDialogContainerAriaDescribedby: string;
-    readonly owlDialogContainerAnimation: any;
+    get owlDialogContainerClass(): boolean;
+    get owlDialogContainerTabIndex(): number;
+    get owlDialogContainerId(): string;
+    get owlDialogContainerRole(): string;
+    get owlDialogContainerAriaLabelledby(): string;
+    get owlDialogContainerAriaDescribedby(): string;
+    get owlDialogContainerAnimation(): any;
     constructor(changeDetector: ChangeDetectorRef, elementRef: ElementRef, focusTrapFactory: FocusTrapFactory, document: any);
     ngOnInit(): void;
     /**
@@ -53,4 +54,6 @@ export declare class OwlDialogContainerComponent extends BasePortalOutlet implem
     private savePreviouslyFocusedElement;
     private trapFocus;
     private restoreFocus;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDialogContainerComponent, [null, null, null, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDialogContainerComponent, "owl-dialog-container", never, {}, {}, never, never>;
 }

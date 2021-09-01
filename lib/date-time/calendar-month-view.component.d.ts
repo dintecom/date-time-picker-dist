@@ -6,6 +6,7 @@ import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.componen
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
 import { SelectMode } from './date-time.class';
+import * as i0 from "@angular/core";
 export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentInit, OnDestroy {
     private cdRef;
     private dateTimeAdapter;
@@ -19,41 +20,49 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
      * Sunday: 0 - Saturday: 6
      */
     private _firstDayOfWeek;
-    firstDayOfWeek: number;
+    get firstDayOfWeek(): number;
+    set firstDayOfWeek(value: number);
     /**
      * The select mode of the picker;
      */
     private _selectMode;
-    selectMode: SelectMode;
+    get selectMode(): SelectMode;
+    set selectMode(val: SelectMode);
     /** The currently selected date. */
     private _selected;
-    selected: T | null;
+    get selected(): T | null;
+    set selected(value: T | null);
     private _selecteds;
-    selecteds: T[];
+    get selecteds(): T[];
+    set selecteds(values: T[]);
     private _pickerMoment;
-    pickerMoment: T;
+    get pickerMoment(): T;
+    set pickerMoment(value: T);
     /**
      * A function used to filter which dates are selectable
      */
     private _dateFilter;
-    dateFilter: (date: T) => boolean;
+    get dateFilter(): (date: T) => boolean;
+    set dateFilter(filter: (date: T) => boolean);
     /** The minimum selectable date. */
     private _minDate;
-    minDate: T | null;
+    get minDate(): T | null;
+    set minDate(value: T | null);
     /** The maximum selectable date. */
     private _maxDate;
-    maxDate: T | null;
+    get maxDate(): T | null;
+    set maxDate(value: T | null);
     private _weekdays;
-    readonly weekdays: {
+    get weekdays(): {
         long: string;
         short: string;
         narrow: string;
     }[];
     private _days;
-    readonly days: CalendarCell[][];
-    readonly activeCell: number;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
+    get days(): CalendarCell[][];
+    get activeCell(): number;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
     private firstDateOfMonth;
     private isDefaultFirstDayOfWeek;
     private localeSub;
@@ -81,7 +90,7 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     readonly pickerMomentChange: EventEmitter<T>;
     /** The body of calendar table */
     calendarBodyElm: OwlCalendarBodyComponent;
-    readonly owlDTCalendarView: boolean;
+    get owlDTCalendarView(): boolean;
     constructor(cdRef: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>, dateTimeFormats: OwlDateTimeFormats);
     ngOnInit(): void;
     ngAfterContentInit(): void;
@@ -129,4 +138,6 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
      */
     private setSelectedDates;
     private focusActiveCell;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlMonthViewComponent<any>, [null, { optional: true; }, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMonthViewComponent<any>, "owl-date-time-month-view", ["owlYearView"], { "hideOtherMonths": "hideOtherMonths"; "firstDayOfWeek": "firstDayOfWeek"; "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "selectedChange": "selectedChange"; "userSelection": "userSelection"; "pickerMomentChange": "pickerMomentChange"; }, never, never>;
 }

@@ -9,6 +9,7 @@ import { OwlTimerComponent } from './timer.component';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTime, PickerType } from './date-time.class';
 import { Observable } from 'rxjs';
+import * as i0 from "@angular/core";
 export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterContentInit, AfterViewInit {
     private cdRef;
     private elmRef;
@@ -22,53 +23,54 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
      * Stream emits when try to hide picker
      */
     private hidePicker$;
-    readonly hidePickerStream: Observable<any>;
+    get hidePickerStream(): Observable<any>;
     /**
      * Stream emits when try to confirm the selected value
      */
     private confirmSelected$;
-    readonly confirmSelectedStream: Observable<any>;
+    get confirmSelectedStream(): Observable<any>;
     private pickerOpened$;
-    readonly pickerOpenedStream: Observable<any>;
+    get pickerOpenedStream(): Observable<any>;
     /**
      * The current picker moment. This determines which time period is shown and which date is
      * highlighted when using keyboard navigation.
      */
     private _clamPickerMoment;
-    pickerMoment: T;
-    readonly pickerType: PickerType;
-    readonly cancelLabel: string;
-    readonly setLabel: string;
+    get pickerMoment(): T;
+    set pickerMoment(value: T);
+    get pickerType(): PickerType;
+    get cancelLabel(): string;
+    get setLabel(): string;
     /**
      * The range 'from' label
      */
-    readonly fromLabel: string;
+    get fromLabel(): string;
     /**
      * The range 'to' label
      */
-    readonly toLabel: string;
+    get toLabel(): string;
     /**
      * The range 'from' formatted value
      */
-    readonly fromFormattedValue: string;
+    get fromFormattedValue(): string;
     /**
      * The range 'to' formatted value
      */
-    readonly toFormattedValue: string;
+    get toFormattedValue(): string;
     /**
      * Cases in which the control buttons show in the picker
      * 1) picker mode is 'dialog'
      * 2) picker type is NOT 'calendar' and the picker mode is NOT 'inline'
      */
-    readonly showControlButtons: boolean;
-    readonly containerElm: HTMLElement;
-    readonly owlDTContainerClass: boolean;
-    readonly owlDTPopupContainerClass: boolean;
-    readonly owlDTDialogContainerClass: boolean;
-    readonly owlDTInlineContainerClass: boolean;
-    readonly owlDTContainerDisabledClass: boolean;
-    readonly owlDTContainerId: string;
-    readonly owlDTContainerAnimation: any;
+    get showControlButtons(): boolean;
+    get containerElm(): HTMLElement;
+    get owlDTContainerClass(): boolean;
+    get owlDTPopupContainerClass(): boolean;
+    get owlDTDialogContainerClass(): boolean;
+    get owlDTInlineContainerClass(): boolean;
+    get owlDTContainerDisabledClass(): boolean;
+    get owlDTContainerId(): string;
+    get owlDTContainerAnimation(): any;
     constructor(cdRef: ChangeDetectorRef, elmRef: ElementRef, pickerIntl: OwlDateTimeIntl, dateTimeAdapter: DateTimeAdapter<T>);
     ngOnInit(): void;
     ngAfterContentInit(): void;
@@ -118,4 +120,6 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
      * Focus to the picker
      */
     private focusPicker;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeContainerComponent<any>, [null, null, null, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeContainerComponent<any>, "owl-date-time-container", ["owlDateTimeContainer"], {}, {}, never, never>;
 }

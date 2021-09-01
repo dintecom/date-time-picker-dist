@@ -8,6 +8,7 @@ import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
 import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.class';
 import { OwlDialogService } from '../dialog/dialog.service';
+import * as i0 from "@angular/core";
 /** Injection token that determines the scroll handling while the dtPicker is open. */
 export declare const OWL_DTPICKER_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 /** @docs-private */
@@ -33,7 +34,8 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     panelClass: string | string[];
     /** The date to open the calendar to initially. */
     private _startAt;
-    startAt: T | null;
+    get startAt(): T | null;
+    set startAt(date: T | null);
     /**
      * Set the type of the dateTime picker
      *      'both' -- show both calendar and timer
@@ -41,18 +43,22 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      *      'timer' -- show only timer
      */
     private _pickerType;
-    pickerType: PickerType;
+    get pickerType(): PickerType;
+    set pickerType(val: PickerType);
     /**
      * Whether the picker open as a dialog
      */
     _pickerMode: PickerMode;
-    pickerMode: PickerMode;
+    get pickerMode(): PickerMode;
+    set pickerMode(mode: PickerMode);
     /** Whether the date time picker should be disabled. */
     private _disabled;
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     /** Whether the calendar is open. */
     private _opened;
-    opened: boolean;
+    get opened(): boolean;
+    set opened(val: boolean);
     /**
      * The scroll strategy when the picker is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
@@ -95,19 +101,21 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     /** The element that was focused before the date time picker was opened. */
     private focusedElementBeforeOpen;
     private _dtInput;
-    readonly dtInput: OwlDateTimeInputDirective<T>;
+    get dtInput(): OwlDateTimeInputDirective<T>;
     private _selected;
-    selected: T | null;
+    get selected(): T | null;
+    set selected(value: T | null);
     private _selecteds;
-    selecteds: T[];
+    get selecteds(): T[];
+    set selecteds(values: T[]);
     /** The minimum selectable date. */
-    readonly minDateTime: T | null;
+    get minDateTime(): T | null;
     /** The maximum selectable date. */
-    readonly maxDateTime: T | null;
-    readonly dateTimeFilter: (date: T | null) => boolean;
-    readonly selectMode: SelectMode;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
+    get maxDateTime(): T | null;
+    get dateTimeFilter(): (date: T | null) => boolean;
+    get selectMode(): SelectMode;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
     private defaultScrollStrategy;
     constructor(overlay: Overlay, viewContainerRef: ViewContainerRef, dialogService: OwlDialogService, ngZone: NgZone, changeDetector: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>, defaultScrollStrategy: any, dateTimeFormats: OwlDateTimeFormats, document: any);
     ngOnInit(): void;
@@ -147,4 +155,6 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      * Create the popup PositionStrategy.
      */
     private createPopupPositionStrategy;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeComponent<any>, [null, null, null, null, null, { optional: true; }, null, { optional: true; }, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never>;
 }

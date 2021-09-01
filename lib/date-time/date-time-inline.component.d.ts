@@ -7,6 +7,7 @@ import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.cla
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from './adapter/date-time-format.class';
 import { OwlDateTimeContainerComponent } from './date-time-picker-container.component';
+import * as i0 from "@angular/core";
 export declare const OWL_DATETIME_VALUE_ACCESSOR: any;
 export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implements OnInit, ControlValueAccessor {
     protected changeDetector: ChangeDetectorRef;
@@ -20,26 +21,35 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
      *      'timer' -- show only timer
      */
     private _pickerType;
-    pickerType: PickerType;
+    get pickerType(): PickerType;
+    set pickerType(val: PickerType);
     private _disabled;
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     private _selectMode;
-    selectMode: SelectMode;
+    get selectMode(): SelectMode;
+    set selectMode(mode: SelectMode);
     /** The date to open the calendar to initially. */
     private _startAt;
-    startAt: T | null;
+    get startAt(): T | null;
+    set startAt(date: T | null);
     private _dateTimeFilter;
-    dateTimeFilter: (date: T | null) => boolean;
+    get dateTimeFilter(): (date: T | null) => boolean;
+    set dateTimeFilter(filter: (date: T | null) => boolean);
     /** The minimum valid date. */
     private _min;
-    minDateTime: T | null;
+    get minDateTime(): T | null;
+    set minDateTime(value: T | null);
     /** The maximum valid date. */
     private _max;
-    maxDateTime: T | null;
+    get maxDateTime(): T | null;
+    set maxDateTime(value: T | null);
     private _value;
-    value: T | null;
+    get value(): T | null;
+    set value(value: T | null);
     private _values;
-    values: T[];
+    get values(): T[];
+    set values(values: T[]);
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
@@ -51,14 +61,16 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
      */
     monthSelected: EventEmitter<T>;
     private _selected;
-    selected: T | null;
+    get selected(): T | null;
+    set selected(value: T | null);
     private _selecteds;
-    selecteds: T[];
-    readonly opened: boolean;
-    readonly pickerMode: PickerMode;
-    readonly isInSingleMode: boolean;
-    readonly isInRangeMode: boolean;
-    readonly owlDTInlineClass: boolean;
+    get selecteds(): T[];
+    set selecteds(values: T[]);
+    get opened(): boolean;
+    get pickerMode(): PickerMode;
+    get isInSingleMode(): boolean;
+    get isInRangeMode(): boolean;
+    get owlDTInlineClass(): boolean;
     private onModelChange;
     private onModelTouched;
     constructor(changeDetector: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>, dateTimeFormats: OwlDateTimeFormats);
@@ -76,4 +88,6 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
      * Emits selected month in year view
      */
     selectMonth(normalizedMonth: T): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeInlineComponent<any>, [null, { optional: true; }, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeInlineComponent<any>, "owl-date-time-inline", never, { "pickerType": "pickerType"; "disabled": "disabled"; "selectMode": "selectMode"; "startAt": "startAt"; "dateTimeFilter": "owlDateTimeFilter"; "minDateTime": "min"; "maxDateTime": "max"; "value": "value"; "values": "values"; }, { "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never>;
 }

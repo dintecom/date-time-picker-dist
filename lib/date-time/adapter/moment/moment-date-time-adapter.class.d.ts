@@ -4,6 +4,7 @@
 import { InjectionToken } from '@angular/core';
 import { Moment } from 'moment';
 import { DateTimeAdapter } from '../date-time-adapter.class';
+import * as i0 from "@angular/core";
 /** Configurable options for {@see MomentDateAdapter}. */
 export interface OwlMomentDateTimeAdapterOptions {
     /**
@@ -63,4 +64,6 @@ export declare class MomentDateTimeAdapter extends DateTimeAdapter<Moment> {
     deserialize(value: any): Moment | null;
     /** Creates a Moment instance while respecting the current UTC settings. */
     private createMoment;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MomentDateTimeAdapter, [{ optional: true; }, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<MomentDateTimeAdapter>;
 }

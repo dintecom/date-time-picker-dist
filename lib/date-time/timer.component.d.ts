@@ -4,6 +4,7 @@
 import { ChangeDetectorRef, ElementRef, EventEmitter, NgZone, OnInit } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
+import * as i0 from "@angular/core";
 export declare class OwlTimerComponent<T> implements OnInit {
     private ngZone;
     private elmRef;
@@ -12,13 +13,16 @@ export declare class OwlTimerComponent<T> implements OnInit {
     private dateTimeAdapter;
     /** The current picker moment */
     private _pickerMoment;
-    pickerMoment: T;
+    get pickerMoment(): T;
+    set pickerMoment(value: T);
     /** The minimum selectable date time. */
     private _minDateTime;
-    minDateTime: T | null;
+    get minDateTime(): T | null;
+    set minDateTime(value: T | null);
     /** The maximum selectable date time. */
     private _maxDateTime;
-    maxDateTime: T | null;
+    get maxDateTime(): T | null;
+    set maxDateTime(value: T | null);
     private isPM;
     /**
      * Whether to show the second's timer
@@ -40,25 +44,25 @@ export declare class OwlTimerComponent<T> implements OnInit {
      * Seconds to change per step
      */
     stepSecond: number;
-    readonly hourValue: number;
+    get hourValue(): number;
     /**
      * The value would be displayed in hourBox.
      * We need this because the value displayed in hourBox it not
      * the same as the hourValue when the timer is in hour12Timer mode.
      */
-    readonly hourBoxValue: number;
-    readonly minuteValue: number;
-    readonly secondValue: number;
-    readonly upHourButtonLabel: string;
-    readonly downHourButtonLabel: string;
-    readonly upMinuteButtonLabel: string;
-    readonly downMinuteButtonLabel: string;
-    readonly upSecondButtonLabel: string;
-    readonly downSecondButtonLabel: string;
-    readonly hour12ButtonLabel: string;
+    get hourBoxValue(): number;
+    get minuteValue(): number;
+    get secondValue(): number;
+    get upHourButtonLabel(): string;
+    get downHourButtonLabel(): string;
+    get upMinuteButtonLabel(): string;
+    get downMinuteButtonLabel(): string;
+    get upSecondButtonLabel(): string;
+    get downSecondButtonLabel(): string;
+    get hour12ButtonLabel(): string;
     selectedChange: EventEmitter<T>;
-    readonly owlDTTimerClass: boolean;
-    readonly owlDTTimeTabIndex: number;
+    get owlDTTimerClass(): boolean;
+    get owlDTTimeTabIndex(): number;
     constructor(ngZone: NgZone, elmRef: ElementRef, pickerIntl: OwlDateTimeIntl, cdRef: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>);
     ngOnInit(): void;
     /**
@@ -123,4 +127,6 @@ export declare class OwlTimerComponent<T> implements OnInit {
      * Get a valid date object
      */
     private getValidDate;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OwlTimerComponent<any>, [null, null, null, null, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlTimerComponent<any>, "owl-date-time-timer", ["owlDateTimeTimer"], { "pickerMoment": "pickerMoment"; "minDateTime": "minDateTime"; "maxDateTime": "maxDateTime"; "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; }, { "selectedChange": "selectedChange"; }, never, never>;
 }
