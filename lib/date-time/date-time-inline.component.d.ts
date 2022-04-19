@@ -1,11 +1,8 @@
-/**
- * date-time-inline.component
- */
 import { ChangeDetectorRef, EventEmitter, OnInit } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.class';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
-import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
 import { OwlDateTimeContainerComponent } from './date-time-picker-container.component';
 import * as i0 from "@angular/core";
 export declare const OWL_DATETIME_VALUE_ACCESSOR: any;

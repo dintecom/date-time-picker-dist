@@ -1,6 +1,3 @@
-/**
- * calendar-body.component
- */
 import { ElementRef, EventEmitter, NgZone, OnInit } from '@angular/core';
 import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
@@ -66,11 +63,11 @@ export declare class OwlCalendarBodyComponent implements OnInit {
     /**
      * Check if the cell is the range from
      */
-    isRangeFrom(value: number): boolean;
+    isRangeFrom(value: number): boolean | void;
     /**
      * Check if the cell is the range to
      */
-    isRangeTo(value: number): boolean;
+    isRangeTo(value: number): boolean | void;
     /**
      * Focus to a active cell
      */

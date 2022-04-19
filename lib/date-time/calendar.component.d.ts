@@ -1,10 +1,7 @@
-/**
- * calendar.component
- */
 import { AfterContentInit, AfterViewChecked, ChangeDetectorRef, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
-import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
 import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
 export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit, AfterViewChecked, OnDestroy {
@@ -17,7 +14,7 @@ export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit
     /**
      * Date filter for the month and year view
      */
-    dateFilter: (date: T) => boolean;
+    dateFilter: ((date: T) => boolean) | undefined;
     /**
      * Set the first day of week
      */

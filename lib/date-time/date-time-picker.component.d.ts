@@ -1,11 +1,8 @@
-/**
- * date-time-picker.component
- */
 import { ChangeDetectorRef, EventEmitter, InjectionToken, NgZone, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { BlockScrollStrategy, Overlay, ScrollStrategy } from '@angular/cdk/overlay';
 import { OwlDateTimeInputDirective } from './date-time-picker-input.directive';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
-import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
 import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.class';
 import { OwlDialogService } from '../dialog/dialog.service';
 import * as i0 from "@angular/core";

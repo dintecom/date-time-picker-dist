@@ -1,6 +1,3 @@
-/**
- * timer-box.component
- */
 import { EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import * as i0 from "@angular/core";
 export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
@@ -31,6 +28,7 @@ export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
     upBtnClicked(): void;
     downBtnClicked(): void;
     handleInputChange(value: string): void;
+    focusOut(value: string): void;
     handleWheelChange(event: WheelEvent): void;
     private updateValue;
     private updateValueViaInput;

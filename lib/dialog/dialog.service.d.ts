@@ -1,6 +1,3 @@
-/**
- * dialog.service
- */
 import { InjectionToken, Injector, TemplateRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { OwlDialogConfig } from './dialog-config.class';

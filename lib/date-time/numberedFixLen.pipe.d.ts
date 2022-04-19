@@ -1,6 +1,3 @@
-/**
- * numberFixedLen.pipe
- */
 import { PipeTransform } from '@angular/core';
 import * as i0 from "@angular/core";
 export declare class NumberFixedLenPipe implements PipeTransform {

@@ -1,6 +1,3 @@
-/**
- * dialog-container.component
- */
 import { ChangeDetectorRef, ComponentRef, ElementRef, EmbeddedViewRef, EventEmitter, OnInit } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
 import { FocusTrapFactory } from '@angular/cdk/a11y';

@@ -1,6 +1,3 @@
-/**
- * dialog-config.class
- */
 import { ViewContainerRef } from '@angular/core';
 import { ScrollStrategy } from '@angular/cdk/overlay';
 /** Possible overrides for a dialog's position. */

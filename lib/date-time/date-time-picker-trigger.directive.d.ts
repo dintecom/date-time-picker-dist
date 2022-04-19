@@ -1,6 +1,3 @@
-/**
- * date-time-picker-trigger.directive
- */
 import { AfterContentInit, ChangeDetectorRef, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { OwlDateTimeComponent } from './date-time-picker.component';
 import * as i0 from "@angular/core";

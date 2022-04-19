@@ -1,8 +1,5 @@
-/**
- * calendar-multi-year-view.component
- */
 import { AfterContentInit, ChangeDetectorRef, EventEmitter, OnInit } from '@angular/core';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.component';
 import { SelectMode } from './date-time.class';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
@@ -52,8 +49,8 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     private initiated;
     get isInSingleMode(): boolean;
     get isInRangeMode(): boolean;
-    get activeCell(): number;
-    get tableHeader(): string;
+    get activeCell(): number | null;
+    get tableHeader(): string | void;
     get prevButtonLabel(): string;
     get nextButtonLabel(): string;
     /**

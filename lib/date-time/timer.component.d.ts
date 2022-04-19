@@ -1,9 +1,6 @@
-/**
- * timer.component
- */
 import { ChangeDetectorRef, ElementRef, EventEmitter, NgZone, OnInit } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import * as i0 from "@angular/core";
 export declare class OwlTimerComponent<T> implements OnInit {
     private ngZone;

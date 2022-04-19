@@ -1,9 +1,6 @@
-/**
- * date-time.class
- */
 import { EventEmitter } from '@angular/core';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
-import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
 import * as i0 from "@angular/core";
 export declare type PickerType = 'both' | 'calendar' | 'timer';
 export declare type PickerMode = 'popup' | 'dialog' | 'inline';
@@ -85,5 +82,5 @@ export declare abstract class OwlDateTime<T> {
     constructor(dateTimeAdapter: DateTimeAdapter<T>, dateTimeFormats: OwlDateTimeFormats);
     protected getValidDate(obj: any): T | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTime<any>, [{ optional: true; }, { optional: true; }]>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OwlDateTime<any>>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTime<any>, never, never, { "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "startView": "startView"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; "firstDayOfWeek": "firstDayOfWeek"; "hideOtherMonths": "hideOtherMonths"; }, {}, never>;
 }

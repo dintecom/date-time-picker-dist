@@ -1,7 +1,7 @@
 import { AfterContentInit, ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { DateTimeAdapter } from './adapter/date-time-adapter.class';
-import { OwlDateTimeFormats } from './adapter/date-time-format.class';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
 import { OwlDateTimeComponent } from './date-time-picker.component';
 import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
@@ -143,10 +143,6 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
      * Handle input change in range mode
      */
     private changeInputInRangeMode;
-    /**
-     * Check if the two value is the same
-     */
-    private isSameValue;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeInputDirective<any>, [null, null, { optional: true; }, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeInputDirective<any>, "input[owlDateTime]", ["owlDateTimeInput"], { "owlDateTime": "owlDateTime"; "owlDateTimeFilter": "owlDateTimeFilter"; "_disabled": "_disabled"; "min": "min"; "max": "max"; "selectMode": "selectMode"; "rangeSeparator": "rangeSeparator"; "value": "value"; "values": "values"; }, { "dateTimeChange": "dateTimeChange"; "dateTimeInput": "dateTimeInput"; }, never>;
 }
