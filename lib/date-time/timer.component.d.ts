@@ -125,5 +125,5 @@ export declare class OwlTimerComponent<T> implements OnInit {
      */
     private getValidDate;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlTimerComponent<any>, [null, null, null, null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlTimerComponent<any>, "owl-date-time-timer", ["owlDateTimeTimer"], { "pickerMoment": "pickerMoment"; "minDateTime": "minDateTime"; "maxDateTime": "maxDateTime"; "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; }, { "selectedChange": "selectedChange"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlTimerComponent<any>, "owl-date-time-timer", ["owlDateTimeTimer"], { "pickerMoment": "pickerMoment"; "minDateTime": "minDateTime"; "maxDateTime": "maxDateTime"; "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; }, { "selectedChange": "selectedChange"; }, never, never, false>;
 }

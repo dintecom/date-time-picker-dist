@@ -144,5 +144,5 @@ export declare class OwlDateTimeInputDirective<T> implements OnInit, AfterConten
      */
     private changeInputInRangeMode;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeInputDirective<any>, [null, null, { optional: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeInputDirective<any>, "input[owlDateTime]", ["owlDateTimeInput"], { "owlDateTime": "owlDateTime"; "owlDateTimeFilter": "owlDateTimeFilter"; "_disabled": "_disabled"; "min": "min"; "max": "max"; "selectMode": "selectMode"; "rangeSeparator": "rangeSeparator"; "value": "value"; "values": "values"; }, { "dateTimeChange": "dateTimeChange"; "dateTimeInput": "dateTimeInput"; }, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeInputDirective<any>, "input[owlDateTime]", ["owlDateTimeInput"], { "owlDateTime": "owlDateTime"; "owlDateTimeFilter": "owlDateTimeFilter"; "_disabled": "_disabled"; "min": "min"; "max": "max"; "selectMode": "selectMode"; "rangeSeparator": "rangeSeparator"; "value": "value"; "values": "values"; }, { "dateTimeChange": "dateTimeChange"; "dateTimeInput": "dateTimeInput"; }, never, never, false>;
 }

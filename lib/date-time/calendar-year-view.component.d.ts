@@ -116,5 +116,5 @@ export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit
     private getValidDate;
     private focusActiveCell;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlYearViewComponent<any>, [null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlYearViewComponent<any>, "owl-date-time-year-view", ["owlMonthView"], { "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "change": "change"; "monthSelected": "monthSelected"; "pickerMomentChange": "pickerMomentChange"; "keyboardEnter": "keyboardEnter"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlYearViewComponent<any>, "owl-date-time-year-view", ["owlMonthView"], { "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "change": "change"; "monthSelected": "monthSelected"; "pickerMomentChange": "pickerMomentChange"; "keyboardEnter": "keyboardEnter"; }, never, never, false>;
 }

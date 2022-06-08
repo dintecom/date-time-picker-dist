@@ -82,5 +82,5 @@ export declare abstract class OwlDateTime<T> {
     constructor(dateTimeAdapter: DateTimeAdapter<T>, dateTimeFormats: OwlDateTimeFormats);
     protected getValidDate(obj: any): T | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTime<any>, [{ optional: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTime<any>, never, never, { "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "startView": "startView"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; "firstDayOfWeek": "firstDayOfWeek"; "hideOtherMonths": "hideOtherMonths"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTime<any>, never, never, { "showSecondsTimer": "showSecondsTimer"; "hour12Timer": "hour12Timer"; "startView": "startView"; "stepHour": "stepHour"; "stepMinute": "stepMinute"; "stepSecond": "stepSecond"; "firstDayOfWeek": "firstDayOfWeek"; "hideOtherMonths": "hideOtherMonths"; }, {}, never, never, false>;
 }

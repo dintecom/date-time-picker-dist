@@ -17,5 +17,5 @@ export declare class OwlDateTimeTriggerDirective<T> implements OnInit, OnChanges
     handleClickOnHost(event: Event): void;
     private watchStateChanges;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeTriggerDirective<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeTriggerDirective<any>, "[owlDateTimeTrigger]", never, { "dtPicker": "owlDateTimeTrigger"; "disabled": "disabled"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<OwlDateTimeTriggerDirective<any>, "[owlDateTimeTrigger]", never, { "dtPicker": "owlDateTimeTrigger"; "disabled": "disabled"; }, {}, never, never, false>;
 }

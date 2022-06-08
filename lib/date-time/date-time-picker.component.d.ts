@@ -153,5 +153,5 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      */
     private createPopupPositionStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeComponent<any>, [null, null, null, null, null, { optional: true; }, null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
 }

@@ -73,5 +73,5 @@ export declare class OwlCalendarBodyComponent implements OnInit {
      */
     focusActiveCell(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlCalendarBodyComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlCalendarBodyComponent, "[owl-date-time-calendar-body]", ["owlDateTimeCalendarBody"], { "activeCell": "activeCell"; "rows": "rows"; "numCols": "numCols"; "cellRatio": "cellRatio"; "todayValue": "todayValue"; "selectedValues": "selectedValues"; "selectMode": "selectMode"; }, { "select": "select"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlCalendarBodyComponent, "[owl-date-time-calendar-body]", ["owlDateTimeCalendarBody"], { "activeCell": "activeCell"; "rows": "rows"; "numCols": "numCols"; "cellRatio": "cellRatio"; "todayValue": "todayValue"; "selectedValues": "selectedValues"; "selectMode": "selectMode"; }, { "select": "select"; }, never, never, false>;
 }

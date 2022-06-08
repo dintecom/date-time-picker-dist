@@ -118,5 +118,5 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
      */
     private focusPicker;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeContainerComponent<any>, [null, null, null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeContainerComponent<any>, "owl-date-time-container", ["owlDateTimeContainer"], {}, {}, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeContainerComponent<any>, "owl-date-time-container", ["owlDateTimeContainer"], {}, {}, never, never, false>;
 }

@@ -50,9 +50,9 @@ export class OwlDateTimeIntl {
         this.hour12PMLabel = 'PM';
     }
 }
-OwlDateTimeIntl.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.2", ngImport: i0, type: OwlDateTimeIntl, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-OwlDateTimeIntl.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.2", ngImport: i0, type: OwlDateTimeIntl, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.2", ngImport: i0, type: OwlDateTimeIntl, decorators: [{
+OwlDateTimeIntl.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeIntl, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+OwlDateTimeIntl.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeIntl, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeIntl, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });

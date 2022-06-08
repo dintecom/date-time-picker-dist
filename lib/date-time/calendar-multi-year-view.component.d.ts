@@ -105,5 +105,5 @@ export declare class OwlMultiYearViewComponent<T> implements OnInit, AfterConten
     private getValidDate;
     private focusActiveCell;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlMultiYearViewComponent<any>, [null, null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMultiYearViewComponent<any>, "owl-date-time-multi-year-view", never, { "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "change": "change"; "yearSelected": "yearSelected"; "pickerMomentChange": "pickerMomentChange"; "keyboardEnter": "keyboardEnter"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMultiYearViewComponent<any>, "owl-date-time-multi-year-view", never, { "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "change": "change"; "yearSelected": "yearSelected"; "pickerMomentChange": "pickerMomentChange"; "keyboardEnter": "keyboardEnter"; }, never, never, false>;
 }

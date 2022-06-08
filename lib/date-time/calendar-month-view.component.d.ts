@@ -136,5 +136,5 @@ export declare class OwlMonthViewComponent<T> implements OnInit, AfterContentIni
     private setSelectedDates;
     private focusActiveCell;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlMonthViewComponent<any>, [null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMonthViewComponent<any>, "owl-date-time-month-view", ["owlYearView"], { "hideOtherMonths": "hideOtherMonths"; "firstDayOfWeek": "firstDayOfWeek"; "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "selectedChange": "selectedChange"; "userSelection": "userSelection"; "pickerMomentChange": "pickerMomentChange"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlMonthViewComponent<any>, "owl-date-time-month-view", ["owlYearView"], { "hideOtherMonths": "hideOtherMonths"; "firstDayOfWeek": "firstDayOfWeek"; "selectMode": "selectMode"; "selected": "selected"; "selecteds": "selecteds"; "pickerMoment": "pickerMoment"; "dateFilter": "dateFilter"; "minDate": "minDate"; "maxDate": "maxDate"; }, { "selectedChange": "selectedChange"; "userSelection": "userSelection"; "pickerMomentChange": "pickerMomentChange"; }, never, never, false>;
 }

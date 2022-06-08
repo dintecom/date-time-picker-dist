@@ -52,5 +52,5 @@ export declare class OwlDialogContainerComponent extends BasePortalOutlet implem
     private trapFocus;
     private restoreFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDialogContainerComponent, [null, null, null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDialogContainerComponent, "owl-dialog-container", never, {}, {}, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDialogContainerComponent, "owl-dialog-container", never, {}, {}, never, never, false>;
 }

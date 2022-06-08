@@ -86,5 +86,5 @@ export declare class OwlDateTimeInlineComponent<T> extends OwlDateTime<T> implem
      */
     selectMonth(normalizedMonth: T): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeInlineComponent<any>, [null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeInlineComponent<any>, "owl-date-time-inline", never, { "pickerType": "pickerType"; "disabled": "disabled"; "selectMode": "selectMode"; "startAt": "startAt"; "dateTimeFilter": "owlDateTimeFilter"; "minDateTime": "min"; "maxDateTime": "max"; "value": "value"; "values": "values"; }, { "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeInlineComponent<any>, "owl-date-time-inline", never, { "pickerType": "pickerType"; "disabled": "disabled"; "selectMode": "selectMode"; "startAt": "startAt"; "dateTimeFilter": "owlDateTimeFilter"; "minDateTime": "min"; "maxDateTime": "max"; "value": "value"; "values": "values"; }, { "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
 }
