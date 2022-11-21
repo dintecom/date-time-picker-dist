@@ -12,6 +12,12 @@ export interface OwlMomentDateTimeAdapterOptions {
      * {@default false}
      */
     useUtc: boolean;
+    /**
+     * Turns the use of strict string parsing in moment.
+     * Changing this will change how the DateTimePicker interprets input.
+     * {@default false}
+     */
+    parseStrict: boolean;
 }
 /** InjectionToken for moment date adapter to configure options. */
 export declare const OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS: InjectionToken<OwlMomentDateTimeAdapterOptions>;
@@ -55,6 +61,7 @@ export declare class MomentDateTimeAdapter extends DateTimeAdapter<Moment> {
     now(): Moment;
     format(date: Moment, displayFormat: any): string;
     parse(value: any, parseFormat: any): Moment | null;
+    readonly parseStrict: boolean;
     /**
      * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
      * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty

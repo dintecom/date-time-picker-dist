@@ -11115,7 +11115,8 @@
                             OwlDateTimeInlineComponent,
                             OwlMultiYearViewComponent,
                             OwlYearViewComponent,
-                            OwlMonthViewComponent
+                            OwlMonthViewComponent,
+                            OwlTimerBoxComponent
                         ],
                         declarations: [
                             OwlDateTimeTriggerDirective,
@@ -12073,6 +12074,13 @@
          * @type {?}
          */
         OwlMomentDateTimeAdapterOptions.prototype.useUtc;
+        /**
+         * Turns the use of strict string parsing in moment.
+         * Changing this will change how the DateTimePicker interprets input.
+         * {\@default false}
+         * @type {?}
+         */
+        OwlMomentDateTimeAdapterOptions.prototype.parseStrict;
     }
     /**
      * InjectionToken for moment date adapter to configure options.
@@ -12088,7 +12096,8 @@
      */
     function OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY() {
         return {
-            useUtc: false
+            useUtc: false,
+            parseStrict: false
         };
     }
     /**
@@ -12571,10 +12580,20 @@
          */
         function (value, parseFormat) {
             if (value && typeof value === 'string') {
-                return this.createMoment(value, parseFormat, this.getLocale());
+                return this.createMoment(value, parseFormat, this.getLocale(), this.parseStrict);
             }
             return value ? this.createMoment(value).locale(this.getLocale()) : null;
         };
+        Object.defineProperty(MomentDateTimeAdapter.prototype, "parseStrict", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this.options && this.options.parseStrict;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
          * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
@@ -12604,7 +12623,7 @@
                 if (!value) {
                     return null;
                 }
-                date = this.createMoment(value, moment.ISO_8601).locale(this.getLocale());
+                date = this.createMoment(value, moment.ISO_8601, this.parseStrict).locale(this.getLocale());
             }
             if (date && this.isValid(date)) {
                 return date;
@@ -12723,18 +12742,18 @@
     exports.OwlDateTimeModule = OwlDateTimeModule;
     exports.OwlMomentDateTimeModule = OwlMomentDateTimeModule;
     exports.OwlNativeDateTimeModule = OwlNativeDateTimeModule;
+    exports.OwlTimerBoxComponent = OwlTimerBoxComponent;
     exports.ɵa = NativeDateTimeModule;
     exports.ɵb = MomentDateTimeModule;
     exports.ɵba = OwlYearViewComponent;
     exports.ɵbb = OwlMonthViewComponent;
-    exports.ɵbc = OwlTimerBoxComponent;
-    exports.ɵbd = NumberFixedLenPipe;
-    exports.ɵbe = NativeDateTimeAdapter;
-    exports.ɵbf = OWL_NATIVE_DATE_TIME_FORMATS;
-    exports.ɵbg = OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS;
-    exports.ɵbh = OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY;
-    exports.ɵbi = MomentDateTimeAdapter;
-    exports.ɵbj = OWL_MOMENT_DATE_TIME_FORMATS;
+    exports.ɵbc = NumberFixedLenPipe;
+    exports.ɵbd = NativeDateTimeAdapter;
+    exports.ɵbe = OWL_NATIVE_DATE_TIME_FORMATS;
+    exports.ɵbf = OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS;
+    exports.ɵbg = OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY;
+    exports.ɵbh = MomentDateTimeAdapter;
+    exports.ɵbi = OWL_MOMENT_DATE_TIME_FORMATS;
     exports.ɵc = OWL_DATE_TIME_LOCALE_FACTORY;
     exports.ɵd = OWL_DATETIME_VALUE_ACCESSOR$1;
     exports.ɵe = OWL_DTPICKER_SCROLL_STRATEGY;

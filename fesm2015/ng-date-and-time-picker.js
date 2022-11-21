@@ -8933,7 +8933,8 @@ OwlDateTimeModule.decorators = [
                     OwlDateTimeInlineComponent,
                     OwlMultiYearViewComponent,
                     OwlYearViewComponent,
-                    OwlMonthViewComponent
+                    OwlMonthViewComponent,
+                    OwlTimerBoxComponent
                 ],
                 declarations: [
                     OwlDateTimeTriggerDirective,
@@ -9659,6 +9660,13 @@ if (false) {
      * @type {?}
      */
     OwlMomentDateTimeAdapterOptions.prototype.useUtc;
+    /**
+     * Turns the use of strict string parsing in moment.
+     * Changing this will change how the DateTimePicker interprets input.
+     * {\@default false}
+     * @type {?}
+     */
+    OwlMomentDateTimeAdapterOptions.prototype.parseStrict;
 }
 /**
  * InjectionToken for moment date adapter to configure options.
@@ -9674,7 +9682,8 @@ const OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS = new InjectionToken('OWL_MOMENT_DATE
  */
 function OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY() {
     return {
-        useUtc: false
+        useUtc: false,
+        parseStrict: false
     };
 }
 /**
@@ -10009,9 +10018,15 @@ class MomentDateTimeAdapter extends DateTimeAdapter {
      */
     parse(value, parseFormat) {
         if (value && typeof value === 'string') {
-            return this.createMoment(value, parseFormat, this.getLocale());
+            return this.createMoment(value, parseFormat, this.getLocale(), this.parseStrict);
         }
         return value ? this.createMoment(value).locale(this.getLocale()) : null;
+    }
+    /**
+     * @return {?}
+     */
+    get parseStrict() {
+        return this.options && this.options.parseStrict;
     }
     /**
      * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
@@ -10030,7 +10045,7 @@ class MomentDateTimeAdapter extends DateTimeAdapter {
             if (!value) {
                 return null;
             }
-            date = this.createMoment(value, moment.ISO_8601).locale(this.getLocale());
+            date = this.createMoment(value, moment.ISO_8601, this.parseStrict).locale(this.getLocale());
         }
         if (date && this.isValid(date)) {
             return date;
@@ -10132,5 +10147,5 @@ OwlMomentDateTimeModule.decorators = [
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlMomentDateTimeModule, OwlNativeDateTimeModule, NativeDateTimeModule as ɵa, MomentDateTimeModule as ɵb, OwlYearViewComponent as ɵba, OwlMonthViewComponent as ɵbb, OwlTimerBoxComponent as ɵbc, NumberFixedLenPipe as ɵbd, NativeDateTimeAdapter as ɵbe, OWL_NATIVE_DATE_TIME_FORMATS as ɵbf, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS as ɵbg, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY as ɵbh, MomentDateTimeAdapter as ɵbi, OWL_MOMENT_DATE_TIME_FORMATS as ɵbj, OWL_DATE_TIME_LOCALE_FACTORY as ɵc, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵd, OWL_DTPICKER_SCROLL_STRATEGY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵf, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵg, OwlDialogModule as ɵh, OwlDialogContainerComponent as ɵi, OWL_DIALOG_SCROLL_STRATEGY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵk, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵl, OWL_DIALOG_DEFAULT_OPTIONS as ɵm, OwlDialogService as ɵn, OwlDialogConfig as ɵo, OwlCalendarComponent as ɵp, OwlTimerComponent as ɵq, OwlDateTimeTriggerDirective as ɵr, OWL_DATETIME_VALUE_ACCESSOR as ɵs, OWL_DATETIME_VALIDATORS as ɵt, OwlDateTimeInputDirective as ɵu, OwlDateTime as ɵv, OwlDateTimeContainerComponent as ɵw, owlDateTimePickerAnimations as ɵx, OwlMultiYearViewComponent as ɵy, OwlCalendarBodyComponent as ɵz };
+export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlMomentDateTimeModule, OwlNativeDateTimeModule, OwlTimerBoxComponent, NativeDateTimeModule as ɵa, MomentDateTimeModule as ɵb, OwlYearViewComponent as ɵba, OwlMonthViewComponent as ɵbb, NumberFixedLenPipe as ɵbc, NativeDateTimeAdapter as ɵbd, OWL_NATIVE_DATE_TIME_FORMATS as ɵbe, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS as ɵbf, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY as ɵbg, MomentDateTimeAdapter as ɵbh, OWL_MOMENT_DATE_TIME_FORMATS as ɵbi, OWL_DATE_TIME_LOCALE_FACTORY as ɵc, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵd, OWL_DTPICKER_SCROLL_STRATEGY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵf, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵg, OwlDialogModule as ɵh, OwlDialogContainerComponent as ɵi, OWL_DIALOG_SCROLL_STRATEGY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵk, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵl, OWL_DIALOG_DEFAULT_OPTIONS as ɵm, OwlDialogService as ɵn, OwlDialogConfig as ɵo, OwlCalendarComponent as ɵp, OwlTimerComponent as ɵq, OwlDateTimeTriggerDirective as ɵr, OWL_DATETIME_VALUE_ACCESSOR as ɵs, OWL_DATETIME_VALIDATORS as ɵt, OwlDateTimeInputDirective as ɵu, OwlDateTime as ɵv, OwlDateTimeContainerComponent as ɵw, owlDateTimePickerAnimations as ɵx, OwlMultiYearViewComponent as ɵy, OwlCalendarBodyComponent as ɵz };
 //# sourceMappingURL=ng-date-and-time-picker.js.map
