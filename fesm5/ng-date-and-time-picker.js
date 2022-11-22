@@ -10912,6 +10912,234 @@ var OwlDialogModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var OwlHourInputComponent = /** @class */ (function () {
+    function OwlHourInputComponent(pickerIntl) {
+        this.pickerIntl = pickerIntl;
+        this.min = 0;
+        this.max = 23;
+        this.step = 1;
+        this.valueChange = new EventEmitter();
+        this.isPM = false;
+    }
+    Object.defineProperty(OwlHourInputComponent.prototype, "hour12ButtonLabel", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.isPM
+                ? this.pickerIntl.hour12PMLabel
+                : this.pickerIntl.hour12AMLabel;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OwlHourInputComponent.prototype, "owlHourInputClass", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OwlHourInputComponent.prototype, "hourValue", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OwlHourInputComponent.prototype, "boxValue", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            /** @type {?} */
+            var hours = this.hourValue;
+            if (!this.hour12Timer) {
+                return hours;
+            }
+            else {
+                if (hours === 0) {
+                    hours = 12;
+                    this.isPM = false;
+                }
+                else if (hours > 0 && hours < 12) {
+                    this.isPM = false;
+                }
+                else if (hours === 12) {
+                    this.isPM = true;
+                }
+                else if (hours > 12 && hours < 24) {
+                    hours = hours - 12;
+                    this.isPM = true;
+                }
+                return hours;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.upBtnClicked = /**
+     * @return {?}
+     */
+    function () {
+        this.valueChanged(this.value + this.step);
+    };
+    /**
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.downBtnClicked = /**
+     * @return {?}
+     */
+    function () {
+        this.valueChanged(this.value - this.step);
+    };
+    /**
+     * @param {?} hours
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.setHourValueViaInput = /**
+     * @param {?} hours
+     * @return {?}
+     */
+    function (hours) {
+        if (this.value && this.isPM && hours >= 1 && hours <= 11) {
+            hours = hours + 12;
+        }
+        else if (this.value && !this.isPM && hours === 12) {
+            hours = 0;
+        }
+        this.value = hours;
+        this.valueChanged(this.value);
+    };
+    /**
+     * @param {?} hours
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.setHourValue = /**
+     * @param {?} hours
+     * @return {?}
+     */
+    function (hours) {
+        if (hours < this.min) {
+            this.value = this.max;
+        }
+        else if (hours > this.max) {
+            this.value = this.min;
+        }
+        else {
+            this.value = hours;
+        }
+        this.valueChanged(this.value);
+    };
+    /**
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.setMeridian = /**
+     * @return {?}
+     */
+    function () {
+        this.isPM = !this.isPM;
+        /** @type {?} */
+        var hours = this.hourValue;
+        if (this.isPM) {
+            hours = hours + 12;
+        }
+        else {
+            hours = hours - 12;
+        }
+        if (hours >= 0 && hours <= 23) {
+            this.setHourValue(hours);
+        }
+        this.valueChanged(this.value);
+    };
+    /**
+     * @private
+     * @param {?} value
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.valueChanged = /**
+     * @private
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
+        this.valueChange.emit(value);
+    };
+    OwlHourInputComponent.decorators = [
+        { type: Component, args: [{
+                    exportAs: 'owlHourInput',
+                    selector: 'owl-hour-input',
+                    template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"upBtnDisabled\"\r\n    [downBtnDisabled]=\"downBtnDisabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setHourValueViaInput($event)\"\r\n    (valueChange)=\"setHourValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
+                    changeDetection: ChangeDetectionStrategy.OnPush,
+                    host: {
+                        '[class.owl-hour-input]': 'owlHourInputClass'
+                    }
+                }] }
+    ];
+    /** @nocollapse */
+    OwlHourInputComponent.ctorParameters = function () { return [
+        { type: OwlDateTimeIntl }
+    ]; };
+    OwlHourInputComponent.propDecorators = {
+        upBtnAriaLabel: [{ type: Input }],
+        upBtnDisabled: [{ type: Input }],
+        downBtnAriaLabel: [{ type: Input }],
+        downBtnDisabled: [{ type: Input }],
+        value: [{ type: Input }],
+        min: [{ type: Input }],
+        max: [{ type: Input }],
+        step: [{ type: Input }],
+        hour12Timer: [{ type: Input }],
+        valueChange: [{ type: Output }]
+    };
+    return OwlHourInputComponent;
+}());
+if (false) {
+    /** @type {?} */
+    OwlHourInputComponent.prototype.upBtnAriaLabel;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.upBtnDisabled;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.downBtnAriaLabel;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.downBtnDisabled;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.value;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.min;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.max;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.step;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.hour12Timer;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.valueChange;
+    /**
+     * @type {?}
+     * @private
+     */
+    OwlHourInputComponent.prototype.isPM;
+    /**
+     * @type {?}
+     * @private
+     */
+    OwlHourInputComponent.prototype.pickerIntl;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var OwlDateTimeModule = /** @class */ (function () {
     function OwlDateTimeModule() {
     }
@@ -10928,7 +11156,8 @@ var OwlDateTimeModule = /** @class */ (function () {
                         OwlMultiYearViewComponent,
                         OwlYearViewComponent,
                         OwlMonthViewComponent,
-                        OwlTimerBoxComponent
+                        OwlTimerBoxComponent,
+                        OwlHourInputComponent
                     ],
                     declarations: [
                         OwlDateTimeTriggerDirective,
@@ -10940,6 +11169,7 @@ var OwlDateTimeModule = /** @class */ (function () {
                         OwlMonthViewComponent,
                         OwlTimerComponent,
                         OwlTimerBoxComponent,
+                        OwlHourInputComponent,
                         OwlCalendarComponent,
                         OwlCalendarBodyComponent,
                         NumberFixedLenPipe,
@@ -12554,5 +12784,5 @@ var OwlMomentDateTimeModule = /** @class */ (function () {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlMomentDateTimeModule, OwlNativeDateTimeModule, OwlTimerBoxComponent, NativeDateTimeModule as ɵa, MomentDateTimeModule as ɵb, OwlYearViewComponent as ɵba, OwlMonthViewComponent as ɵbb, NumberFixedLenPipe as ɵbc, NativeDateTimeAdapter as ɵbd, OWL_NATIVE_DATE_TIME_FORMATS as ɵbe, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS as ɵbf, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY as ɵbg, MomentDateTimeAdapter as ɵbh, OWL_MOMENT_DATE_TIME_FORMATS as ɵbi, OWL_DATE_TIME_LOCALE_FACTORY as ɵc, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵd, OWL_DTPICKER_SCROLL_STRATEGY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵf, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵg, OwlDialogModule as ɵh, OwlDialogContainerComponent as ɵi, OWL_DIALOG_SCROLL_STRATEGY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵk, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵl, OWL_DIALOG_DEFAULT_OPTIONS as ɵm, OwlDialogService as ɵn, OwlDialogConfig as ɵo, OwlCalendarComponent as ɵp, OwlTimerComponent as ɵq, OwlDateTimeTriggerDirective as ɵr, OWL_DATETIME_VALUE_ACCESSOR as ɵs, OWL_DATETIME_VALIDATORS as ɵt, OwlDateTimeInputDirective as ɵu, OwlDateTime as ɵv, OwlDateTimeContainerComponent as ɵw, owlDateTimePickerAnimations as ɵx, OwlMultiYearViewComponent as ɵy, OwlCalendarBodyComponent as ɵz };
+export { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE, OWL_DATE_TIME_LOCALE_PROVIDER, OwlDateTimeComponent, OwlDateTimeInlineComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlHourInputComponent, OwlMomentDateTimeModule, OwlNativeDateTimeModule, OwlTimerBoxComponent, NativeDateTimeModule as ɵa, MomentDateTimeModule as ɵb, OwlYearViewComponent as ɵba, OwlMonthViewComponent as ɵbb, NumberFixedLenPipe as ɵbc, NativeDateTimeAdapter as ɵbd, OWL_NATIVE_DATE_TIME_FORMATS as ɵbe, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS as ɵbf, OWL_MOMENT_DATE_TIME_ADAPTER_OPTIONS_FACTORY as ɵbg, MomentDateTimeAdapter as ɵbh, OWL_MOMENT_DATE_TIME_FORMATS as ɵbi, OWL_DATE_TIME_LOCALE_FACTORY as ɵc, OWL_DATETIME_VALUE_ACCESSOR$1 as ɵd, OWL_DTPICKER_SCROLL_STRATEGY as ɵe, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵf, OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER as ɵg, OwlDialogModule as ɵh, OwlDialogContainerComponent as ɵi, OWL_DIALOG_SCROLL_STRATEGY as ɵj, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵk, OWL_DIALOG_SCROLL_STRATEGY_PROVIDER as ɵl, OWL_DIALOG_DEFAULT_OPTIONS as ɵm, OwlDialogService as ɵn, OwlDialogConfig as ɵo, OwlCalendarComponent as ɵp, OwlTimerComponent as ɵq, OwlDateTimeTriggerDirective as ɵr, OWL_DATETIME_VALUE_ACCESSOR as ɵs, OWL_DATETIME_VALIDATORS as ɵt, OwlDateTimeInputDirective as ɵu, OwlDateTime as ɵv, OwlDateTimeContainerComponent as ɵw, owlDateTimePickerAnimations as ɵx, OwlMultiYearViewComponent as ɵy, OwlCalendarBodyComponent as ɵz };
 //# sourceMappingURL=ng-date-and-time-picker.js.map

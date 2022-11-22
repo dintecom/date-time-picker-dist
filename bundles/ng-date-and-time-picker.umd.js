@@ -11100,6 +11100,234 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var OwlHourInputComponent = /** @class */ (function () {
+        function OwlHourInputComponent(pickerIntl) {
+            this.pickerIntl = pickerIntl;
+            this.min = 0;
+            this.max = 23;
+            this.step = 1;
+            this.valueChange = new core.EventEmitter();
+            this.isPM = false;
+        }
+        Object.defineProperty(OwlHourInputComponent.prototype, "hour12ButtonLabel", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this.isPM
+                    ? this.pickerIntl.hour12PMLabel
+                    : this.pickerIntl.hour12AMLabel;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(OwlHourInputComponent.prototype, "owlHourInputClass", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return true;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(OwlHourInputComponent.prototype, "hourValue", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this.value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(OwlHourInputComponent.prototype, "boxValue", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                /** @type {?} */
+                var hours = this.hourValue;
+                if (!this.hour12Timer) {
+                    return hours;
+                }
+                else {
+                    if (hours === 0) {
+                        hours = 12;
+                        this.isPM = false;
+                    }
+                    else if (hours > 0 && hours < 12) {
+                        this.isPM = false;
+                    }
+                    else if (hours === 12) {
+                        this.isPM = true;
+                    }
+                    else if (hours > 12 && hours < 24) {
+                        hours = hours - 12;
+                        this.isPM = true;
+                    }
+                    return hours;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.upBtnClicked = /**
+         * @return {?}
+         */
+        function () {
+            this.valueChanged(this.value + this.step);
+        };
+        /**
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.downBtnClicked = /**
+         * @return {?}
+         */
+        function () {
+            this.valueChanged(this.value - this.step);
+        };
+        /**
+         * @param {?} hours
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.setHourValueViaInput = /**
+         * @param {?} hours
+         * @return {?}
+         */
+        function (hours) {
+            if (this.value && this.isPM && hours >= 1 && hours <= 11) {
+                hours = hours + 12;
+            }
+            else if (this.value && !this.isPM && hours === 12) {
+                hours = 0;
+            }
+            this.value = hours;
+            this.valueChanged(this.value);
+        };
+        /**
+         * @param {?} hours
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.setHourValue = /**
+         * @param {?} hours
+         * @return {?}
+         */
+        function (hours) {
+            if (hours < this.min) {
+                this.value = this.max;
+            }
+            else if (hours > this.max) {
+                this.value = this.min;
+            }
+            else {
+                this.value = hours;
+            }
+            this.valueChanged(this.value);
+        };
+        /**
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.setMeridian = /**
+         * @return {?}
+         */
+        function () {
+            this.isPM = !this.isPM;
+            /** @type {?} */
+            var hours = this.hourValue;
+            if (this.isPM) {
+                hours = hours + 12;
+            }
+            else {
+                hours = hours - 12;
+            }
+            if (hours >= 0 && hours <= 23) {
+                this.setHourValue(hours);
+            }
+            this.valueChanged(this.value);
+        };
+        /**
+         * @private
+         * @param {?} value
+         * @return {?}
+         */
+        OwlHourInputComponent.prototype.valueChanged = /**
+         * @private
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this.valueChange.emit(value);
+        };
+        OwlHourInputComponent.decorators = [
+            { type: core.Component, args: [{
+                        exportAs: 'owlHourInput',
+                        selector: 'owl-hour-input',
+                        template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"upBtnDisabled\"\r\n    [downBtnDisabled]=\"downBtnDisabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setHourValueViaInput($event)\"\r\n    (valueChange)=\"setHourValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
+                        changeDetection: core.ChangeDetectionStrategy.OnPush,
+                        host: {
+                            '[class.owl-hour-input]': 'owlHourInputClass'
+                        }
+                    }] }
+        ];
+        /** @nocollapse */
+        OwlHourInputComponent.ctorParameters = function () { return [
+            { type: OwlDateTimeIntl }
+        ]; };
+        OwlHourInputComponent.propDecorators = {
+            upBtnAriaLabel: [{ type: core.Input }],
+            upBtnDisabled: [{ type: core.Input }],
+            downBtnAriaLabel: [{ type: core.Input }],
+            downBtnDisabled: [{ type: core.Input }],
+            value: [{ type: core.Input }],
+            min: [{ type: core.Input }],
+            max: [{ type: core.Input }],
+            step: [{ type: core.Input }],
+            hour12Timer: [{ type: core.Input }],
+            valueChange: [{ type: core.Output }]
+        };
+        return OwlHourInputComponent;
+    }());
+    if (false) {
+        /** @type {?} */
+        OwlHourInputComponent.prototype.upBtnAriaLabel;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.upBtnDisabled;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.downBtnAriaLabel;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.downBtnDisabled;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.value;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.min;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.max;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.step;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.hour12Timer;
+        /** @type {?} */
+        OwlHourInputComponent.prototype.valueChange;
+        /**
+         * @type {?}
+         * @private
+         */
+        OwlHourInputComponent.prototype.isPM;
+        /**
+         * @type {?}
+         * @private
+         */
+        OwlHourInputComponent.prototype.pickerIntl;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var OwlDateTimeModule = /** @class */ (function () {
         function OwlDateTimeModule() {
         }
@@ -11116,7 +11344,8 @@
                             OwlMultiYearViewComponent,
                             OwlYearViewComponent,
                             OwlMonthViewComponent,
-                            OwlTimerBoxComponent
+                            OwlTimerBoxComponent,
+                            OwlHourInputComponent
                         ],
                         declarations: [
                             OwlDateTimeTriggerDirective,
@@ -11128,6 +11357,7 @@
                             OwlMonthViewComponent,
                             OwlTimerComponent,
                             OwlTimerBoxComponent,
+                            OwlHourInputComponent,
                             OwlCalendarComponent,
                             OwlCalendarBodyComponent,
                             NumberFixedLenPipe,
@@ -12740,6 +12970,7 @@
     exports.OwlDateTimeInlineComponent = OwlDateTimeInlineComponent;
     exports.OwlDateTimeIntl = OwlDateTimeIntl;
     exports.OwlDateTimeModule = OwlDateTimeModule;
+    exports.OwlHourInputComponent = OwlHourInputComponent;
     exports.OwlMomentDateTimeModule = OwlMomentDateTimeModule;
     exports.OwlNativeDateTimeModule = OwlNativeDateTimeModule;
     exports.OwlTimerBoxComponent = OwlTimerBoxComponent;
