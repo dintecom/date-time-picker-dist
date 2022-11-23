@@ -10920,7 +10920,34 @@ var OwlHourInputComponent = /** @class */ (function () {
         this.step = 1;
         this.valueChange = new EventEmitter();
         this.isPM = false;
+        this.onChange = (/**
+         * @return {?}
+         */
+        function () { });
+        this.onTouch = (/**
+         * @return {?}
+         */
+        function () { });
     }
+    Object.defineProperty(OwlHourInputComponent.prototype, "value", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this._value;
+        },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._value = value;
+            this.onChange(value);
+            this.onTouch(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(OwlHourInputComponent.prototype, "hour12ButtonLabel", {
         get: /**
          * @return {?}
@@ -11006,7 +11033,7 @@ var OwlHourInputComponent = /** @class */ (function () {
      * @param {?} hours
      * @return {?}
      */
-    OwlHourInputComponent.prototype.setHourValueViaInput = /**
+    OwlHourInputComponent.prototype.setValueViaInput = /**
      * @param {?} hours
      * @return {?}
      */
@@ -11024,7 +11051,7 @@ var OwlHourInputComponent = /** @class */ (function () {
      * @param {?} hours
      * @return {?}
      */
-    OwlHourInputComponent.prototype.setHourValue = /**
+    OwlHourInputComponent.prototype.setValue = /**
      * @param {?} hours
      * @return {?}
      */
@@ -11057,7 +11084,7 @@ var OwlHourInputComponent = /** @class */ (function () {
             hours = hours - 12;
         }
         if (hours >= 0 && hours <= 23) {
-            this.setHourValue(hours);
+            this.setValue(hours);
         }
         this.valueChanged(this.value);
     };
@@ -11074,15 +11101,58 @@ var OwlHourInputComponent = /** @class */ (function () {
     function (value) {
         this.valueChange.emit(value);
     };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.writeValue = /**
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
+        this.value = value;
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.registerOnChange = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) {
+        this.onChange = fn;
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.registerOnTouched = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) {
+        this.onTouch = fn;
+    };
     OwlHourInputComponent.decorators = [
         { type: Component, args: [{
                     exportAs: 'owlHourInput',
                     selector: 'owl-hour-input',
-                    template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"upBtnDisabled\"\r\n    [downBtnDisabled]=\"downBtnDisabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setHourValueViaInput($event)\"\r\n    (valueChange)=\"setHourValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
+                    template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"upBtnDisabled\"\r\n    [downBtnDisabled]=\"downBtnDisabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setValueViaInput($event)\"\r\n    (valueChange)=\"setValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     host: {
                         '[class.owl-hour-input]': 'owlHourInputClass'
-                    }
+                    },
+                    providers: [
+                        {
+                            provide: NG_VALUE_ACCESSOR,
+                            useExisting: forwardRef((/**
+                             * @return {?}
+                             */
+                            function () { return OwlHourInputComponent; })),
+                            multi: true
+                        }
+                    ]
                 }] }
     ];
     /** @nocollapse */
@@ -11112,8 +11182,11 @@ if (false) {
     OwlHourInputComponent.prototype.downBtnAriaLabel;
     /** @type {?} */
     OwlHourInputComponent.prototype.downBtnDisabled;
-    /** @type {?} */
-    OwlHourInputComponent.prototype.value;
+    /**
+     * @type {?}
+     * @private
+     */
+    OwlHourInputComponent.prototype._value;
     /** @type {?} */
     OwlHourInputComponent.prototype.min;
     /** @type {?} */
@@ -11129,6 +11202,10 @@ if (false) {
      * @private
      */
     OwlHourInputComponent.prototype.isPM;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.onChange;
+    /** @type {?} */
+    OwlHourInputComponent.prototype.onTouch;
     /**
      * @type {?}
      * @private

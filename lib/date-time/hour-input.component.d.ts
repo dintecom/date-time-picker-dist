@@ -3,12 +3,14 @@
  */
 import { EventEmitter } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
-export declare class OwlHourInputComponent {
+import { ControlValueAccessor } from '@angular/forms';
+export declare class OwlHourInputComponent implements ControlValueAccessor {
     private pickerIntl;
     upBtnAriaLabel: string;
     upBtnDisabled: boolean;
     downBtnAriaLabel: string;
     downBtnDisabled: boolean;
+    private _value;
     value: number;
     min: number;
     max: number;
@@ -23,8 +25,13 @@ export declare class OwlHourInputComponent {
     readonly boxValue: number;
     upBtnClicked(): void;
     downBtnClicked(): void;
-    setHourValueViaInput(hours: number): void;
-    setHourValue(hours: number): void;
+    setValueViaInput(hours: number): void;
+    setValue(hours: number): void;
     setMeridian(): void;
     private valueChanged;
+    onChange: any;
+    onTouch: any;
+    writeValue(value: any): void;
+    registerOnChange(fn: any): void;
+    registerOnTouched(fn: any): void;
 }
