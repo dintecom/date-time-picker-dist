@@ -1,10 +1,10 @@
 /**
  * hour-input.component
  */
-import { EventEmitter } from '@angular/core';
+import { AfterViewInit, EventEmitter } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { ControlValueAccessor } from '@angular/forms';
-export declare class OwlHourInputComponent implements ControlValueAccessor {
+export declare class OwlHourInputComponent implements ControlValueAccessor, AfterViewInit {
     private pickerIntl;
     upBtnAriaLabel: string;
     upBtnDisabled: boolean;
@@ -16,9 +16,11 @@ export declare class OwlHourInputComponent implements ControlValueAccessor {
     max: number;
     step: number;
     hour12Timer: boolean;
+    disabled: boolean;
     valueChange: EventEmitter<number>;
     private isPM;
     constructor(pickerIntl: OwlDateTimeIntl);
+    ngAfterViewInit(): void;
     readonly hour12ButtonLabel: string;
     readonly owlHourInputClass: boolean;
     readonly hourValue: number;
