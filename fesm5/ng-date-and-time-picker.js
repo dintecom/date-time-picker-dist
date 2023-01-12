@@ -10918,7 +10918,6 @@ var OwlHourInputComponent = /** @class */ (function () {
         this.min = 0;
         this.max = 23;
         this.step = 1;
-        this.disabled = false;
         this.valueChange = new EventEmitter();
         this.isPM = false;
         this.onChange = (/**
@@ -10949,18 +10948,6 @@ var OwlHourInputComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    /**
-     * @return {?}
-     */
-    OwlHourInputComponent.prototype.ngAfterViewInit = /**
-     * @return {?}
-     */
-    function () {
-        if (this.disabled) {
-            this.upBtnDisabled = true;
-            this.downBtnDisabled = true;
-        }
-    };
     Object.defineProperty(OwlHourInputComponent.prototype, "hour12ButtonLabel", {
         get: /**
          * @return {?}
@@ -11151,7 +11138,7 @@ var OwlHourInputComponent = /** @class */ (function () {
         { type: Component, args: [{
                     exportAs: 'owlHourInput',
                     selector: 'owl-hour-input',
-                    template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"upBtnDisabled\"\r\n    [downBtnDisabled]=\"downBtnDisabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setValueViaInput($event)\"\r\n    (valueChange)=\"setValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n        [disabled]=\"disabled\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
+                    template: "<owl-date-time-timer-box\r\n    [upBtnAriaLabel]=\"upBtnAriaLabel\"\r\n    [downBtnAriaLabel]=\"downBtnAriaLabel\"\r\n    [upBtnDisabled]=\"disabled\"\r\n    [downBtnDisabled]=\"disabled\"\r\n    [boxValue]=\"boxValue\"\r\n    [value]=\"value\"\r\n    [min]=\"0\"\r\n    [max]=\"23\"\r\n    [step]=\"step\"\r\n    [inputLabel]=\"'Hour'\"\r\n    (inputChange)=\"setValueViaInput($event)\"\r\n    (valueChange)=\"setValue($event)\"\r\n></owl-date-time-timer-box>\r\n\r\n<div *ngIf=\"hour12Timer\" class=\"owl-dt-timer-hour12\">\r\n    <button\r\n        class=\"owl-dt-control-button owl-dt-timer-hour12-box\"\r\n        type=\"button\"\r\n        tabindex=\"0\"\r\n        (click)=\"setMeridian()\"\r\n        [disabled]=\"disabled\"\r\n    >\r\n        <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\r\n            {{ hour12ButtonLabel }}\r\n        </span>\r\n    </button>\r\n</div>\r\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     host: {
                         '[class.owl-hour-input]': 'owlHourInputClass'
@@ -11174,9 +11161,7 @@ var OwlHourInputComponent = /** @class */ (function () {
     ]; };
     OwlHourInputComponent.propDecorators = {
         upBtnAriaLabel: [{ type: Input }],
-        upBtnDisabled: [{ type: Input }],
         downBtnAriaLabel: [{ type: Input }],
-        downBtnDisabled: [{ type: Input }],
         value: [{ type: Input }],
         min: [{ type: Input }],
         max: [{ type: Input }],
@@ -11191,11 +11176,7 @@ if (false) {
     /** @type {?} */
     OwlHourInputComponent.prototype.upBtnAriaLabel;
     /** @type {?} */
-    OwlHourInputComponent.prototype.upBtnDisabled;
-    /** @type {?} */
     OwlHourInputComponent.prototype.downBtnAriaLabel;
-    /** @type {?} */
-    OwlHourInputComponent.prototype.downBtnDisabled;
     /**
      * @type {?}
      * @private
