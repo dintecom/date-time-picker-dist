@@ -11,7 +11,7 @@ import * as i2 from '@angular/cdk/portal';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalInjector, PortalModule } from '@angular/cdk/portal';
 import { ENTER, PAGE_DOWN, PAGE_UP, END, HOME, DOWN_ARROW, UP_ARROW, RIGHT_ARROW, LEFT_ARROW, SPACE, ESCAPE } from '@angular/cdk/keycodes';
 import { coerceNumberProperty, coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
-import { take, debounceTime, filter, startWith } from 'rxjs/operators';
+import { take, filter, startWith } from 'rxjs/operators';
 import { trigger, state, style, transition, group, query, animateChild, animate, keyframes } from '@angular/animations';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, Validators } from '@angular/forms';
 import * as i1$1 from '@angular/cdk/platform';
@@ -1843,22 +1843,27 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImpor
         }] });
 
 class OwlTimerBoxComponent {
-    constructor() {
+    constructor(numberFixedLen) {
+        this.numberFixedLen = numberFixedLen;
         this.showDivider = false;
         this.step = 1;
         this.valueChange = new EventEmitter();
         this.inputChange = new EventEmitter();
         this.inputStream = new Subject();
         this.inputStreamSub = Subscription.EMPTY;
+        this.stringValue = '';
+        this.editMode = false;
     }
     get displayValue() {
-        return this.boxValue || this.value;
+        if (this.editMode)
+            return this.stringValue;
+        return '' + this.numberFixedLen.transform(this.boxValue || this.value, 2);
     }
     get owlDTTimerBoxClass() {
         return true;
     }
     ngOnInit() {
-        this.inputStreamSub = this.inputStream.pipe(debounceTime(500)).subscribe((val) => {
+        this.inputStreamSub = this.inputStream.subscribe((val) => {
             if (val) {
                 const inputValue = coerceNumberProperty(val, 0);
                 this.updateValueViaInput(inputValue);
@@ -1885,7 +1890,12 @@ class OwlTimerBoxComponent {
     handleInputChange(value) {
         this.inputStream.next(value);
     }
+    onFocus() {
+        this.editMode = true;
+        this.stringValue = '' + this.numberFixedLen.transform(this.boxValue || this.value, 2);
+    }
     focusOut(value) {
+        this.editMode = false;
         if (value) {
             const inputValue = coerceNumberProperty(value, 0);
             this.updateValueViaInput(inputValue);
@@ -1901,6 +1911,8 @@ class OwlTimerBoxComponent {
         }
     }
     updateValue(value) {
+        this._inputValueElement.nativeElement.focus();
+        this.stringValue = '' + this.numberFixedLen.transform(value, 2);
         this.valueChange.emit(value);
     }
     updateValueViaInput(value) {
@@ -1910,14 +1922,17 @@ class OwlTimerBoxComponent {
         this.inputChange.emit(value);
     }
 }
-OwlTimerBoxComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlTimerBoxComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-OwlTimerBoxComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlTimerBoxComponent, selector: "owl-date-time-timer-box", inputs: { showDivider: "showDivider", upBtnAriaLabel: "upBtnAriaLabel", upBtnDisabled: "upBtnDisabled", downBtnAriaLabel: "downBtnAriaLabel", downBtnDisabled: "downBtnDisabled", boxValue: "boxValue", value: "value", min: "min", max: "max", step: "step", inputLabel: "inputLabel" }, outputs: { valueChange: "valueChange", inputChange: "inputChange" }, host: { properties: { "class.owl-dt-timer-box": "owlDTTimerBoxClass" } }, exportAs: ["owlDateTimeTimerBox"], ngImport: i0, template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"upBtnDisabled\"\n  [attr.aria-label]=\"upBtnAriaLabel\"\n  (click)=\"upBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n  <input\n    class=\"owl-dt-timer-input\"\n    maxlength=\"2\"\n    [value]=\"displayValue | numberFixedLen: 2\"\n    (wheel)=\"handleWheelChange($event)\"\n    (keydown.arrowUp)=\"!upBtnDisabled && upBtnClicked()\"\n    (keydown.arrowDown)=\"!downBtnAriaLabel && downBtnClicked()\"\n    (input)=\"handleInputChange(valueInput.value)\"\n    (focusout)=\"focusOut(valueInput.value)\"\n    #valueInput\n  />\n  <span class=\"owl-hidden-accessible\">{{ inputLabel }}</span>\n</label>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"downBtnDisabled\"\n  [attr.aria-label]=\"downBtnAriaLabel\"\n  (click)=\"downBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n", dependencies: [{ kind: "directive", type: i3.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "pipe", type: NumberFixedLenPipe, name: "numberFixedLen" }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+OwlTimerBoxComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlTimerBoxComponent, deps: [{ token: NumberFixedLenPipe }], target: i0.ɵɵFactoryTarget.Component });
+OwlTimerBoxComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlTimerBoxComponent, selector: "owl-date-time-timer-box", inputs: { showDivider: "showDivider", upBtnAriaLabel: "upBtnAriaLabel", upBtnDisabled: "upBtnDisabled", downBtnAriaLabel: "downBtnAriaLabel", downBtnDisabled: "downBtnDisabled", boxValue: "boxValue", value: "value", min: "min", max: "max", step: "step", inputLabel: "inputLabel" }, outputs: { valueChange: "valueChange", inputChange: "inputChange" }, host: { properties: { "class.owl-dt-timer-box": "owlDTTimerBoxClass" } }, providers: [NumberFixedLenPipe], viewQueries: [{ propertyName: "_inputValueElement", first: true, predicate: ["valueInput"], descendants: true, static: true }], exportAs: ["owlDateTimeTimerBox"], ngImport: i0, template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"upBtnDisabled\"\n  [attr.aria-label]=\"upBtnAriaLabel\"\n  (click)=\"upBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n  <input\n    class=\"owl-dt-timer-input\"\n    maxlength=\"2\"\n    [value]=\"displayValue\"\n    (wheel)=\"handleWheelChange($event)\"\n    (keydown.arrowUp)=\"!upBtnDisabled && upBtnClicked()\"\n    (keydown.arrowDown)=\"!downBtnAriaLabel && downBtnClicked()\"\n    (input)=\"handleInputChange(valueInput.value)\"\n    (focusout)=\"focusOut(valueInput.value)\"\n    (focus)=\"onFocus()\"\n    #valueInput\n  />\n  <span class=\"owl-hidden-accessible\">{{ inputLabel }}</span>\n</label>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"downBtnDisabled\"\n  [attr.aria-label]=\"downBtnAriaLabel\"\n  (click)=\"downBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n", dependencies: [{ kind: "directive", type: i3.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlTimerBoxComponent, decorators: [{
             type: Component,
             args: [{ exportAs: 'owlDateTimeTimerBox', selector: 'owl-date-time-timer-box', changeDetection: ChangeDetectionStrategy.OnPush, host: {
                         '[class.owl-dt-timer-box]': 'owlDTTimerBoxClass'
-                    }, template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"upBtnDisabled\"\n  [attr.aria-label]=\"upBtnAriaLabel\"\n  (click)=\"upBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n  <input\n    class=\"owl-dt-timer-input\"\n    maxlength=\"2\"\n    [value]=\"displayValue | numberFixedLen: 2\"\n    (wheel)=\"handleWheelChange($event)\"\n    (keydown.arrowUp)=\"!upBtnDisabled && upBtnClicked()\"\n    (keydown.arrowDown)=\"!downBtnAriaLabel && downBtnClicked()\"\n    (input)=\"handleInputChange(valueInput.value)\"\n    (focusout)=\"focusOut(valueInput.value)\"\n    #valueInput\n  />\n  <span class=\"owl-hidden-accessible\">{{ inputLabel }}</span>\n</label>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"downBtnDisabled\"\n  [attr.aria-label]=\"downBtnAriaLabel\"\n  (click)=\"downBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n" }]
-        }], ctorParameters: function () { return []; }, propDecorators: { showDivider: [{
+                    }, providers: [NumberFixedLenPipe], template: "<div *ngIf=\"showDivider\" class=\"owl-dt-timer-divider\" aria-hidden=\"true\"></div>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"upBtnDisabled\"\n  [attr.aria-label]=\"upBtnAriaLabel\"\n  (click)=\"upBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Up\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M248.292,106.406l194.281,194.29c12.365,12.359,12.365,32.391,0,44.744c-12.354,12.354-32.391,12.354-44.744,0\n                        L225.923,173.529L54.018,345.44c-12.36,12.354-32.395,12.354-44.748,0c-12.359-12.354-12.359-32.391,0-44.75L203.554,106.4\n                        c6.18-6.174,14.271-9.259,22.369-9.259C234.018,97.141,242.115,100.232,248.292,106.406z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n<label class=\"owl-dt-timer-content\">\n  <input\n    class=\"owl-dt-timer-input\"\n    maxlength=\"2\"\n    [value]=\"displayValue\"\n    (wheel)=\"handleWheelChange($event)\"\n    (keydown.arrowUp)=\"!upBtnDisabled && upBtnClicked()\"\n    (keydown.arrowDown)=\"!downBtnAriaLabel && downBtnClicked()\"\n    (input)=\"handleInputChange(valueInput.value)\"\n    (focusout)=\"focusOut(valueInput.value)\"\n    (focus)=\"onFocus()\"\n    #valueInput\n  />\n  <span class=\"owl-hidden-accessible\">{{ inputLabel }}</span>\n</label>\n<button\n  class=\"owl-dt-control-button owl-dt-control-arrow-button\"\n  type=\"button\"\n  tabindex=\"-1\"\n  [disabled]=\"downBtnDisabled\"\n  [attr.aria-label]=\"downBtnAriaLabel\"\n  (click)=\"downBtnClicked()\"\n>\n  <span class=\"owl-dt-control-button-content\" tabindex=\"-1\">\n    <!-- <editor-fold desc=\"SVG Arrow Down\"> -->\n    <svg\n      xmlns=\"http://www.w3.org/2000/svg\"\n      xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n      version=\"1.1\"\n      x=\"0px\"\n      y=\"0px\"\n      viewBox=\"0 0 451.847 451.846\"\n      style=\"enable-background: new 0 0 451.847 451.846\"\n      xml:space=\"preserve\"\n      width=\"100%\"\n      height=\"100%\"\n    >\n      <path\n        d=\"M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751\n                        c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0\n                        c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z\"\n      />\n    </svg>\n    <!-- </editor-fold> -->\n  </span>\n</button>\n" }]
+        }], ctorParameters: function () { return [{ type: NumberFixedLenPipe }]; }, propDecorators: { _inputValueElement: [{
+                type: ViewChild,
+                args: ['valueInput', { static: true }]
+            }], showDivider: [{
                 type: Input
             }], upBtnAriaLabel: [{
                 type: Input
@@ -3866,10 +3881,6 @@ class OwlDateTimeInputDirective {
         this.renderer = renderer;
         this.dateTimeAdapter = dateTimeAdapter;
         this.dateTimeFormats = dateTimeFormats;
-        /** The minimum valid date. */
-        this._min = this.dateTimeAdapter?.createDate(1, 0, 1, 0, 0, 0);
-        /** The maximum valid date. */
-        this._max = this.dateTimeAdapter?.createDate(3000, 11, 31, 23, 59, 59);
         /**
          * The picker's select mode
          */
@@ -3895,12 +3906,9 @@ class OwlDateTimeInputDirective {
         this.validatorOnChange = () => { };
         /** The form control validator for whether the input parses. */
         this.parseValidator = () => {
-            const value = this.elmRef.nativeElement.value;
-            if (!value)
-                return null;
             return this.lastValueValid
                 ? null
-                : { owlDateTimeParse: { text: value } };
+                : { owlDateTimeParse: { text: this.elmRef.nativeElement.value } };
         };
         /** The form control validator for the min date. */
         this.minValidator = (control) => {
@@ -4039,7 +4047,6 @@ class OwlDateTimeInputDirective {
             element.blur();
         }
     }
-    ;
     get min() {
         return this._min;
     }
@@ -4205,7 +4212,6 @@ class OwlDateTimeInputDirective {
         else {
             this.changeInputInRangeFromToMode(value);
         }
-        this.validatorOnChange();
     }
     handleChangeOnHost(event) {
         let v;
@@ -4294,13 +4300,12 @@ class OwlDateTimeInputDirective {
      * Handle input change in single mode
      */
     changeInputInSingleMode(inputValue) {
-        inputValue = (inputValue || '').trim();
-        this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         let value = inputValue;
         if (this.dtPicker.pickerType === 'timer') {
             value = this.convertTimeStringToDateTimeString(value, this.value);
         }
         let result = this.dateTimeAdapter.parse(value, this.dateTimeFormats.parse.dateTimeInput);
+        this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
         result = this.getValidDate(result);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
         // result equals to null means there is input event, but the input value is invalid
@@ -4319,13 +4324,12 @@ class OwlDateTimeInputDirective {
      * Handle input change in rangeFrom or rangeTo mode
      */
     changeInputInRangeFromToMode(inputValue) {
-        inputValue = (inputValue || '').trim();
-        this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         const originalValue = this._selectMode === 'rangeFrom' ? this._values[0] : this._values[1];
         if (this.dtPicker.pickerType === 'timer') {
             inputValue = this.convertTimeStringToDateTimeString(inputValue, originalValue);
         }
         let result = this.dateTimeAdapter.parse(inputValue, this.dateTimeFormats.parse.dateTimeInput);
+        this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
         result = this.getValidDate(result);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
         if ((this._selectMode === 'rangeFrom' &&
@@ -4350,19 +4354,17 @@ class OwlDateTimeInputDirective {
      * Handle input change in range mode
      */
     changeInputInRangeMode(inputValue) {
-        inputValue = (inputValue || '').trim();
         const selecteds = inputValue.split(this.rangeSeparator);
-        let fromString = (selecteds[0] || '').trim();
-        let toString = (selecteds[1] || '').trim();
-        this.lastValueValid =
-            this.dateTimeAdapter.isValidFormat(fromString, this.dtPicker.formatString) &&
-                this.dateTimeAdapter.isValidFormat(toString, this.dtPicker.formatString);
+        let fromString = selecteds[0];
+        let toString = selecteds[1];
         if (this.dtPicker.pickerType === 'timer') {
             fromString = this.convertTimeStringToDateTimeString(fromString, this.values[0]);
             toString = this.convertTimeStringToDateTimeString(toString, this.values[1]);
         }
         let from = this.dateTimeAdapter.parse(fromString, this.dateTimeFormats.parse.dateTimeInput);
         let to = this.dateTimeAdapter.parse(toString, this.dateTimeFormats.parse.dateTimeInput);
+        this.lastValueValid =
+            (!from || this.dateTimeAdapter.isValid(from)) && (!to || this.dateTimeAdapter.isValid(to));
         from = this.getValidDate(from);
         to = this.getValidDate(to);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
@@ -5004,51 +5006,6 @@ class NativeDateTimeAdapter extends DateTimeAdapter {
     }
     isValid(date) {
         return date && !isNaN(date.getTime());
-    }
-    isValidFormat(value, parseFormat) {
-        if (SUPPORTS_INTL_API) {
-            parseFormat = { ...parseFormat, timeZone: 'utc' };
-            const dtf = new Intl.DateTimeFormat(this.locale, parseFormat);
-            const parts = dtf.formatToParts();
-            let regex = '^';
-            for (const part of parts) {
-                switch (part.type) {
-                    case 'day':
-                        regex += '([1-9]{1}|[0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})';
-                        break;
-                    case 'month':
-                        regex += '([1-9]|0[1-9]|1[0-2])';
-                        break;
-                    case 'year':
-                        regex += '([0-9]{1,4})';
-                        break;
-                    case 'hour':
-                        if (dtf.resolvedOptions().hour12) {
-                            regex += '(0?[1-9]|1[012])';
-                        }
-                        else {
-                            regex += '([01]?[0-9]|2[0-3])';
-                        }
-                        break;
-                    case 'second':
-                    case 'minute':
-                        regex += '([0-9]{1}|[0-5][0-9])';
-                        break;
-                    case 'dayPeriod':
-                        regex += '((a|A)(m|M)?|(p|P)(m|M)?)';
-                        break;
-                    case 'literal':
-                        regex += part.value.replace('/', '\\/').replace('.', '\\.');
-                        break;
-                }
-            }
-            regex += '$';
-            return (new RegExp(regex)).test(value);
-        }
-        else {
-            const date = new Date(value);
-            return date.getTime() === date.getTime();
-        }
     }
     invalid() {
         return new Date(NaN);

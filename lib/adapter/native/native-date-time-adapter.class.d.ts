@@ -48,7 +48,6 @@ export declare class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
     toIso8601(date: Date): string;
     isDateInstance(obj: any): boolean;
     isValid(date: Date): boolean;
-    isValidFormat(value: any, parseFormat: any): boolean;
     invalid(): Date;
     differenceInCalendarDays(dateLeft: Date, dateRight: Date): number;
     /**

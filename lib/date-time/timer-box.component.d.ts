@@ -1,6 +1,9 @@
 import { EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { NumberFixedLenPipe } from './numberedFixLen.pipe';
 import * as i0 from "@angular/core";
 export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
+    private readonly numberFixedLen;
+    private _inputValueElement;
     showDivider: boolean;
     upBtnAriaLabel: string;
     upBtnDisabled: boolean;
@@ -20,14 +23,17 @@ export declare class OwlTimerBoxComponent implements OnInit, OnDestroy {
     inputChange: EventEmitter<number>;
     private inputStream;
     private inputStreamSub;
-    constructor();
-    get displayValue(): number;
+    private stringValue;
+    private editMode;
+    constructor(numberFixedLen: NumberFixedLenPipe);
+    get displayValue(): string;
     get owlDTTimerBoxClass(): boolean;
     ngOnInit(): void;
     ngOnDestroy(): void;
     upBtnClicked(): void;
     downBtnClicked(): void;
     handleInputChange(value: string): void;
+    onFocus(): void;
     focusOut(value: string): void;
     handleWheelChange(event: WheelEvent): void;
     private updateValue;
