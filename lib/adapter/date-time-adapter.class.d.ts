@@ -11,7 +11,7 @@ export declare abstract class DateTimeAdapter<T> {
     /** total milliseconds in a day. */
     protected readonly millisecondsInDay = 86400000;
     /** total milliseconds in a minute. */
-    protected readonly milliseondsInMinute = 60000;
+    protected readonly millisecondsInMinute = 60000;
     protected _localeChanges: Subject<void>;
     /** A stream that emits when the locale changes. */
     get localeChanges(): Observable<void>;
@@ -216,6 +216,10 @@ export declare abstract class DateTimeAdapter<T> {
      * @returns Whether the date is valid.
      */
     abstract isValid(date: T): boolean;
+    /**
+     * Checks whether the given date is valid.
+     */
+    abstract isValidFormat(value: any, parseFormat: any): boolean;
     /**
      * Gets date instance that is not valid.
      * @returns An invalid date.

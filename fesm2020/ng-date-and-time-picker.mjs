@@ -153,7 +153,7 @@ class DateTimeAdapter {
         /** total milliseconds in a day. */
         this.millisecondsInDay = 86400000;
         /** total milliseconds in a minute. */
-        this.milliseondsInMinute = 60000;
+        this.millisecondsInMinute = 60000;
         this._localeChanges = new Subject();
     }
     /** A stream that emits when the locale changes. */
@@ -3878,6 +3878,10 @@ class OwlDateTimeInputDirective {
         this.renderer = renderer;
         this.dateTimeAdapter = dateTimeAdapter;
         this.dateTimeFormats = dateTimeFormats;
+        /** The minimum valid date. */
+        this._min = this.dateTimeAdapter?.createDate(1, 0, 1, 0, 0, 0);
+        /** The maximum valid date. */
+        this._max = this.dateTimeAdapter?.createDate(3000, 11, 31, 23, 59, 59);
         /**
          * The picker's select mode
          */
@@ -3903,9 +3907,12 @@ class OwlDateTimeInputDirective {
         this.validatorOnChange = () => { };
         /** The form control validator for whether the input parses. */
         this.parseValidator = () => {
+            const value = this.elmRef.nativeElement.value;
+            if (!value)
+                return null;
             return this.lastValueValid
                 ? null
-                : { owlDateTimeParse: { text: this.elmRef.nativeElement.value } };
+                : { owlDateTimeParse: { text: value } };
         };
         /** The form control validator for the min date. */
         this.minValidator = (control) => {
@@ -4044,6 +4051,7 @@ class OwlDateTimeInputDirective {
             element.blur();
         }
     }
+    ;
     get min() {
         return this._min;
     }
@@ -4209,6 +4217,7 @@ class OwlDateTimeInputDirective {
         else {
             this.changeInputInRangeFromToMode(value);
         }
+        this.validatorOnChange();
     }
     handleChangeOnHost(event) {
         let v;
@@ -4297,12 +4306,13 @@ class OwlDateTimeInputDirective {
      * Handle input change in single mode
      */
     changeInputInSingleMode(inputValue) {
+        inputValue = (inputValue || '').trim();
+        this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         let value = inputValue;
         if (this.dtPicker.pickerType === 'timer') {
             value = this.convertTimeStringToDateTimeString(value, this.value);
         }
         let result = this.dateTimeAdapter.parse(value, this.dateTimeFormats.parse.dateTimeInput);
-        this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
         result = this.getValidDate(result);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
         // result equals to null means there is input event, but the input value is invalid
@@ -4321,12 +4331,13 @@ class OwlDateTimeInputDirective {
      * Handle input change in rangeFrom or rangeTo mode
      */
     changeInputInRangeFromToMode(inputValue) {
+        inputValue = (inputValue || '').trim();
+        this.lastValueValid = this.dateTimeAdapter.isValidFormat(inputValue, this.dtPicker.formatString);
         const originalValue = this._selectMode === 'rangeFrom' ? this._values[0] : this._values[1];
         if (this.dtPicker.pickerType === 'timer') {
             inputValue = this.convertTimeStringToDateTimeString(inputValue, originalValue);
         }
         let result = this.dateTimeAdapter.parse(inputValue, this.dateTimeFormats.parse.dateTimeInput);
-        this.lastValueValid = !result || this.dateTimeAdapter.isValid(result);
         result = this.getValidDate(result);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
         if ((this._selectMode === 'rangeFrom' &&
@@ -4351,17 +4362,19 @@ class OwlDateTimeInputDirective {
      * Handle input change in range mode
      */
     changeInputInRangeMode(inputValue) {
+        inputValue = (inputValue || '').trim();
         const selecteds = inputValue.split(this.rangeSeparator);
-        let fromString = selecteds[0];
-        let toString = selecteds[1];
+        let fromString = (selecteds[0] || '').trim();
+        let toString = (selecteds[1] || '').trim();
+        this.lastValueValid =
+            this.dateTimeAdapter.isValidFormat(fromString, this.dtPicker.formatString) &&
+                this.dateTimeAdapter.isValidFormat(toString, this.dtPicker.formatString);
         if (this.dtPicker.pickerType === 'timer') {
             fromString = this.convertTimeStringToDateTimeString(fromString, this.values[0]);
             toString = this.convertTimeStringToDateTimeString(toString, this.values[1]);
         }
         let from = this.dateTimeAdapter.parse(fromString, this.dateTimeFormats.parse.dateTimeInput);
         let to = this.dateTimeAdapter.parse(toString, this.dateTimeFormats.parse.dateTimeInput);
-        this.lastValueValid =
-            (!from || this.dateTimeAdapter.isValid(from)) && (!to || this.dateTimeAdapter.isValid(to));
         from = this.getValidDate(from);
         to = this.getValidDate(to);
         // if the newValue is the same as the oldValue, we intend to not fire the valueChange event
@@ -5004,6 +5017,51 @@ class NativeDateTimeAdapter extends DateTimeAdapter {
     isValid(date) {
         return date && !isNaN(date.getTime());
     }
+    isValidFormat(value, parseFormat) {
+        if (SUPPORTS_INTL_API) {
+            parseFormat = { ...parseFormat, timeZone: 'utc' };
+            const dtf = new Intl.DateTimeFormat(this.locale, parseFormat);
+            const parts = dtf.formatToParts();
+            let regex = '^';
+            for (const part of parts) {
+                switch (part.type) {
+                    case 'day':
+                        regex += '([1-9]{1}|[0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})';
+                        break;
+                    case 'month':
+                        regex += '([1-9]|0[1-9]|1[0-2])';
+                        break;
+                    case 'year':
+                        regex += '([0-9]{1,4})';
+                        break;
+                    case 'hour':
+                        if (dtf.resolvedOptions().hour12) {
+                            regex += '(0?[1-9]|1[012])';
+                        }
+                        else {
+                            regex += '([01]?[0-9]|2[0-3])';
+                        }
+                        break;
+                    case 'second':
+                    case 'minute':
+                        regex += '([0-9]{1}|[0-5][0-9])';
+                        break;
+                    case 'dayPeriod':
+                        regex += '((a|A)(m|M)?|(p|P)(m|M)?)';
+                        break;
+                    case 'literal':
+                        regex += part.value.replace('/', '\\/').replace('.', '\\.');
+                        break;
+                }
+            }
+            regex += '$';
+            return (new RegExp(regex)).test(value);
+        }
+        else {
+            const date = new Date(value);
+            return date.getTime() === date.getTime();
+        }
+    }
     invalid() {
         return new Date(NaN);
     }
@@ -5012,9 +5070,9 @@ class NativeDateTimeAdapter extends DateTimeAdapter {
             const dateLeftStartOfDay = this.createDate(this.getYear(dateLeft), this.getMonth(dateLeft), this.getDate(dateLeft));
             const dateRightStartOfDay = this.createDate(this.getYear(dateRight), this.getMonth(dateRight), this.getDate(dateRight));
             const timeStampLeft = this.getTime(dateLeftStartOfDay) -
-                dateLeftStartOfDay.getTimezoneOffset() * this.milliseondsInMinute;
+                dateLeftStartOfDay.getTimezoneOffset() * this.millisecondsInMinute;
             const timeStampRight = this.getTime(dateRightStartOfDay) -
-                dateRightStartOfDay.getTimezoneOffset() * this.milliseondsInMinute;
+                dateRightStartOfDay.getTimezoneOffset() * this.millisecondsInMinute;
             return Math.round((timeStampLeft - timeStampRight) / this.millisecondsInDay);
         }
         else {
