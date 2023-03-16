@@ -62,6 +62,13 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      */
     scrollStrategy: ScrollStrategy;
     /**
+     * For Range mode. Check if the 'from' is after 'to' or 'to' is before 'from'.
+     * If true check when click 'Set' or select 'to'/'from'. If false - check every time change.
+     */
+    private _lazyValidation;
+    get lazyValidation(): boolean;
+    set lazyValidation(value: boolean);
+    /**
      * Callback when the picker is closed
      */
     afterPickerClosed: EventEmitter<any>;
@@ -153,5 +160,5 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      */
     private createPopupPositionStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeComponent<any>, [null, null, null, null, null, { optional: true; }, null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; "lazyValidation": "lazyValidation"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
 }

@@ -16,6 +16,7 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
     timer: OwlTimerComponent<T>;
     picker: OwlDateTime<T>;
     activeSelectedIndex: number;
+    lazyValidation: boolean;
     /**
      * Stream emits when try to hide picker
      */
@@ -117,6 +118,7 @@ export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterCo
      * Focus to the picker
      */
     private focusPicker;
+    private _checkBeforeAfterTimeValidity;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeContainerComponent<any>, [null, null, null, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeContainerComponent<any>, "owl-date-time-container", ["owlDateTimeContainer"], {}, {}, never, never, false>;
 }

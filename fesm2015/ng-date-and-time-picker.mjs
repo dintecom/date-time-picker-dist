@@ -2260,6 +2260,7 @@ class OwlDateTimeContainerComponent {
         this.pickerIntl = pickerIntl;
         this.dateTimeAdapter = dateTimeAdapter;
         this.activeSelectedIndex = 0; // The current active SelectedIndex in range select mode (0: 'from', 1: 'to')
+        this.lazyValidation = false;
         /**
          * Stream emits when try to hide picker
          */
@@ -2406,12 +2407,13 @@ class OwlDateTimeContainerComponent {
             const selecteds = [...this.picker.selecteds];
             // check if the 'from' is after 'to' or 'to'is before 'from'
             // In this case, we set both the 'from' and 'to' the same value
-            if ((this.activeSelectedIndex === 0 &&
-                selecteds[1] &&
-                this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[1]) > 0) ||
-                (this.activeSelectedIndex === 1 &&
-                    selecteds[0] &&
-                    this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[0]) < 0)) {
+            if (!this.lazyValidation &&
+                ((this.activeSelectedIndex === 0 &&
+                    selecteds[1] &&
+                    this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[1]) > 0) ||
+                    (this.activeSelectedIndex === 1 &&
+                        selecteds[0] &&
+                        this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[0]) < 0))) {
                 selecteds[0] = this.pickerMoment;
                 selecteds[1] = this.pickerMoment;
             }
@@ -2433,6 +2435,7 @@ class OwlDateTimeContainerComponent {
      * Handle click on set button
      */
     onSetClicked(event) {
+        this._checkBeforeAfterTimeValidity();
         if (!this.picker.dateTimeChecker(this.pickerMoment)) {
             this.hidePicker$.next(null);
             event.preventDefault();
@@ -2483,6 +2486,7 @@ class OwlDateTimeContainerComponent {
             if (this.picker.selecteds && selected) {
                 this.pickerMoment = this.dateTimeAdapter.clone(selected);
             }
+            this._checkBeforeAfterTimeValidity();
         }
         return;
     }
@@ -2576,6 +2580,21 @@ class OwlDateTimeContainerComponent {
         }
         else if (this.timer) {
             this.timer.focus();
+        }
+    }
+    _checkBeforeAfterTimeValidity() {
+        if (this.picker.isInRangeMode && this.lazyValidation) {
+            const selecteds = [...this.picker.selecteds];
+            if ((this.activeSelectedIndex === 0 &&
+                selecteds[1] &&
+                this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[1]) > 0) ||
+                (this.activeSelectedIndex === 1 &&
+                    selecteds[0] &&
+                    this.dateTimeAdapter.compareDate(this.pickerMoment, selecteds[0]) < 0)) {
+                selecteds[0] = this.pickerMoment;
+                selecteds[1] = this.pickerMoment;
+                this.picker.select(selecteds);
+            }
         }
     }
 }
@@ -3428,6 +3447,11 @@ class OwlDateTimeComponent extends OwlDateTime {
         /** Whether the calendar is open. */
         this._opened = false;
         /**
+         * For Range mode. Check if the 'from' is after 'to' or 'to' is before 'from'.
+         * If true check when click 'Set' or select 'to'/'from'. If false - check every time change.
+         */
+        this._lazyValidation = false;
+        /**
          * Callback when the picker is closed
          */
         this.afterPickerClosed = new EventEmitter();
@@ -3524,6 +3548,12 @@ class OwlDateTimeComponent extends OwlDateTime {
     set opened(val) {
         val ? this.open() : this.close();
     }
+    get lazyValidation() {
+        return this._lazyValidation;
+    }
+    set lazyValidation(value) {
+        this._lazyValidation = value;
+    }
     get dtInput() {
         return this._dtInput;
     }
@@ -3608,6 +3638,7 @@ class OwlDateTimeComponent extends OwlDateTime {
         }
         this.pickerMode === 'dialog' ? this.openAsDialog() : this.openAsPopup();
         this.pickerContainer.picker = this;
+        this.pickerContainer.lazyValidation = this.lazyValidation;
         // Listen to picker container's hidePickerStream
         this.hidePickerStreamSub = this.pickerContainer.hidePickerStream.subscribe(() => {
             this.close();
@@ -3835,7 +3866,7 @@ class OwlDateTimeComponent extends OwlDateTime {
     }
 }
 OwlDateTimeComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeComponent, deps: [{ token: i1.Overlay }, { token: i0.ViewContainerRef }, { token: OwlDialogService }, { token: i0.NgZone }, { token: i0.ChangeDetectorRef }, { token: DateTimeAdapter, optional: true }, { token: OWL_DTPICKER_SCROLL_STRATEGY }, { token: OWL_DATE_TIME_FORMATS, optional: true }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Component });
-OwlDateTimeComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlDateTimeComponent, selector: "owl-date-time", inputs: { backdropClass: "backdropClass", panelClass: "panelClass", startAt: "startAt", pickerType: "pickerType", pickerMode: "pickerMode", disabled: "disabled", opened: "opened", scrollStrategy: "scrollStrategy" }, outputs: { afterPickerClosed: "afterPickerClosed", afterPickerOpen: "afterPickerOpen", yearSelected: "yearSelected", monthSelected: "monthSelected" }, exportAs: ["owlDateTime"], usesInheritance: true, ngImport: i0, template: "", changeDetection: i0.ChangeDetectionStrategy.OnPush });
+OwlDateTimeComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlDateTimeComponent, selector: "owl-date-time", inputs: { backdropClass: "backdropClass", panelClass: "panelClass", startAt: "startAt", pickerType: "pickerType", pickerMode: "pickerMode", disabled: "disabled", opened: "opened", scrollStrategy: "scrollStrategy", lazyValidation: "lazyValidation" }, outputs: { afterPickerClosed: "afterPickerClosed", afterPickerOpen: "afterPickerOpen", yearSelected: "yearSelected", monthSelected: "monthSelected" }, exportAs: ["owlDateTime"], usesInheritance: true, ngImport: i0, template: "", changeDetection: i0.ChangeDetectionStrategy.OnPush });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeComponent, decorators: [{
             type: Component,
             args: [{ selector: 'owl-date-time', exportAs: 'owlDateTime', changeDetection: ChangeDetectionStrategy.OnPush, template: "" }]
@@ -3871,6 +3902,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImpor
             }], opened: [{
                 type: Input
             }], scrollStrategy: [{
+                type: Input
+            }], lazyValidation: [{
                 type: Input
             }], afterPickerClosed: [{
                 type: Output
