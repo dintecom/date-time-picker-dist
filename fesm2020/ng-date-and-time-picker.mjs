@@ -1904,10 +1904,10 @@ class OwlTimerBoxComponent {
     }
     handleWheelChange(event) {
         const deltaY = event.deltaY;
-        if (deltaY > 0 && !this.upBtnDisabled) {
+        if (deltaY > 0 && !this.downBtnDisabled) {
             this.downBtnClicked();
         }
-        else if (deltaY < 0 && !this.downBtnDisabled) {
+        else if (deltaY < 0 && !this.upBtnDisabled) {
             this.upBtnClicked();
         }
     }
@@ -4084,7 +4084,6 @@ class OwlDateTimeInputDirective {
             element.blur();
         }
     }
-    ;
     get min() {
         return this._min;
     }
