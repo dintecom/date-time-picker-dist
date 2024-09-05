@@ -1,11 +1,11 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, ElementRef, OnInit } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
-import { OwlDateTimeIntl } from './date-time-picker-intl.service';
-import { OwlCalendarComponent } from './calendar.component';
-import { OwlTimerComponent } from './timer.component';
-import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
-import { OwlDateTime, PickerType } from './date-time.class';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, ElementRef, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlCalendarComponent } from './calendar.component';
+import { OwlDateTimeIntl } from './date-time-picker-intl.service';
+import { OwlDateTime, PickerType } from './date-time.class';
+import { OwlTimerComponent } from './timer.component';
 import * as i0 from "@angular/core";
 export declare class OwlDateTimeContainerComponent<T> implements OnInit, AfterContentInit, AfterViewInit {
     private cdRef;

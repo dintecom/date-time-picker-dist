@@ -1,10 +1,10 @@
-import { InjectionToken, Injector, TemplateRef } from '@angular/core';
-import { Location } from '@angular/common';
-import { OwlDialogConfig } from './dialog-config.class';
-import { OwlDialogRef } from './dialog-ref.class';
-import { Observable, Subject } from 'rxjs';
 import { Overlay, OverlayContainer, ScrollStrategy } from '@angular/cdk/overlay';
 import { ComponentType } from '@angular/cdk/portal';
+import { Location } from '@angular/common';
+import { InjectionToken, Injector, TemplateRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { OwlDialogConfig } from './dialog-config.class';
+import { OwlDialogRef } from './dialog-ref.class';
 import * as i0 from "@angular/core";
 export declare const OWL_DIALOG_DATA: InjectionToken<any>;
 /**

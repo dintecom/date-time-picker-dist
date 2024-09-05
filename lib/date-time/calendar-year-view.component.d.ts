@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectorRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.component';
 import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
+import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.component';
 import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
 export declare class OwlYearViewComponent<T> implements OnInit, AfterContentInit, OnDestroy {

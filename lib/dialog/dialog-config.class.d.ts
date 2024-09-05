@@ -1,5 +1,5 @@
-import { ViewContainerRef } from '@angular/core';
 import { ScrollStrategy } from '@angular/cdk/overlay';
+import { ViewContainerRef } from '@angular/core';
 /** Possible overrides for a dialog's position. */
 export interface DialogPosition {
     /** Override for the dialog's top position. */

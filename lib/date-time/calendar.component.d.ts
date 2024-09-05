@@ -1,7 +1,7 @@
 import { AfterContentInit, AfterViewChecked, ChangeDetectorRef, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
+import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
 export declare class OwlCalendarComponent<T> implements OnInit, AfterContentInit, AfterViewChecked, OnDestroy {

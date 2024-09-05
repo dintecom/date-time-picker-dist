@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectorRef, EventEmitter, OnInit } from '@angular/core';
 import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import { CalendarCell, OwlCalendarBodyComponent } from './calendar-body.component';
-import { SelectMode } from './date-time.class';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
+import { SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
 export declare const YEARS_PER_ROW = 3;
 export declare const YEAR_ROWS = 7;

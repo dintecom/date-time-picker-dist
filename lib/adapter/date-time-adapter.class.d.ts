@@ -1,5 +1,5 @@
-import { Observable, Subject } from 'rxjs';
 import { InjectionToken } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 /** InjectionToken for date-time picker that can be used to override default locale code. */
 export declare const OWL_DATE_TIME_LOCALE: InjectionToken<string>;
 /** @docs-private */

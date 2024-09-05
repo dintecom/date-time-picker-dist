@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, ComponentRef, ElementRef, EmbeddedViewRef, EventEmitter, OnInit } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
 import { FocusTrapFactory } from '@angular/cdk/a11y';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { ChangeDetectorRef, ComponentRef, ElementRef, EmbeddedViewRef, EventEmitter, OnInit } from '@angular/core';
 import { OwlDialogConfig } from './dialog-config.class';
 import * as i0 from "@angular/core";
 export declare class OwlDialogContainerComponent extends BasePortalOutlet implements OnInit {

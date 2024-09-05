@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, EventEmitter, InjectionToken, NgZone, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { BlockScrollStrategy, Overlay, ScrollStrategy } from '@angular/cdk/overlay';
-import { OwlDateTimeInputDirective } from './date-time-picker-input.directive';
+import { ChangeDetectorRef, EventEmitter, InjectionToken, NgZone, OnDestroy, ViewContainerRef } from '@angular/core';
 import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
 import { OwlDateTimeFormats } from '../adapter/date-time-format.class';
-import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.class';
 import { OwlDialogService } from '../dialog/dialog.service';
+import { OwlDateTimeInputDirective } from './date-time-picker-input.directive';
+import { OwlDateTime, PickerMode, PickerType, SelectMode } from './date-time.class';
 import * as i0 from "@angular/core";
 /** Injection token that determines the scroll handling while the dtPicker is open. */
 export declare const OWL_DTPICKER_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
@@ -16,7 +16,7 @@ export declare const OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER: {
     deps: (typeof Overlay)[];
     useFactory: typeof OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER_FACTORY;
 };
-export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements OnInit, OnDestroy {
+export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements OnDestroy {
     private overlay;
     private viewContainerRef;
     private dialogService;
@@ -122,7 +122,6 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     get isInRangeMode(): boolean;
     private defaultScrollStrategy;
     constructor(overlay: Overlay, viewContainerRef: ViewContainerRef, dialogService: OwlDialogService, ngZone: NgZone, changeDetector: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>, defaultScrollStrategy: any, dateTimeFormats: OwlDateTimeFormats, document: any);
-    ngOnInit(): void;
     ngOnDestroy(): void;
     registerInput(input: OwlDateTimeInputDirective<T>): void;
     open(): void;

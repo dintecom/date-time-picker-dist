@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, ElementRef, EventEmitter, NgZone, OnInit } from '@angular/core';
-import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import { DateTimeAdapter } from '../adapter/date-time-adapter.class';
+import { OwlDateTimeIntl } from './date-time-picker-intl.service';
 import * as i0 from "@angular/core";
 export declare class OwlTimerComponent<T> implements OnInit {
     private ngZone;
@@ -20,7 +20,7 @@ export declare class OwlTimerComponent<T> implements OnInit {
     private _maxDateTime;
     get maxDateTime(): T | null;
     set maxDateTime(value: T | null);
-    private isPM;
+    isPM: boolean;
     /**
      * Whether to show the second's timer
      */
@@ -56,10 +56,13 @@ export declare class OwlTimerComponent<T> implements OnInit {
     get downMinuteButtonLabel(): string;
     get upSecondButtonLabel(): string;
     get downSecondButtonLabel(): string;
-    get hour12ButtonLabel(): string;
+    get hour12AMLabel(): string;
+    get hour12PMLabel(): string;
     selectedChange: EventEmitter<T>;
     get owlDTTimerClass(): boolean;
     get owlDTTimeTabIndex(): number;
+    amButton: ElementRef<HTMLButtonElement>;
+    pmButton: ElementRef<HTMLButtonElement>;
     constructor(ngZone: NgZone, elmRef: ElementRef, pickerIntl: OwlDateTimeIntl, cdRef: ChangeDetectorRef, dateTimeAdapter: DateTimeAdapter<T>);
     ngOnInit(): void;
     /**
