@@ -5056,8 +5056,8 @@ class OwlDateTimeComponent extends OwlDateTime {
         });
         this.pickerContainer = this.dialogRef.componentInstance;
         this.dialogRef.afterOpen().subscribe(() => {
-            this.afterPickerOpen.emit(null);
             this._opened = true;
+            this.afterPickerOpen.emit(null);
         });
         this.dialogRef.afterClosed().subscribe(() => this.close());
     }
@@ -5085,8 +5085,8 @@ class OwlDateTimeComponent extends OwlDateTime {
             this.pickerOpenedStreamSub = this.pickerContainer.pickerOpenedStream
                 .pipe(take(1))
                 .subscribe(() => {
-                this.afterPickerOpen.emit(null);
                 this._opened = true;
+                this.afterPickerOpen.emit(null);
             });
         }
     }
