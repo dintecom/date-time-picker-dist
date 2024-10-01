@@ -56,6 +56,10 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     private _opened;
     get opened(): boolean;
     set opened(val: boolean);
+    private _opening;
+    get opening(): boolean;
+    private _closing;
+    get closing(): boolean;
     /**
      * The scroll strategy when the picker is open
      * Learn more this from https://material.angular.io/cdk/overlay/overview#scroll-strategies
@@ -71,11 +75,13 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
     /**
      * Callback when the picker is closed
      */
-    afterPickerClosed: EventEmitter<any>;
+    afterPickerClosed: EventEmitter<void>;
     /**
      * Callback when the picker is open
      */
-    afterPickerOpen: EventEmitter<any>;
+    afterPickerOpen: EventEmitter<void>;
+    pickerOpening: EventEmitter<void>;
+    pickerClosing: EventEmitter<void>;
     /**
      * Emits selected year in multi-year view
      * This doesn't imply a change on the selected date.
@@ -159,5 +165,5 @@ export declare class OwlDateTimeComponent<T> extends OwlDateTime<T> implements O
      */
     private createPopupPositionStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<OwlDateTimeComponent<any>, [null, null, null, null, null, { optional: true; }, null, { optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; "lazyValidation": "lazyValidation"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<OwlDateTimeComponent<any>, "owl-date-time", ["owlDateTime"], { "backdropClass": "backdropClass"; "panelClass": "panelClass"; "startAt": "startAt"; "pickerType": "pickerType"; "pickerMode": "pickerMode"; "disabled": "disabled"; "opened": "opened"; "scrollStrategy": "scrollStrategy"; "lazyValidation": "lazyValidation"; }, { "afterPickerClosed": "afterPickerClosed"; "afterPickerOpen": "afterPickerOpen"; "pickerOpening": "pickerOpening"; "pickerClosing": "pickerClosing"; "yearSelected": "yearSelected"; "monthSelected": "monthSelected"; }, never, never, false>;
 }

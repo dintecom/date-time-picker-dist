@@ -4713,6 +4713,8 @@ class OwlDateTimeComponent extends OwlDateTime {
         this._pickerMode = 'popup';
         /** Whether the calendar is open. */
         this._opened = false;
+        this._opening = false;
+        this._closing = false;
         /**
          * For Range mode. Check if the 'from' is after 'to' or 'to' is before 'from'.
          * If true check when click 'Set' or select 'to'/'from'. If false - check every time change.
@@ -4726,6 +4728,8 @@ class OwlDateTimeComponent extends OwlDateTime {
          * Callback when the picker is open
          */
         this.afterPickerOpen = new EventEmitter();
+        this.pickerOpening = new EventEmitter();
+        this.pickerClosing = new EventEmitter();
         /**
          * Emits selected year in multi-year view
          * This doesn't imply a change on the selected date.
@@ -4815,6 +4819,12 @@ class OwlDateTimeComponent extends OwlDateTime {
     set opened(val) {
         val ? this.open() : this.close();
     }
+    get opening() {
+        return this._opening;
+    }
+    get closing() {
+        return this._closing;
+    }
     get lazyValidation() {
         return this._lazyValidation;
     }
@@ -4887,6 +4897,8 @@ class OwlDateTimeComponent extends OwlDateTime {
         if (!this._dtInput) {
             throw Error('Attempted to open an DateTimePicker with no associated input.');
         }
+        this._opening = true;
+        this.pickerOpening.next();
         if (this.document) {
             this.focusedElementBeforeOpen = this.document.activeElement;
         }
@@ -4961,6 +4973,8 @@ class OwlDateTimeComponent extends OwlDateTime {
         if (!this._opened) {
             return;
         }
+        this._closing = true;
+        this.pickerClosing.emit();
         if (this.popupRef && this.popupRef.hasAttached()) {
             this.popupRef.detach();
         }
@@ -4985,8 +4999,9 @@ class OwlDateTimeComponent extends OwlDateTime {
         }
         const completeClose = () => {
             if (this._opened) {
+                this._closing = false;
                 this._opened = false;
-                this.afterPickerClosed.emit(null);
+                this.afterPickerClosed.emit();
                 this.focusedElementBeforeOpen = null;
             }
         };
@@ -5031,8 +5046,9 @@ class OwlDateTimeComponent extends OwlDateTime {
         });
         this.pickerContainer = this.dialogRef.componentInstance;
         this.dialogRef.afterOpen().subscribe(() => {
+            this._opening = false;
             this._opened = true;
-            this.afterPickerOpen.emit(null);
+            this.afterPickerOpen.emit();
         });
         this.dialogRef.afterClosed().subscribe(() => this.close());
     }
@@ -5060,8 +5076,9 @@ class OwlDateTimeComponent extends OwlDateTime {
             this.pickerOpenedStreamSub = this.pickerContainer.pickerOpenedStream
                 .pipe(take(1))
                 .subscribe(() => {
+                this._opening = false;
                 this._opened = true;
-                this.afterPickerOpen.emit(null);
+                this.afterPickerOpen.emit();
             });
         }
     }
@@ -5132,7 +5149,7 @@ class OwlDateTimeComponent extends OwlDateTime {
     }
 }
 OwlDateTimeComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeComponent, deps: [{ token: i1$1.Overlay }, { token: i0.ViewContainerRef }, { token: OwlDialogService }, { token: i0.NgZone }, { token: i0.ChangeDetectorRef }, { token: DateTimeAdapter, optional: true }, { token: OWL_DTPICKER_SCROLL_STRATEGY }, { token: OWL_DATE_TIME_FORMATS, optional: true }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Component });
-OwlDateTimeComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlDateTimeComponent, selector: "owl-date-time", inputs: { backdropClass: "backdropClass", panelClass: "panelClass", startAt: "startAt", pickerType: "pickerType", pickerMode: "pickerMode", disabled: "disabled", opened: "opened", scrollStrategy: "scrollStrategy", lazyValidation: "lazyValidation" }, outputs: { afterPickerClosed: "afterPickerClosed", afterPickerOpen: "afterPickerOpen", yearSelected: "yearSelected", monthSelected: "monthSelected" }, exportAs: ["owlDateTime"], usesInheritance: true, ngImport: i0, template: "", changeDetection: i0.ChangeDetectionStrategy.OnPush });
+OwlDateTimeComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.0", type: OwlDateTimeComponent, selector: "owl-date-time", inputs: { backdropClass: "backdropClass", panelClass: "panelClass", startAt: "startAt", pickerType: "pickerType", pickerMode: "pickerMode", disabled: "disabled", opened: "opened", scrollStrategy: "scrollStrategy", lazyValidation: "lazyValidation" }, outputs: { afterPickerClosed: "afterPickerClosed", afterPickerOpen: "afterPickerOpen", pickerOpening: "pickerOpening", pickerClosing: "pickerClosing", yearSelected: "yearSelected", monthSelected: "monthSelected" }, exportAs: ["owlDateTime"], usesInheritance: true, ngImport: i0, template: "", changeDetection: i0.ChangeDetectionStrategy.OnPush });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImport: i0, type: OwlDateTimeComponent, decorators: [{
             type: Component,
             args: [{ selector: 'owl-date-time', exportAs: 'owlDateTime', changeDetection: ChangeDetectionStrategy.OnPush, template: "" }]
@@ -5172,6 +5189,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0", ngImpor
             }], afterPickerClosed: [{
                 type: Output
             }], afterPickerOpen: [{
+                type: Output
+            }], pickerOpening: [{
+                type: Output
+            }], pickerClosing: [{
                 type: Output
             }], yearSelected: [{
                 type: Output
