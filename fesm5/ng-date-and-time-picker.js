@@ -11134,6 +11134,17 @@ var OwlHourInputComponent = /** @class */ (function () {
     function (fn) {
         this.onTouch = fn;
     };
+    /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    OwlHourInputComponent.prototype.setDisabledState = /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    function (isDisabled) {
+        this.disabled = isDisabled;
+    };
     OwlHourInputComponent.decorators = [
         { type: Component, args: [{
                     exportAs: 'owlHourInput',

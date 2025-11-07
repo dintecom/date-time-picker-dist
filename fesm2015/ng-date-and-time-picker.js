@@ -9090,6 +9090,13 @@ class OwlHourInputComponent {
     registerOnTouched(fn) {
         this.onTouch = fn;
     }
+    /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    setDisabledState(isDisabled) {
+        this.disabled = isDisabled;
+    }
 }
 OwlHourInputComponent.decorators = [
     { type: Component, args: [{

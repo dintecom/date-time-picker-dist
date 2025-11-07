@@ -33,4 +33,5 @@ export declare class OwlHourInputComponent implements ControlValueAccessor {
     writeValue(value: any): void;
     registerOnChange(fn: any): void;
     registerOnTouched(fn: any): void;
+    setDisabledState(isDisabled: boolean): void;
 }
