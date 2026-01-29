@@ -1,47 +1,49 @@
 {
-  "name": "ng-date-and-time-picker",
-  "version": "14.0.0",
+  "name": "@metalshub/angular-datetime-picker",
+  "version": "21.0.0",
   "description": "Angular Date Time Picker",
   "keywords": [
     "Angular",
     "datepicker",
     "date picker",
     "timepicker",
-    "time picker"
+    "time picker",
+    "datetime picker",
+    "date time picker",
+    "material",
+    "ngx"
   ],
-  "author": "daniel pan <myron.yk.pan@gmail.com>",
+  "author": "Maintained and updated by Daniel Moncada, original implementatiom by Daniel Pan",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DanielYKPan/date-time-picker.git"
+    "url": "https://github.com/metalshub/date-time-picker.git"
+  },
+  "homepage": "https://github.com/metalshub/date-time-picker",
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
-    "@angular/common": "^14.0.0",
-    "@angular/core": "^14.0.0",
-    "@angular/cdk": "^14.0.0",
-    "rxjs": "^7.5.5"
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/cdk": "^21.0.0"
   },
-  "dependencies": {
-    "tslib": "^2.4.0"
-  },
-  "module": "fesm2015/ng-date-and-time-picker.mjs",
-  "es2020": "fesm2020/ng-date-and-time-picker.mjs",
-  "esm2020": "esm2020/ng-date-and-time-picker.mjs",
-  "fesm2020": "fesm2020/ng-date-and-time-picker.mjs",
-  "fesm2015": "fesm2015/ng-date-and-time-picker.mjs",
-  "typings": "index.d.ts",
   "exports": {
+    "./assets/style/picker.min.css": {
+      "default": "./assets/style/picker.min.css"
+    },
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.ts",
-      "esm2020": "./esm2020/ng-date-and-time-picker.mjs",
-      "es2020": "./fesm2020/ng-date-and-time-picker.mjs",
-      "es2015": "./fesm2015/ng-date-and-time-picker.mjs",
-      "node": "./fesm2015/ng-date-and-time-picker.mjs",
-      "default": "./fesm2020/ng-date-and-time-picker.mjs"
+      "types": "./types/metalshub-angular-datetime-picker.d.ts",
+      "default": "./fesm2022/metalshub-angular-datetime-picker.mjs"
     }
   },
-  "sideEffects": false
+  "module": "fesm2022/metalshub-angular-datetime-picker.mjs",
+  "typings": "types/metalshub-angular-datetime-picker.d.ts",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
 }
